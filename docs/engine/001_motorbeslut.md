@@ -12,7 +12,7 @@ Motorn byggs i fyra steg: (1) state och typer, (2) rondens skelett, (3) en aktio
 |---|---|---|---|
 | M11 ✅ | När löses combat i förhållande till aktionsordningen? | **Bekräftat av Gustaf.** Rundan pausar efter den **slot** där combat uppstod; alla combats från samma slot förhandlas parallellt. | Kanoniskt måste torpor från combat kunna stoppa senare aktioner (gd:95, gd:946). Detta är det enda valet som håller regeln utan att rundan pausar per combat. |
 | M16 ✅ | Ser man en aktion när intercept **=** stealth? | **Ja** (≥). Bekräftat av Gustaf. | Regelboken säger emot sig själv (se nedan). Påverkar varje informationsberäkning. |
-| M2 | Vilken state är publik? | Allowlist i tabellen under M2. | Grunden för alla vyer och läck-tester. |
+| M2 ✅ | Vilken state är publik? | Allowlist i tabellen under M2. Bekräftat av Gustaf. | Grunden för alla vyer och läck-tester. |
 | M6 | Hur många aktioner har en vampyr utan titel? | **3**. | Odefinierat i regelboken men inträffar (förlorad enda stad). |
 
 ---
@@ -24,6 +24,7 @@ Motorn byggs i fyra steg: (1) state och typer, (2) rondens skelett, (3) en aktio
 **Motivering:** Koordinatorns förslag, och SPEC B12 (portabilitet) kräver att motorn är oberoende av lagring. TypeScript ger diskriminerade unioner som passar aktions- och eventtyper.
 
 ### M2. Vad är publikt, vad är dolt
+**Status:** ✅ Bekräftat av Gustaf 2026-11-07: hela tabellen stämmer. Klan, minions (antal, namn, typ, level) och alla stadsvärden syns för alla. Positioner syns bara för ägaren, om de inte upptäckts (t.ex. via Auspex).
 **Beslut:** Vyer byggs från en **allowlist**: allt som inte står som publikt här är dolt.
 
 | Data | Synlighet | Belägg |
