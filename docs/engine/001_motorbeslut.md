@@ -10,7 +10,7 @@ Motorn byggs i fyra steg: (1) state och typer, (2) rondens skelett, (3) en aktio
 
 | # | Fråga | Valt | Varför det spelar roll |
 |---|---|---|---|
-| M11 | När löses combat i förhållande till aktionsordningen? | Rundan pausar efter den **slot** där combat uppstod; alla combats från samma slot förhandlas parallellt. | Kanoniskt måste torpor från combat kunna stoppa senare aktioner (gd:95, gd:946). Detta är det enda valet som håller regeln utan att rundan pausar per combat. |
+| M11 ✅ | När löses combat i förhållande till aktionsordningen? | **Bekräftat av Gustaf.** Rundan pausar efter den **slot** där combat uppstod; alla combats från samma slot förhandlas parallellt. | Kanoniskt måste torpor från combat kunna stoppa senare aktioner (gd:95, gd:946). Detta är det enda valet som håller regeln utan att rundan pausar per combat. |
 | M16 | Ser man en aktion när intercept **=** stealth? | **Ja** (≥). | Regelboken säger emot sig själv (se nedan). Påverkar varje informationsberäkning. |
 | M2 | Vilken state är publik? | Allowlist i tabellen under M2. | Grunden för alla vyer och läck-tester. |
 | M6 | Hur många aktioner har en vampyr utan titel? | **3**. | Odefinierat i regelboken men inträffar (förlorad enda stad). |
@@ -113,6 +113,7 @@ Motorn byggs i fyra steg: (1) state och typer, (2) rondens skelett, (3) en aktio
 ## Steg 3 — första aktionstypen (combat)
 
 ### M11. När combat löses
+**Status:** ✅ Bekräftat av Gustaf 2026-11-07: "alla combats i action 1 hanteras innan action 2 körs alls, etc till rundan är slut." GM har hanterat 5–6 parallella combats per runda i Discord-spelet utan problem, så parallell förhandling per slot är beprövad.
 **Beslut:** När en aktion i slot *N* startar en combat fortsätter resten av slot *N* att lösas. Därefter **pausar upplösningen**. Alla combats som startat i slot *N* förhandlas **parallellt**. Är samma vampyr i flera combats i samma slot körs de i den ordning de startade. När alla är klara fortsätter upplösningen med slot *N+1*. Fight for Control-combats löses i fas 4a.
 **Alternativ som valdes bort:**
 - *Pausa per combat:* kanoniskt men kan ge flera dygns väntan per runda (varje combat upp till 18 h + press).
