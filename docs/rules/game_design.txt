@@ -1,0 +1,1281 @@
+Vampire the Long Night 
+
+
+What is this? 
+Vampire the long night is a matrix mega roleplaying game for 20 players (and one or more game master) set in the world of darkness. The game can be played over any online forum where text chats can be set up, but for this game Discord is recommended. In the game, each player will create a vampire that is a member of the elite of vampiric society and scheme against other players to grow their own power, influence and resources in order to become the winner of the campaign. 
+
+The game master (GM) is in charge of preparing, facilitating and running the campaign. Their job is to make the game run smoothly and to resolve player actions. 
+
+How does it work? 
+Every turn the players decide what actions their character makes and in what order they perform these actions in. Once all players are done, or at a pre-set deadline, all players send in their actions to the GM. The GM resolves all actions and determines what happens as the actions are performed. When the GM is done, they send out an open news update that describes the larger happenings in the game. Every player also gets a personal update related to the information their character and minions get their hands on. With this personal update, players also get the resources, VP and minions that they might have acquired thanks to their actions. This marks the end of the round. Then repeat this process for 8 rounds. The player with the most VP after 8 turns is considered the winner. 
+
+What can you expect from the game?
+This is a game about intrigue and manipulation. You will need to maneuver the ever evolving political landscape of kindred society. You will be a powerful vampire but so will every other player. To have a successful campaign you will need to communicate with players, organise plans and share information. Don't go into this game expecting that you will be able to do everything, because you won´t. Use your allies and utilize their abilities for your gain. But beware, backstabbing, lies and cruelty is also a big part of the game. In this game you are alone, only one player can win a campaign and some are willing to do everything to do so.
+
+What is expected from you?
+As a player in a Vampire the long night campaign there are a few things expected of you as a player. They are the following:
+
+Don't hold grudges, some players will betray you, it's all a part of the game and fun. Plan your revenge and strike back, but there is no reason to insult anyone personally for their actions in the game.
+Answer when someone contacts you in the game. Your answer can be that you are busy and can't give a proper reply. Just don't ghost players when they try to engage with you.
+Don't spam the GM or other players. Everyone can ask for a break and you must respect that. 
+Send in your actions on time and double check that they are correct and follow the rules. 
+Read the rules at least once. 
+
+Is winning important? 
+It depends on how you see it. The rules and objectives of the game are there to cause tension and drama in the campaign. The winner gets some hype and their vampire will start in a powerful position in the next game. Play to win but don't let it stop you from having fun!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RULES INDEX 
+
+Intro —--> Page 1-2
+
+Action Rules —--> Page 4-5
+
+Combat —--> Page 6-7
+
+Minions —--> Page 8-12
+
+Artifacts —--> Page 13-15
+
+Cities —--> Page 16-17
+
+The information rule —--> Page 17
+
+The rule of three —--> Page 17
+
+Domains —--> Page 17
+
+VP and how to get them —--> Page 18
+
+The Camarilla —--> Page 19-20
+
+The Anarchs —--> Page 21
+
+The Sabbat —--> Page 22
+
+Build your vampire —--> Page 23-26
+
+EXP upgrades —--> Page 27
+
+Keywords —--> page 28-29
+
+Round resolution breakdown —--> Page 30
+
+All actions —--> Page 31-41
+
+
+
+
+
+
+Actions: 
+
+Actions are the centerpiece of the game. Every turn your vampire performs and minions perform actions. There are 5 different types of actions.
+
+Faction actions: Actions that affect the map, cities, and political landscape of the game. All sect or title specific actions are faction actions.
+Personal actions: Actions that your vampyre personally performs.
+Minion actions: Actions performed by minions.
+Discipline actions: Actions that you need different disciplines to perform. 
+Artifact actions: Actions you need different artifacts to perform. 
+
+You can divide your actions in any way you want (just remember that only minions can perform minion actions). 
+
+Pick the actions you want to perform and make sure you can pay for them. (Remember that income comes at the start of the next round) And write all your actions in the order you want to perform them. Actions will resolve from top to bottom. So all players' action nr 1 will happen first, then nr 2 and so on. If something happens so an action cannot be resolved, like a combat that sends you to torpor or you try to target something that's in the wrong city, the GM informs you that the action did not resolve and you get the cost for the action refunded. Make sure you plan out your actions, buffs and modifiers need to be applied before the action they target.
+
+Example of how well written actions look: 
+1. Obfuscate: Give +4 stealth to action nr 3. Cost: 0, (Undetectable)
+2. King kong (Lvl 1) - Move - New York to Philadelphia - Cost 5 - Stealth +1
+3. Move: Move from New York to Washington DC. Cost: 10, Stealth +2
+4. Bleed: Bleed Washington DC, Cost 0, Stealth +4 (from Obfuscate)
+5. Move: Move from Washington DC to New York, Cost 10 Stealth +2
+6. John Smith (Lvl 2) - Bleed - Philadelphia - cost 0 - Stealth + 3
+
+Disciplines and Discipline actions:
+Disciplines in Vampire: The Long Night are supernatural powers granted by a vampire’s bloodline and clan. They reflect a vampire’s inhuman nature, ranging from enhanced physical abilities like strength and speed to mystical arts like mind control, shapeshifting, or summoning shadows. 
+
+There are 14 different disciplines in the game. What disciplines you have access to depends on what clan you have chosen and how you build your vampire. When you have a discipline you can spend an action to perform that discipline's specific action. Discipline actions work like other actions. 
+
+Mastered Disciplines: 
+A vampyre can spend 1 EXP to master a discipline they already have. It will give them a new mastered action that they can use. A player can only use the (M) discipline action if they have mastered the discipline. 
+
+Stealth and intercept: 
+All actions in the game have a stealth value. The total stealth value of any action is the actions stealth value added to the vampire or minion performing the actions value. That's the total stealth of the action, all players in the same city as the acting vampire with an intercept higher or equal to the total stealth learns of the action. 
+All cities also have intercept. The controller of a city learns all actions that target and originate in the city that have lower or equal stealth to the city's intercept. 
+
+Trifle:
+Some actions have Trifle. The first action you make with Trifle each round doesn't cost an action. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COMBAT
+It will happen that vampires will have to fight for supremacy! 
+
+There are 6 different steps of combat.  
+The stand off 
+The Charge 
+Combat 
+The negotiation 
+Press! 
+Combat ends. 
+
+The Stand off 
+When Vampires engage in combat there is first a dramatic stare down between the fighters! 
+The GM will create a combat chat for both players participating in the combat. Informing them that the combat will begin. The players now have up to 6 hours to make a deal before the combat. A deal can be anything. All promised blood, artifacts, minions and cities that are promised will be transferred directly. But any promise of future actions and payments are not binding. 
+
+If the players make a successful deal the combat ends. If not, proceed to the next step. 
+
+The Charge 
+The storm is here! 
+Both players have 6 hours to spend blood to increase their strength. The players must send a DM to the GM determining how much blood they spend on the combat. For every 10 blood spent they will gain +1 Strength in the combat. Strength gained this way does not follow the rule of 3.
+
+Combat
+A clash of claws and fangs! 
+In combat the GM rolls one D4 for every side in the combat, then adds the strength of all sides to their D4. The side with the highest result wins the combat. 
+
+The negotiation 
+Time for winners to brag and losers to bargain.
+The GM gives a description of how the combat played out. Players now have 6 hours to make a deal. A deal can be anything. All promised blood, artifacts, minions and cities that are promised will be transferred directly. But any promise of future actions and payments are not binding. 
+
+If a deal is made the players move to combat ends. If no deal is made, move to the next step. 
+
+
+
+Press! 
+I didn't hear no bell!
+The loser of the combat can decide to press. A press costs 50 blood. repeat steps from step 2 in a new round of combat. If the loser does not press, move to the next step. 
+
+Combat ends
+And so it comes to an end
+If the players have successfully made a deal the GM transfers all promised blood, artifacts, minions and cities and then the combat is over. 
+
+If no deal was made the losing player rolls on the wounds table. And then combat is over. 
+
+THE WOUND TABEL (Rolled with 2D6)
+The GM rolls 2D6 when rolling on the wounds table! 
+2-3: The vampire is burned.
+4-6: The vampire is sent to torpor in the city the fight took place in or any adjacent city. (their choice)
+7-9: The vampire is sent to torpor in their domain or any adjacent city to the city the combat was resolved in (their choice). 
+10-12 The vampire flees back to their domain. (If there are multiple options you choose)
+
+Minions in combat: 
+Minions vs Vampires
+If a minion is in combat it works exactly the same as a vampyre. A minion's strength, stealth and intercept is equal to its lvl for the purpose of hunts and combat. But if a minion is defeated in combat it's burned. Minions can´t spend blood to gain more strength during the charge step or press. A minion whit the meek trait can´t win a combat against a vampier.
+
+Minion VS minion:
+All steps except the combat stepped and combat ends step are skipped. In simple terms the GM rolls and resolves the combat, there is no negotiation between servants.  
+
+Minions helping in combat: 
+Some actions like, bodyguard. Let's minions fight with their vampire masters. Then the minion(s) adds their lvl to the vampire's strength. If you lose a combat that you have minions in they are all burned. Unless you can save them when pleading for your life. 
+TORPOR
+A vampire in torpor can´t make actions unless it's the awakened action. When in torpor a vampire can only make one action a turn. But they can still make minion actions.
+When a vampire is in torpor it counts as they have 0 VP for the purpose of end game scoring. A vampire can't score VP while in torpor. 
+
+When a vampire tries to awaken from torpor they must do so three times to leave torpor. 
+MINIONS
+All vampires have servants. 
+In the game they are your minions. A minion is a NPC character that serves a player. A minion can be anything from a human in a position of power to a deformed war ghoul serving the vampiric master that created it. 
+
+There are 5 types of minions in the game. GHOULS, HARPIES and EYES are the three generic minion types. PRIMOGENS are minions that only princes can recruit and ARCHONS are minions that only Justicars can recruit. A minion's type determines what actions they can perform and how much upkeep they cost. 
+
+Minions have different levels from 1-3. A level 1 minion represents the weakest servants a vampire can have. Like a group of humans or a newborn vampire. A level 3 minion is the strongest servant a vampire can have, like a war ghoul, an older vampire or the mayor of a city. But all minions gain 1 Minion action each turn! 
+
+Minions don't have stats like players do. A minions lvl represents their stats. So a lvl 2 minion has a strength of 2, stealth 2 and intercept 2. Other modifiers can change this. Every round you must pay an upkeep cost for every minion that you have. 
+
+Minions cost upkeep that must be paid every turn. If upkeep can't be paid the minion is burned. You don't need to pay for a minions upkeep the round you gain it 
+
+Every minion gets one minion action every round and they can ONLY make minion actions that match their minion type.. 
+
+The different minions have different traits. 
+
+GHOULS 
+Agents of infiltration and sabotage.
+
+Traits: Meek (Can't win combat against vampires)
+
+Ghoul Minion actions: 
+Move: Your minion moves from one city to an adjacent city. 
+Cost: 5, Stealth: +0
+
+Sail: If this minion is in a port city, move it any other port city that shares the same sea region. Minions can´t sail in a sea region with a storm.
+Cost: 15, Stealth: +0
+
+
+Bleed the enemy: You ghoul bleeds in the city they are in. You get XD10x2. Where X is the minions Lvl. The blood flow of a city will decrease by the amount you hunted for this turn. 
+Cost: 0, Stealth: +1 
+
+Partner in crime: If this minion is in the same city as you. Increases the stealth of etch action you performed by +X, where X is the minions Lvl. 
+the rest of the turn, if you are in the same city. 
+Cost: 10, Stealth: +0 
+
+Sabotage: The city this minion is in gets -1 Stability or -1 intercept. 
+Cost: 15, Stealth: +2
+
+Move the master: If the controller of this minion is in torpor, move them to the city this minion is in. 
+Cost: 10, Stealth: +2 
+
+Upkeep:
+Ghouls cost 5 blood per lvl etch turn. 5/10/15
+
+HARPIES 
+Soldier on the frontline.
+Traits: Trained (Gains +2 strength in combat with other minions.) 
+
+Harpie Minion actions:
+Move: Your minion moves from one city to an adjacent city. 
+Cost: 5, Stealth: +0 
+
+Sail: If this minion is in a port city, move it any other port city that shares the same sea region. Minions can´t sail in a sea region with a storm.
+Cost: 15, Stealth: +0
+
+Wait and strike: Choose a city that your minion is in and set a condition to attack. The GM rolls a hunt roll for your minion.They hunt the next vampire or minion that fulfills the condition. If you move from the chosen city it cancels the effect from this action.  
+Cost: 0, Stealth: +2
+
+Bodyguard: If you are in the same city as this minion and enter combat, gain strength equal to the minions Lvl. 
+Cost: 10, Stealth: +0 
+
+Suicide mission: Name a special in the same city as this minion. The GM then rolls a D4. If the result is equal to or lower then the minions Lvl remove the named speciell. If the result is higher then the minions lvl then the minion is burned.
+Cost: 10, Stealth: -2 
+
+Guard the master: If this minions controller is in torpor and in the same city as this minion, this minion will attack all vampires that try to dibleriese their controller. They gain +1 Strength in this combat. 
+Cost: 10, Stealth: +1 
+
+Upkeep: A harpy cost 15 blood per lvl, 15/30/45
+
+
+
+EYES
+Spies and information gatherers. 
+
+Traits: Meek (Can't win combat against vampires) Informant (This minion will send the information they gather based on what they learn from their intercept)
+
+Eyes Minion actions:
+Move: Your minion moves from one city to an adjacent city. 
+Cost: 5, Stealth: +0
+
+Sail: If this minion is in a port city, move it any other port city that shares the same sea region. Minions can´t sail in a sea region with a storm.
+Cost: 15, Stealth: +0
+
+Investigate Eye: Name a problem or special in the same city as this minion. Then pick one question for each lvl of the minion performing this action. Gain one answer for each question.
+What is the origin of the problem/Special?
+Who can I make it worse/better?
+What other vampires or minions have interacted with this problem/special?
+Is there any information I can gain that is not in the questions above?
+Cost: 10, Stealth: +2
+
+Hide and spy: This minion gains +2 stealth and intercept for this and next turn. This minion can´t make an action next turn. 
+Cost: 0, Stealth: +1
+
+Keep an eye on them: Name a vampire in the same city as this minion. Then make a hunt roll against that vampire. On success ask one of the following questions:
+How much blood does the vampire have?
+Which artifacts does that vampire have? 
+Do they have more VP than me?
+Cost: 10, Stealth: +2
+
+Hide the master: If this minions controller is in torpor and the same city as this minion, thay gain stealth equal to this minions lvl for the purpose of hunt rolls against diablerie. 
+Cost: 10, Stealth: +0
+
+Upkeep: A eye cost 5 blood per Lvl, 5/10/15
+
+PRIMOGIN 
+City builders and organisers. 
+Traits: Loyal to the prince: (If this minion is not controlled by a camarilla prince, burn it.) 
+
+Primogen Minion Actions:
+Build on the masters kingdom: The city this minion is in gains one of the benefits for each lvl of this minion. You choose: 
+
++1 Stability 
++1 Intercept 
++1 Masquerade status 
++1 Influence 
+Special: Elysium (The controller of this city gains +1 vote in the Ivory Tower.) This special can be built multiple times in the same city. Every time gives +1 vote.
+Special: Camarilla order (Next time someone targets this city with the troublemaker action, the action fails and this special is burned)
+Special: Secure haven (The next time someone attacks the controller of the city the action fails and this special is burnt. Does not stop combat from a Fight for control action)
+Cost: 0, Stealth: Cannot be hidden. 
+
+Upkeep: 20 blood per lvl, 20/40/60
+
+ARCHON 
+Elite agents and skilled warriors.
+Traits: Trained (Gains +2 strength in combat with minions.) Informant (This minion will send the information they gather based on what they learn from their intercept) Camarilla Loyal (This minion costs 0 upkeep. All Archons begin the game with 3 loyalty counters. At the end of every round they lose one loyalty counter unless the Justicar has completed a mission. If an Archon has 0 loyalty counters or is not controlled by a Justicar it is burned.)
+
+Arcon Minion Actions:
+Arcon Movement: This minion moves to an adjacent city. Then they may move to an adjacent city again. 
+Cost: 5, Stealth: +2
+
+
+Sail: If this minion is in a port city, move it any other port city that shares the same sea region. Minions can´t sail in a sea region with a storm.
+Cost: 15, Stealth: +0
+
+Attack: Name a vampire or minion in the same city as this minion. Make a hunt roll, on success this minion enters combat with the named target. If this minion's stealth is higher than the target's intercept, this minion gets an Ambush. 
+Cost: 10, Stealth: -1
+
+Bodyguard: If you are in the same city as this minion and enter combat, gain strength equal to the minions Lvl. 
+Cost: 10, +0 Stealth 
+
+Follow them: Name a vampire or minion in the same city as this minion. If the named vampire or minion moves (in any way) this minion moves to the same city as they. This effect can trigger multiple times during 1 turn. 
+Cost: 15, Stealth: +2
+
+Sabbat interrogations: 
+If there is a sabbat base in the same city as this minion it loses 1 lvl. If the base is a lvl 1 base it is destroyed. If there is no Sabbat base the city loses 1 stability. 
+Cost: 20, Stealth +0 
+
+The masters will: This minion gains 3 loyalty counters. 
+Cost: 30, Stealth +0 
+
+Upkeep: 0 blood per Lvl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ARTEFACTS  
+Artifacts are powerful objects that players can find, buy or steal. You gain artifacts from interaction with specials and problems in cities. You can also start the game with one or more artifacts. 
+
+Artifacts give your vampire access to special artifact actions that only can be performed by the vampire in possession of the artifact. An artifact action can only be made once per turn per artifact. Some artifacts can also be carried by minions. That will give the minion extra Stealth, Strength of intercept depending on the artifact. 
+
+A vampire can carry any number of artifacts but a minion can only carry one. 
+
+ALL ARTIFACT ACTIONS HAVE TRIFLE.
+
+
+List of artifacts in game: 
+Aaron's Feeding Razor: Bleed the city you are in. You get 2d10 x2 (Minion get +1 Strength)                                                                                                                           Cost: 0, Stealth: +1
+Black gloves: Get +2 Strength (Minion gets +1 Strength)                                       Cost: 5 Blood, Undetectable 
+Giants' Blood: Name a vampire in torpor. The named vampire awakens from torpor and then burns this artifact. You can still make this action even if you are in torpor. 
+Cost: 0, Stealth: +2
+Hand of Conrad: This round. In combat the GM rolls +3 dice for you and picks the best one as the result. 
+Cost: 0, Undetectable 
+Ivory Bow: This round if you win a combat and the opponent rolls on the wounds tabel they get -1 on that roll. 
+Cost: 0, Undetectable 
+
+
+
+
+Martinelli's Ring of Clear Thought: Get +2 intercept for the rest of the round. (Minion gets +1 intercept) If you have the dementation discipline, lose it for as long as you are in possession of this artifact.
+Cost: 0, Undetectable 
+Pumping Heart of Nizchetus: If you are in your domain all hunt rolls targeting you get -2. (Minion gets +1 stealth)                                                                                    Cost: 0, Undetectable 
+Tongue of Jarthis the Slaver: Get +1 Stealth on all faction actions this round. (Minion gets +1 Stealth) 
+Cost: 0, Undetectable 
+Vestment of Vileness: Get a lvl 1 zombie minion. This minion doesn't cost upkeep. This minion can only do the Move and Hunt for me action. This minion can´t be dominated. If the minion is defeated in combat its burnt and the opposing player gains this artifact. 
+Cost: 0, Undetectable (Players will still see the minion in player stats)
+Bowl of Convergence: Learn of one random vampire and minion in the same city as you. (Minion gets +1 intercept) 
+Cost: 0 Undetectable 
+Bloodspot dice: The GM rolls a D20. Gain the rolled amount x2  in blood. If a 1 is rolled, lose 20 Blood. 
+Cost: 0, Undetectable 
+Gangrel eye: If you fail a hunt roll this round, reroll it with +1 to the result. (Minion gets +1 Intercept)                                                                                                                     Cost: 0, Undetectable 
+Orb of Ulain: All hunt rolls targeting you for a Dementation, Dominate and Auspex action gets -2. (Minion can't be Dominated) 
+Cost: 0, Undetectable 
+Vispers in a bottle: Learn of one random action performed by a vampire of your choice (Minion gets +1 Intercept) 
+Cost: 0, Undetectable
+ Bag of gifts: Give another vampire 10 blood, this doesn't cost an action. (Minion get´s +5 to all hunts for blood) 
+Cost: 0, Stealth: +1 
+Fog Flute: Give a city -1 intercept until the end of round. (Minion get´s +1 Stealth) Cost: 0, Stealth: +2 
+ S.H.R.E.K NET access: Learn of all vampires that made a Move action this round. (Minion gets +1 intercept) 
+Cost: 10 Blood, Stealth: +3
+Crown of Malkav: If a vampire uses any dementation action this round, gain a random screen picture from a random chat. (Minion gets +1 Intercept) 
+	Cost: 5 Blood, Undetectable 
+Ring of Tremer: When you gain this artifact choose a discipline. You can perform that discipline action on basic. (Minion can perform the chosen discipline on basic) 
+(Cost and Stealth is the same as the chosen discipline)
+Scepter of Venture: Move a minion you control to any city. (A minion equipped with this artifact gains +1 Lvl, to a maximum of 3) 
+Cost: 15, Stealth +1 
+The evil eye: Name a vampire, that vampire loses 5 blood. This does not cost an action. 
+Cost: 0, +3 Stealth
+Ravanos boots: Move to an adjacent city. 
+Cost: 0, Undetectable 
+The Demeter: Move to any port city. 
+Cost: 20 Blood, Stealth: +1 
+Diamond of Toreador: All players learn what city you are in. Gain 25 blood. 
+Cost: 0, Can't be hidden 
+Daemon blood: Gain +3 in all stats until the end of the round then enter torpor in the city you are in. 
+Cost: 0, Undetectable 
+Brujahs Book: Name a city, it gets -1 stability and +1 MS. 
+Cost: 15, Stealth: +1
+The signet of king saul: Your actions become undetectable for inner circle members this round. 
+Cost: 10, Undetectable 
+The soul gem of Etrius: You may only perform this action if you are in torpor. If you are diablerierised, and the vampire that diablerierised you wins the campaign, you win instead. 
+Cost: 0, Undetectable 
+
+Sword of judgment: Gain +3 strength in combat against vampires that have performed a successful Diablerie action during this campaign. This effect lasts until the end of the round. 
+Cost: 5, Stealth: +0 
+
+Vial of elder blood: Gain all 
+disciplines on basic and masterd until the end of the round. This artifact is burned. 
+Cost: 0, Undetectable  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+THE CITIES
+Cities are the different arenas that the camarilla, anarchs and Sabbat will fight over. 
+A city has four different stats, Stability, Blood flow, Masquerade status and Intercept. 
+
+City example:
+Name: NYC (New york city) 
+Controller: ______ Prince of NYC (Camarilla) 
+Stability: 4 / 5 
+Blood flow: 130 Blood (150 - 20)
+Masquerade status: 3/5
+Intercept: 1
+Problems: Sabbat presens, Anarch presens, Independent Gangrels in central park, To many vampires (-20 Blood flow, -1 MS etch turn). 
+Special: Capital of the world ( +1 stealth on all personal actions)
+
+Stability represents how much control the leading vampyre of a city has. To create revolts anarchs will need to lower the stability of the city they want to do it in. If a city ever gets 0 stability it will get a problem. 
+
+Blood flow is how much blood the city's controller gets at the start of each round. 
+
+Masquerade status represents the vampire's control over humans. If a city gets a MS of 0 it triggers a masquerade violation! (see keywords)
+
+Intercept, the city's controller will learn all actions taken against or in the city that have lower stealth than the city's intercept. 
+
+The Controller is the vampyre ruling the city. 
+
+Problems are unique negative modifiers to a city. A city can have any number of problems. 
+
+Specials are modifiers or special effects a city or city's controller gains. A city can have any number of specials. 
+
+Contesting a city:
+During the game there might be two or more vampires who claim control of the same city. When a city is contested it's not uncontrolled but no one gets the blood flow from the city. 
+A contested city will get -1 stability and -1 MS etch turn its contested. 
+
+There are three ways that someone contesting a city can gain control over it. 
+One is to make a deal, a vampire can stop contesting a city at any time for any reason so send them some blood, a minion or maybe some promises and they might leave the city to you. 
+Or you can make the battle for control action. 
+Or if any vampire contesting the city enters torpor or is burned. A vampire in torpor can´t contest anything.
+
+ If a masquerade violation happens in a contested city all contesting vampires will be regarded as controllers.
+
+Taking a city:
+There will come times when a vampyre tries to take another city for themselves. A city is taken only when the controller of the city is changed after being contested. When a city is taken the new controller scores VP. If it's a baron they score 6 VP. If it's a Prince they score 8 VP but any camarilla member can claim credit the next round to steal VP from them. Archbishops score 3 VP for everyone in their sect when they take a city.
+YOU CAN ONLY SCORE VP FROM CONQUERING A CITY ONCE PER CITY.
+
+Losing a city: 
+If you lose control of a city you will gain the city's full blood flow at the start of the next round. You will lose your title but remain in your sect if it´s your only city.
+
+THE INFORMATION RULE
+You are not allowed to send screenshots of conversations, stats or other hidden information. Only open information is allowed to be screenshot and sent. 
+
+You are also not allowed to copy-paste conversations and send them to other players or to read them out allowed. You must always retell them with your own words, but to quote some parts is okay.
+
+THE POWER OF 3 RULE
+In the game you vampire can gain a lot of buffs from different actions, artifacts and other modifiers. But a vampire can NEVER gain more than +3 in any stat from any single source. 
+
+A source can be any game effect (actions, artifacts, modifiers, upgrades). For example, a vampire with protean can use it 3 times for +3 Strength, after that the source of protean can´t give the vampire more strength, but you can use an artifact like the black gloves to gain +2 strength for a grand total of +5 strength. As you gain bonuses from 2 different sources. 
+
+DOMAIN: 
+All vampyre players will have a domain. Some rules refer to a vampire being in or moving to their domain. Princes, Barons and Archbishops treat cities they control as their domains. Justicars and Inner circle members treat all Camarilla cities as their domain. If something tells you to move to your domain and you have more than one option, you choose.
+
+
+VP AND HOW TO GET THEM 
+Victory points (VP) are how you win the game. The player with the most VPs at the end of a campaign is the winner. There are multiple ways to gain VPs depending on what title you have. If you ever change titles you keep all the VPs you have but must follow your new titles ways of gaining new VPs. 
+
+Inner circle:
+Members of the inner circle have the easiest ways of gaining VPs. At the start of the game they begin with 3 VPs. And at the start of every second round they gain 3 more. In every Debate in the Ivory Tower both Inner circle members will always have one option that gives them 1VP in addition to its other effects. 
+
+Justicars: 
+Justicars will gain missions that can gain them VPs. Additionally they gain 2 VP every time they send a member of the Sabbat to torpor or burn them. They can also gain VP by exposing members of the Sabbat with the Expose the sabbat! action. 
+
+Princes:
+The princes gain VPs by taking control of new cities, it gains them 8 VPs. At the start of every turn that they control more than one city, they gain 1VP for every additional city they control. Princes can build influence in cities they control. When a prince builds influence in a city they will gain an influence in that city. If they control the city at the end of the campaign they gain VP equal to the influence of the city. 
+
+Barons:
+The barons gain VPs by taking control of new cities; it gives them 6 VPs. At the start of every turn that they control more than one city, they gain 1VP for every additional city they control. Princes can build influence in cities they control. A Baron gains 2 VPs when they successfully perform the Diablerie action. The Anarch Revolt action also gives VP.
+
+Archbishops:
+The Archbishops gain 1 Vp when they burn a minion controlled by a non-sabat
+player. They gain 2 Vp if they trigger a masquerade violation in a non-sabbat city.
+An archbishop gains 2 VPs when they successfully perform the Diablerie action. 
+All Sabbat players gain 3 VP if an Archbishop captures another city. And if a sabbat player burns a member of the inner circle they score 10 VP. The Shovelhead and Esbath actions can also give VP.
+ If a sabbat player is sent to torpor by a Camarilla player, all archbishops lose 2 Vp. 
+
+Final score for a campaign
+After the final round of the campaign is finished the GM will go over all players VPs. The player with the most VP is the winner of the campaign. A vampire in torpor or that is burned counts as having 0 VP for the final scoring. 
+The Camarilla
+
+The Camarilla is a vast and ancient sect of vampires, devoted to maintaining the Masquerade, the law that hides the Kindred from human society. Created in response to mortal inquisitions, it values secrecy, order, and control. The sect is ruled by a secretive Inner Circle, whose will is enforced by the Justicars, near-mythical figures with the authority to judge and investigate princes. Each Justicar commands a network of agents known as Archons, acting as both spies and enforcers. Local power lies with Princes, who govern individual cities with near-absolute authority. To belong to the Camarilla is to live under constant surveillance, endless politicking, and strict traditions that protect the whole from exposure or collapse. For many, it is safe through structure. For others, it is tyranny masked as order. But even this mighty sect now struggles to hold back the storm of rebellion, betrayal, and apocalyptic dread.
+
+There are three titles in the Camarilla, Inner Circle, Justicar and Prince. They all need to work together in order to maintain the strongest sect in the game. The highest ranked members of the camarilla are the Inner Circle members! They are the most powerful vampires when the game starts and can call upon endless resources. Their job is to maintain the camarilla as the strongest sect and to ensure its members remain loyal! They can give rewards and hand out punishments. A member of the inner circle has 6 actions every round.
+
+Justicars are the enforcers of the camarilla! It's their job to hunt down the sabbat and to keep the anarchs at bay! They are given missions that they must accomplish to score VP and gain blood. It's also the responsibility of the Justicars to keep the princes in line and stop them from betraying the sect. They have access to the powerful Arcon minion type to help them stalk enemies to the camarilla and root out sabbat influence.  A Justicar has 4 actions every round.
+
+The Princes are the backbone of the Camarilla. They are the rulers of the sect's many cities and enforce the sect's presence in any one region. They build on their cities to make them grow more powerful and secure. It's also the princess' responsibility to expand the camarilla to cities that are not under camarilla influence to grow the sects and their own power. They can also recruit the Primogen minion to help them build their cities. A prince has 4 actions every round.
+
+
+The Ivory Tower
+The Camarillas special mechanic is the Ivory Tower! The sect uses the Ivory tower in order to push their decrees on all other kindred and rule from the shadows. But the tower is a place for intrigue, backstabbing and plots within plots.
+
+Every round the Ivory Tower will present a Debate. Every debate has 2-4 different options to vote on. When a camarilla vampire writes their actions they must also declare how they vote. A vampire can divide their votes between multiple options. 
+
+A camarilla vampire has votes equal to their title. They can also use the Buy votes action to gain more votes. Non-camarilla vampires can vote in the Ivory tower thanks to this action. When a debate has been resolved it will be revealed how many votes each option got but not who voted for what.
+
+If a member of the inner circle or Justicar would lose their title or be burned a special debate will begin where players can vote on which member of the sect who will take the title. 
+
+No title - 1 Vote
+Prince - 2 Votes
+Justicar - 3 Votes 
+Inner circle - 4 Votes 
+
+A Debate can look like this: 
+
+CAMARILLA SEGREGATION 
+A call to separate organized camarilla vampires from independent troublemakers. 
+
+Option: 1 
+Name: YES, WE MUST SEPARATE! 
+Effect: All camarilla cities gain the following special: Camarilla segregation (The cost to Move into this city is increased by 10 blood for all non-camarilla vampires,)  
+The Move action cost all camarilla vampires an additional 10 blood for 3 turns. 
+
+Option: 2
+Name: NO, WE MUST MAINTAIN OUR INFLUENCE!
+Effect: All camarilla cities lose 1 stability. For the next 3 turns the Move action is free for camarilla players. 
+
+
+
+
+
+
+
+
+
+
+
+The Anarchs
+
+The Anarch Movement is a loose, rebellious coalition of Kindred who reject the rigid hierarchy and elitism of the Camarilla. Formed from frustration with centuries of elder domination, the Anarchs fight for freedom, equality, and self-determination among vampires. They despise the Traditions being used as tools of control and see the Princes and Inner Circle as relics of a dying order. While not as violent or chaotic as the Sabbat, Anarch domains often operate with open debate and rotating leadership, prioritizing the voice of the younger generations. However, their lack of unity makes them vulnerable to internal power struggles and outside manipulation. Despite this, the Anarchs continue to grow in strength, especially in cities where the Camarilla has failed to protect or serve the Kindred population. For many neonates, the Movement represents the future of vampire society. One where all Kindred have a say in their fate.
+
+The anarchs only have one title, Baron. The barons want to do one thing… REVOLT! The anarch revolt action is one of the most powerful actions in the game! It can completely destroy another player's turn or city! And the more anarchs that revolt the stronger it gets! So an anarch's game plan should always be to lower the stability of other cities and trigger revolts in them. But the anarchs can be much more than just rebels. Organizing the younger generations of vampires can form powerful armies and using them the anarch cities can become havens for kindred of all kinds. A Baron has 5 actions every round.
+
+It is important to keep in mind that the anarchs are not an organized sect like the camarilla. All Barons need to be able to stand on their own. Temporary alliances can be formed when the Camarilla or Sabbat attack their domains. But these alliances don't last for long. A Baron can trust no one, for one wrong move can mean the end of their domain forever. 
+
+The anarchs don't have a unique sect mechanic like the Camarilla or Sabbat. But to compensate for this they have very strong faction actions that can let them move faster than vampires of the other sects. Speed and specialized strikes are the anarchs strongest weapon against their enemies. 
+
+
+
+
+
+
+
+
+
+
+
+THE SABBAT 
+
+The Sabbat is a fanatical and violent sect of vampires that rejects the Camarilla's traditions and the Masquerade. Embracing their monstrous nature, the Sabbat see mortals as cattle and believe Kindred should rule openly. Bound by blood and loyalty, Sabbat packs operate like militant cults, often engaging in brutal rites like the creation of Shovelheads, fresh vampires thrown into battle. They favor freedom through strength and despise the tyranny of elders, even while following their own brutal hierarchies. The Sabbat thrives in chaos, waging wars against the Camarilla and spreading fear wherever they take hold. Though diminished in modern nights, whispers of Sabbat resurgence persist—especially as Gehenna looms. To most Kindred, they are nightmares in the dark, monsters who embrace the beast within without shame or restraint.
+
+There is only one title in the Sabbat, Archbishop. But at the start of a campaign all archbishops will be hidden among the other two sects. Disguised as either a Prince or Baron. Archbishops control a city just like the Prince or Baron they are pretending to be. They can use all the actions of the title they masquerade as, but they don´t score VP in the same way. An exposed archbishop has 4 actions every round.
+
+Their goal is to build hidden Sabbat bases in cities with their Build the Base action. A sabbat base can have a Lvl from 1-3. There can only be one Sabbat base per city. All Sabbat players share their bases and will know the location of every base. Some Sabbat actions require a base of certain lvls to be performed. Sabbat players score VP mainly from their special actions that require high lvl bases. 
+
+How is a Sabbat member found? 
+A sabbat member can be found in one of two ways. They can reveal themselves when calling a crusade or get exposed by a Justicar with the expose sabbat action. When a sabbat member is exposed they lose their disguise and the title that goes with it. They gain the sabbat tag and lose the ability to use the actions of the sect they had infiltrated.
+
+Sabbat schemes 
+The Sabbat scheme is a unique mechanic to symbolize the sects ability to constantly create trouble for the other sects. 
+
+The sabbat players get X+1 extra actions where X is the number of sabbat players. These actions must be divided between the sabbat player before the start of any round. All sabbat players must agree on how the actions will be divided. If players can't agree no one gets the action. How the players agree is up to the sabbat players etch round, it must just be clear to the GM who gets the extra actions.
+
+
+
+BUILD YOUR VAMPIRE
+
+
+Get a Title
+When the game begins all players will be given a title by the GM.  If this title is a city title (Prince, Baron or Archbishop) they will also be given a City at the same time. If your title begins the game with an artifact the GM will tell you what artifact you start with.
+
+Think of a concept
+Take a few minutes and consider what kind of character you want to play. If you have no idea, maybe thinking about these questions can help.
+Who was your character before they became a vampire?
+Why have your character risen to the top of vampire society?
+When did your character become a vampire? 
+Where is your character from?
+
+Choose a Clan
+There are 14 different clans in the game (see list below), you can choose any clan you want. Your clan gives you a Boon and a Curse. These are special rules that will apply to your character during the campaign. Your clan will also determine your 3 starting disciplines.
+
+Choose your starting minions. 
+Your title will specify what minion(s) you can choose. Give all your minions a name. (Exemples: Ron (LV 1 Ghoul), Jenny (LV 2 Eye), The Gloomy Gang (LV 2 Harpy)) 
+
+Master disciplines 
+Your title will specify how many disciplines you get to master during character creation. Indicate your mastered discipline by placing an (M) in front of them. 
+(Exemples: (M)Obfuscate or (M)Chimestry)
+
+Choose your starting upgrades. 
+Your title will specify what upgrades you can choose. Pick 2 out of 4 options.
+
+Spend EXP 
+Your title will specify how much EXP you have to spend on additional upgrades. You must spend all EXP you have during character creation. The list of upgrades is found below the list of clans. If you choose an extra artifact inform the GM as soon as possible so they can help you generate your artifact.
+
+Prepare your character introduction.
+When you are done filing in your character, it's time to prepare your first in-character post. This is when you first introduce your character to the other players. You decide on your own how long this text will be. Some players like to add a picture, this is encouraged but not mandatory. When you have written the introduction, post it in “Kindred Societ
+
+
+
+
+
+The titles of Vampyres 
+
+Inner circle starts whit:
+Minions: Two LV 2 minions. They can be either a Ghoul, Harpy or Eye. The minions can be different types. And two LV 1 Ghouls. 
+Masters disciplines: You get three masted disciplines.
+Starting upgrades: (Pick 2)
+Gain another discipline. 
+Gain +1 in any stat. 
+Gain a LV 3 Ghoul, Harpy or Eye.
+Gain 100 extra starting blood. 
+Starting EXP: 6
+Start of game resources:
+200 Blood 
+One random artifact.
+3 VP
+
+The Justicars start with:
+Minions: One LV 2 Archon or Three LV 1 Eyes.
+Masters disciplines: You get two masted disciplines.
+Starting upgrades: (Pick 2)
+Gain another discipline. 
+Gain +1 Strength or +1 Intercept.
+Gain a LV 2 Archon
+Gain 100 extra starting blood. 
+Starting EXP: 4
+Start of game resources:
+150 Blood 
+One random artifact.
+2 Missions
+
+
+
+
+
+
+A prince start with: 
+Minions: One LV 1 Primogen or One LV 2 Ghoul, Harpy or Eye.
+Masters disciplines: You get one master's discipline.
+Starting upgrades: (Pick 2)
+Gain another discipline. 
+Gain +1 Stealth or +1 Strength 
+Your starting city gains +25 Bloodflow.
+Your starting city gains +2 Intercept. 
+Starting EXP: 4
+Start of game resources:
+100 Blood
+2 Royal privileges
+One city (This is your starting city)
+
+A baron stats with:
+Minions: One LV 1 Harpy and Ghoul or one LV 1 Eye and Ghoul.
+Masters disciplines: You get one master's discipline.
+Starting upgrades: (Pick 2)
+Gain another discipline. 
+Gain +1 Strength or +1 Intercept. 
+Your starting city gains the Anarch Stronghold: During combat in this city its controller gains +2 to the combat dice, special. 
+Your starting city gains the Anarch political hub: Every round name a city. Give the named city +/- 1 stability special or the Anarch free press: At the start of the round gain a lvl 1 Ghoul or Eye minion special.
+Starting EXP: 4
+Start of game resources:
+150 Blood
+One city (This is your starting city)
+THE CLANS:
+
+Banu Haqim
+Assassins and judges of Kindred. Honorable, terrifying, and precise. Blood calls to blood. Feared by many, trusted by few. Justice is sacred, and blood is currency.
+Disciplines: Celerity, Obfuscate, Thaumaturgy  
+Assassins (Boon): If this vampire gets an ambush, give them +2 strength also.  
+Bloodlust (Curse): This vampire has -1 strength. Lose this curse after you have committed diablerie.
+
+
+Brujah 
+Rebels, warriors, and idealists. Passion fuels their fists and fury. Brilliant minds and short tempers. Easily provoked, but never without purpose. Chaos is their philosophy.
+Disciplines: Celerity, Potence, Pressense 
+Brujah debate (Boon): If you have won a combat all faction actions you perform this and next turn gets -10 cost.
+Frenzy (Curse): At the end of each round there is a 25% chance that you attack a random vampire or minion in the same city as you.
+
+
+The Ministry
+Serpents who spread corruption, desire, and heresy. Freedom through temptation. Masters of sin and subversion. Always watching, always whispering. Enlightenment lies in surrender to darkness.
+Disciplines: Obfuscate, Protean, Pressense 
+Seduction (Boon): Eye and Arcon minions get -1 intercept against you. 
+Decadence (Curse): Lose 5 Blood at the end of every turn.
+
+Gangrel
+Nomadic survivors, beasts of the wild. They hunt alone, loyal to none. Closer to the earth, closer to the Beast. The night is their domain.
+Disciplines: Animalism, Fortitude, Protean
+Apex predators (Boon): This vampire gets +1 to all hunt rolls.
+More beast than man (Curse): This vampyre can't negotiate if they lose combat. 
+
+
+Hecata 
+The Clan of Death reborn. United from Giovanni, Cappadocians, and others. Necromancers with a terrifying intimacy with the grave. Bound by blood, family, and ghostly whispers.
+Disciplines: Auspex, Fortitude, Oblivion
+Necromansers (Boon): If this vampire loses a minion, they gain a lvl 1 Ghoul. 
+A cursed kiss (Curse): Recruiting a minion cost +10 blood.
+
+Lasombra
+Tyrants who command shadow and silence. No reflection, no regrets. Dominate through strength. Masters of fear, hierarchy, and manipulation. Darkness obeys their every thought.
+Disciplines: Dominate, Oblivion, Potence
+Masters of shadows (Boon): If this vampire uses the Oblivion discipline choos another action that gains Undetectable. This triggers only once per round. An action that has Can´t be hidden cannot become Undetectable.
+Over ambitious (Curse): If this vampire has less blood then it did last turn, they can't use trifle. 
+
+
+Malkavian 
+Mad seers, cursed with fragmented genius. Their insanity is often prophecy, their logic is riddled, and their presence disturbs more than it soothes.
+Disciplines: Auspex, Dementation, Obfuscate
+Prophecy of madness! (Boon): Gets a unique bit of information every round. 
+Madness of prophecy! (Curse): At the end of every round there is a 25% chance that this vampire moves to a random adjacent city. 
+
+
+
+
+
+
+
+Nosferatu
+Deformed, despised, and unseen. Masters of secrets and subterranean networks, they trade in information and horror, hiding in plain sight—because no one looks.
+Disciplines:Animalism, Obfuscate, Potence
+Always listening (Boon): When a Nosferatu uses the Obfuscate, Hide or In the shadows action. They gain +1 Intercept for the rest of the round. 
+Monstrous (Curse): The Move action costs +5 blood.
+
+
+Ravnos 
+Nomadic tricksters with illusion in their blood. Tied to chaos and fleeting pleasures, their legacy burned, but their stories still haunt the night.
+Disciplines:Chimestry, Fortitude, Animalism
+Master thieves (Boon): Gain +1 Stealth on Hunt for blood and Steal artifact actions. 
+A need for speed (Curse): If this vampire did not move, lose 5 blood at the end of round. 
+
+
+Salubri
+Healers shunned as heretics. Rare and hunted, they offer peace in a world of hunger, but their kindness masks ancient power and tragedy.
+Disciplines:Auspex, Dominate, Fortitude
+Healers and scholars (Boon): If this vampire performs the Awaken from torpor action, gain 2 ticks inside of 1.
+Hated by kindred (Curse): You can only make one Gift action etch turn. 
+
+
+Toreador 
+Artists, lovers, and narcissists. Obsessed with beauty, they live for the aesthetic moment, even as eternity slowly steals the passion they crave.
+Socialites (Boon): All faction actions cost 5 blood less. 
+Disciplines: Auspex, Celerity, Presence
+Obsession (Curse): At the start of the game the GM generates a random obsession. The obsession can be an artifact, city or even a minion. If this vampire does not own or control their possession they lose 10 blood at the end of every turn.
+
+
+Tremere 
+Blood sorcerers bound by ritual. Ambitious, secretive, and feared, they built a pyramid of power—then watched it fracture from within.
+Disciplines: Auspex, Dominate, Thaumaturgy
+Blood mage (Boon):If you only make one Thaumaturgy action during a round, it won't cost an action. 
+The broken pyramid (Curse): Can't have Lvl 3 minions.
+
+Tzimisce
+Shapers of flesh and lords of terror. They twist bodies and minds alike, ruling domains with alien intellect, ancient pride, and monstrous devotion to control.
+Disciplines: Animalism, Dominate, Visisitude
+Flesh artist (Boon): If this vampire burns another vampire's minion gain 10/20/30 blood, depending on Lvl.
+Bound by earth (Curse): If this vampire ends their turn and is not in their domain, they lose 10 blood.
+
+
+Ventrue 
+Aristocrats, rulers, and iron-willed kings. They demand excellence in all things, especially blood. To rule is their birthright—and they never feed beneath themselves.
+Disciplines: Dominate, Fortitude, Pressense
+Venture wealth (Boon): Gain 10 blood every turn. 
+Picky eater (Curse): Get -10 blood on every Bleed action.
+
+
+
+
+
+
+
+EXP UPGRADES
+
+Extra discipline - Your vampire learns one more discipline. Pick any discipline you don't have and add it to your vampyre. Cost: 1 EXP
+Mastered discipline - You master a discipline you already have. Choose a discipline you have and gain access to its master discipline. Cost: 1 EXP
+Greater strength: Get +1 Strength. A vampyre can get a maximum of +3 strength from this upgrade. Cost: 2 EXP
+Useen: Get +1 Stealth. A vampyre can get a maximum of +3 Stealth from this upgrade. Cost: 2 EXP 
+Eyes of the night: Get +1 Intercept. A vampyre can get a maximum of +3 Intercept from this upgrade. Cost: 2 EXP
+My treasure: Get a random artifact. Cost: 1 EXP
+A vampire may spend a maximum of 12 Exp in a campaign. 
+
+
+When you are done your character should look like this (Depending on your title): 
+
+Name: Victor Creed 
+Clan: Nosferatu
+Title: Prince 
+VP: 0
+Strength: +1
+Stealth: +1
+Intercept:+ 0
+Blood: 100
+Discipline: (M)Animalism, (M)Obfuscate, Potence, Celerity.
+Artifacts: -
+Minions: Mr Thornsby (LV 1 Primogen)
+Extra: (2 Royal favors) (+25 Bloodflow to starting city)
+Domain: 
+
+
+
+
+
+
+
+
+
+
+
+
+Keywords: 
+
+Ambush: If you attack a vampire and have higher stealth then there intercept the GM rolls one extra dice for you in combat and picks the best one.
+
+Bleed: When an effect says that you bleed a city. That city's blood flow is lowered by the amount you bleed until the end of the round and you gain that amount of blood. 
+
+Blood flow: A city's Blood flow is how much Blood a city generates for its controller each turn.
+
+Blood hunt: A vampyre can be the target of a blood hunt. All Justicars will get a mission to burn them. It will reward all Justicars a lot of VP. If a non-Justicar player sends the blood-hunted vampire to torpor or burns them they gain 150 blood and 2VP.  If a camarilla member triggers a blood hunt they lose their title. 
+
+Burned: If something is burned it's removed from the game. 
+
+Contest: During the game there might be two or more vampires who claim the control of the same city. When a city is contested it's not uncontrolled but no one gets the blood flow from the city. A contested city will get -1 stability and -1 MS etch turn its contested. Contesting a city controlled by another player costs 50 blood per round you contest it. There are three ways that someone contesting a city can gain control over it. The first one is to make a deal, a vampire can stop contesting a city at any time for any reason so send them some blood, a minion or maybe some promises and they might leave the city to you. Or you can make the battle for control action. Or if all other vampires contesting the city enters torpor or is burned. If someone contests a city you control you will always have an opportunity to move back to their city for the start of the next round. If a masquerade violation happens in a contested city all contesting vampires will be regarded as controllers. 
+
+Domain: All vampyre players will have a domain. Some rules refer to a vampire being in or moving to their domain. Princes, Barons and Archbishops treat cities they control as their domains. Justicars and Inner circle members treat all Camarilla cities as their domain. If something tells you to move to your domain and you have more than one option, you choose. 
+
+EXP: Stands for experience points. All vampires begin with a number of EXP depending on their title. A vampire spends EXP on different upgrades (See character creation). A Vampyre can spend a maximum of 12 EXP during a game.     
+
+Hunt: When you are looking for a vampyre or minion to start combat or make any other action against them you (usually) need to make a hunt roll. The GM rolls a D4 and adds your personal intercept and then rolls a D4 and adds the targeted vampire or minions stealth. If the score is higher than the hunted vampires or minions stealth your action can continue. 
+
+Influence: Camarilla Princes can build influence in their cities with the Build my kingdom action. A city's influence can always be seen by players in city notes. At the end of the game all princes score VP equal to the influence in cities they control. If a prince ever loses a city they lose all influence in that city.   
+
+Intercept: All vampires and cities have an intercept score. You will learn all actions that originated from the city you are in that have lower stealth than your intercept. If you control a city you will learn all actions that target the city and all actions that originated in the city with lower stealth than the city's intercept. 
+
+Masquerade violation: If a city gains a masquerade status of 0/5 it will trigger a masquerade violation. The controller of the city will get a blood hunt called on them for failing their duties to honor the first tradition. All adjacent cities will get -1 MS at the start of each round until the masquerade violation has been mended by giving the city that triggered the violation 5/5 MS. If more than half of all cities have a masquerade violation all vampires will be hunted down by humans and the game is over! The first time a masquerade violation triggers in a Camarilla city no blood hunt is called. 
+
+Minion: A minion is a NPC character that serves a player vampire. A minion can be anything from a human in a position of power to a deformed war-ghoul serving its vampiric master. Minions have different levels from 1-3. A level 1 minion represents the weakest servants a vampire can have. Like a group of humans or a newborn vampire. A level 3 minion is the strongest servant a vampire can have, like a war-ghoul, an older vampire or the mayor of a city. Beside a level, a minion has one of five types. Ghoul, Harpie, Eye, Primogin and Arcon. They have a set cost per turn depending on level and minion type.
+
+Missions: Missions are a special mechanic for Justicars. A mission is something a Justicars must complete to gain blood or to score VPs. There are two ways to get missions, if they get a mission from an Inner circle member or if they get it from the Camarilla (with the Orders from the top action).  
+
+Possession: A vampire can be in possession of artifacts. Other vampires don't know what's in your possession unless they use the actions to uncover it. Or you make actions that reveal it.
+
+Royal Privileges: If a blood hunt is called on a prince they instead lose 1 royal privilege. A Prince may spend a royal privilege to gain 1 extra action for a round.
+
+Stealth: When you make an action it will not be obvious to other vampires what that action is. If your stealth is higher than the intercept of other vampires or the cities they are masters over, they will not know of your action. But they might notice the effects of the action. The actions stealth is your (or your minions) stealth and the actions stealth modifier. 
+
+Torpor: A vampire in torpor can´t make actions unless it's the awakened action. When in torpor a vampyre can only make one action a turn. But they can still make minion actions. A vampire can't score VP in Torpor and counts as having 0 VP for the purpose of end game scoring.
+
+VP: Stands for victory points. Get them to win the game.
+
+Trifle: The first action you make with Trifle each round doesn't cost an action.
+
+
+Round Break down 
+
+Players send in actions.
+1a - Players pay for their actions.
+1b - Players pay for their minions. 
+
+Start of round effects resolve. 
+2a - City effects are resolved. 
+2b - Event effects are resolved. 
+2c - Other effects are resolved. 
+
+Actions resolve. 
+3a - The GM resolves all players action 1 in a random order. Then repeat the process for action 2,3,4 etc until all actions are resolved. Combats are resolved in order depending on when in the action sequence they happened. Remember that players don´t gain any blood income until step 5. 
+
+End or round effects
+4a - The fight for control is resolved.
+4b - Player end of round effects resolve. Like (M)Dementation, Dominate and others. 
+4c - Justicars check if missions are accomplished. 
+4e - Check for a masquerade collapse. 
+
+Income.
+4a - Players controlling cities gain the cities current blood flow as income. 
+4b - Players gain blood from any Bleed they have performed.
+4c - Players gain income from other sources. Like Bottomless wealth, Finished missions, or other actions that generate blood. 
+
+
+
+
+All actions
+Faction actions:
+Give: Name a vampire or NPC. Give them any amount of blood, Minions or artifacts you control. This doesn't cost an action. 
+Cost: 0, Stealth:+1 
+
+Investigate: Name a city and a problem or special in that city. The GM will give you information on the problem or special and a hint on how to handle it or make it worse.
+Cost: 20 Blood, Stealth: +1 
+
+Troublemaker: Name a city. You create a problem in that city. The lower the city's stability the worse the problem. If the city has 0 stability, it creates a disaster. 
+Cost: 30, Stealth: +0 
+
+Fight for control: You can only make this action if you contest a city. All other vampires contesting the city will get the option to fight for the city or flee. If they flee you will get control of the city. If they fight you will enter combat with them at the end of the next round the winner gains control of the city. 
+Cost: 25 Blood, Stealth: -3
+
+Search: Name a city in your domain. The GM gives you a list of all vampires and minions that have lower stealth than your or the city's intercept in that city. There is a 25% chance that you find an artifact.  
+Cost: 20 Blood, Stealth: +0 
+
+Conquer new territory: Contest the city you are in. This action can only be made if you have no title.
+Cost: 150, Can´t be hidden
+
+Camarilla actions: Only camarilla players can make the following actions 
+
+Control the masquerade: Name a city. It gets +1 masquerade status. Trifle
+Cost: 10 Blood, Stealth: +1 
+
+Claim credit: This action can only be made if a Price becomes the controller of a new city or a justicar completes a blood hunt. Steal one VP from that Prince or Justicar. A maximum of 6 VP can be stolen at any one turn. This action can only be made once per turn. 
+Cost: 25 (0 Blood if you are Inner circle) Blood, Stealth: -2 
+
+Buy votes: For every 10 blood spent on this action gain +1 vote in the Ivory Tower for this round. This does not cost an action.
+Cost: X, Stealth: +0
+
+Invite to the camarilla: Name an anarch vampire. They will get the option to join the camarilla. If the Anarch is a baron they will become a prince of the city they control. Otherwise they just get the camarilla tag. Next turn the invited vampyre can only perform 1 action. 
+Cost: 10 Blood, Stealth: -2
+
+Only princes can perform the following actions: 
+
+Build my kingdom: Name a city and pick three (You can't pick the same one more than ones) This action can only be made once per city, per turn : 
+Next turn the city gains +1 intercept. Cost: 10
+Next turn the city gains +1 Stability Cost: 10
+Next turn the city gains + 25 blood flow. Cost 50
+Next turn the city gains Special: Camarilla order (Next time someone targets this city with the troublemaker action, the action fails and this special is burned) Cost: 15
+Next turn the city gains Special: Secure haven (The next time someone attacks the controller of the city the action fails and this special is burnt. Does not stop combat from a Fight for control action) Cost: 10
+Next turn the city gains Special: Camarilla Ball (All princes in the city gains 1 Royal privilege at the end of round, then burn this special)  Cost: 25 
+Gain 2 influences in the chosen city. Cost: 15
+Cost: X Blood, Cannot be hidden 
+
+Second tradition: Name a vampyre or minion in your domain. Make a hunt roll with +2 intercept. If successful, enter combat with that vampire or minion. You may bring any number of your Harpies that are in your domain with you in this combat. The minions you bring can´t make another action this turn. (You and all chosen minions move to the city with the named vampire if the hunt roll is successful) 
+Cost: 15 Blood, Stealth: +0 
+
+Expansion:  Name a city that is adjacent to a city you control and choose one:
+Pay (the city's blood flow X 10) blood. You become the controller of the city. The previous controller loses the city and title. Score VP for the city. 
+Move to the city and contest it. You may bring any number of minions in the same city as you, with you. But the minions you bring can´t take actions this round. 
+Cost: 50 Blood, Stealth: -2 
+
+Recruit a Primogen: 
+Name a city in your domain. Gain a lvl X primogen in the named city.
+Cost: 40/80/120, Stealth: +0
+
+Sabotage: Lower a city's Stability or intercept by -1. 
+Cost:  20 Blood, Stealth: +0 
+
+Go Anarch: You lose your Camarilla tag and abstain from your title if you have any. If you are a Prince, become a Baron. This action must be your only action in the round. 
+Cost: 0, Can´t be hidden
+
+Only justicars can perform the following actions:  
+
+Orders from the top: Get a Mission from the GM. Trifle 
+Cost: 0 blood, Undetectable.
+
+Iron fist of the camarilla: Name a vampire or minion. You learn what city(s) they were in last turn, you will also learn what city they ended the round in. 
+Cost: 20 Blood, Stealth: +0
+
+Investigate the Sabbat: Name a city. Learn of all Sabbat actions targeting the city this and the previous round. (You get to know what actions happened in what round.)
+Cost: 10 Blood, Stealth: +1 
+
+Expose the sabbat!: 
+Name a Prince or Baron that you are in the same city as. If the named Prince or Baron is a member of the sabbat the GM rolls a D4. If the result is anything but a 1 they become exposed and you score 4 VP. If they are not a member of the sabbat you lose 2 VP. This action can be performed only once per turn.
+Cost: 50, Can’t be hidden 
+
+Recruit a Archon:
+Gain a Lvl X Archon in the same city that you are in. This action can only be made if you have completed a mission this turn.
+Cost: 25/50/75 Blood, Stealth: +1
+
+Only inner circle members can perform the following actions: 
+
+Bottles wealth of the camarilla:  Gain 250 Blood. You can't Move (In any way) the round you use this action. This action can only be performed once per round. 
+Cost: 0 blood, Stealth: +0
+
+Reward loyalty: Name a Prince or Justicar. If the named vampire is a Prince, that prince gains 1 royal favor. If the named Vampire is a justicar they gain 50 Blood. This action can only be made once per turn. Trifle
+Cost: 25, Stealth: +1 
+
+Fifth tradition: If you are in a camarilla city, gain all the information the Prince will get from the city's intercept and all information princes from adjacent camarilla cities get. 
+Cost: 30 blood, Stealth: -1
+
+Punish treason: Name a camarilla vampire. The named vampire loses 25 blood at the end of the round. A vampire can only lose blood as a result of this action once per round.
+Cost: 0, Stealth: +0 
+
+Pardon: Name a vampire with a blood hunt called on them. The blood hunt is canceled at the end of the round.
+Cost: 25 Blood, Cannot be hidden.
+
+Anarch actions: Only Anarchs can perform the following actions. 
+
+Anarch highway: Move up to 2 of your minions to any adjacent city. 
+Cost: 10 Blood, Stealth: +0 
+
+Anarch free press: Give a city +2 intercept for the rest of the round. Trifle
+Cost: 10 Blood, Stealth :+2 
+
+Anarch mission: Name a minion you control, the named minion gains +1 action this round. A minion may only gain 1 extra action per round.
+Cost: 15, Stealth: +1
+
+Anarch Sabotage: Lower a city's Stability or intercept by -1. Trifle
+Cost:  15 Blood, Stealth: +0 
+ 
+Only barons can make the following actions:
+
+Anarch revolt: Name a city with a stability of 1 or less and place one revolt counter on it, then choose one for every revolt counter on the named city:
+The GM rolls a D4 for every camarilla and sabbat minion in the city. If the D4 rolls over the minions level they are burned.
+If the ruler of a city is in it, they are moved from it to a random adjacent city at the end of round and lose a D100 blood. 
+Bleed the city for half of its remaining blood flow. Then the city loses -10 Blood flow permanently.
+Gain 2, lvl 1, Ghouls or harpies in the named city.
+Move to the city and contest it.
+If this city has 5 revolt counters, gain control of it and remove all revolt counters from it. It gains -10 blood flow permanently.
+Then score 1 VP and the chosen city gains -1MS. A vampire can only preform this action once per round per city.
+Cost: 50 Blood, Stealth: -3 
+
+
+Organize resistance: Burn a minion in your domain and choose X (X is the burned minions lvl: 
+Name an anarch city, it gains +1 stability. 
+Name an anarch city, it gains +1 intercept. 
+Name an anarch city, It gains +1 MS.
+Name a city you control, gain 50 blood. Get -1 Masquerade status in the named city. 
+Name a city you control, give it the Anarch stronghold, Anarch political hub or Anarch free press special. 
+Cost: 25 Blood, Stealth: +0 
+
+Sabbat actions:  Only Sabbat members can perform the following actions.
+
+Sabbat sabotage: Choose a city. That city gains -1 MS or -1 Intercept. 
+Cost: 15 Blood, Stealth: +2
+
+Only Archbishops can make the following actions
+
+Build the Base: Name a city that belongs to the same sect that matches your disguise or that already has a Sabbat base in it. If there is no base in the chosen city, create a Lvl 1 base. If there already is a base in the city give it +1 Lvl, to a maximum of 3. 
+
+A Sabbat base gives the following effects to all Sabbat players:
+Gain +X stealth on all sabbat faction action targeting the city. Where X is the base Lvl. 
+All sabbat players gain 5 blood per lvl of the base at the end of each round. 
+A city with a sabbat base counts as being adjacent at all times for the use of Sabbat actions.
+Cost: 25 Blood, Stealth: +3
+
+Burn the weak!: Name a city with a sabbat base in it. The GM rolls a D4 for every minion in that city that has a Lvl lower or equal to the base. If the D4 rolls over the minions level they are burned.
+Cost: 10, Stealth: +2
+
+Spreading the truth of Cain: Choose up to 3 cities with Sabbat bases in them! All of the named cities get -1 stability, -1 MS and -1 Intercept. This action can only be made once per turn. 
+Cost: 20, Stealth: +1 
+
+Shovelhead attack!: Name a city whit a Lvl 3 Sabbat base. Roll a D4 for etch non-sabbat minions in that city. If the D4 rolls over the minions level they are burned. The city suffers -2 stability and -2 Masquerade status. The city also gets -25 blood flow for 2 turns. The Sabbat player that made this action score 2 VP. The lvl of the sabbat base is reduced to 1. This action can only be made once per round.
+Cost: 50 Blood, Stealth: +0
+
+Esbat: Name a city with a Sabbat base in it. Bleed it for X2,D10s where X is the Lvl of the chosen base. The Sabbat player can choose to not gain blood from this action, and instead score 1 Vp for every 20 blood they would have bleed. This must be done as the action is chosen. This action can only be made once per turn. 
+Cost: 10, Stealth: +2 
+
+Call a Crusade!:
+You gain 250 Blood, gain 2 lvl 2 minions and next turn gain 1 extra action. You become exposed. 
+Cost: 0, Stealth: Can’t be hidden 
+
+Conquer in the name of Cain! 
+Name an adjacent city. Move to it and contest it. This action can only be made by exposed Archbishops. 
+Cost: 100, Stealth: Can´t be hidden
+
+
+Personal actions: 
+
+Move: Your Vampire moves from one city to an adjacent city. If you are a Justicar this action gains Trifle.
+Cost: 10 Blood (5 if you are a Justicar), Stealth: +2 
+
+Bleed: You bleed the city you are in. If you bleed in your domain you will get 2 D10x5 Blood. If you bleed in another vampire's domain you get 1D10x5. The blood flow of a city will decrease by the amount you bleed it for this turn. You can´t gain more blood than the city´s blood flow. 
+Cost: 0, Stealth: +0 
+
+Watchful eyes: Increase your personal intercept by +1 for this turn. This action can only be performed once per turn.
+Cost: 10 Blood, Stealth: +0
+
+In the shadows: Increase your personal stealth by +1 for this turn. This action can only be performed once per turn.
+Cost: 10 Blood, Stealth: +0 
+
+Blood for blood: Increase your personal strength by +1 for this turn. This action can only be performed once per turn.
+Cost: 10 Blood, Stealth: +0 
+
+Attack!: Name a vampire or minion in the same city as you. Make a hunt roll, on success you enter combat with the named target. If your stealth is higher than their intercept, you get an Ambush. 
+Cost: 0 Blood, Stealth: -1 
+
+Wait and strike: Choose a city that you are in and set a condition to attack. The GM rolls a hunt roll for your vampire.You hunt the next vampire or minion that fulfills the condition (see examples below). If you move from the chosen city it cancels the effect from this action.  
+Cost: 0, Stealth: +2 
+
+Exempel:  A condition should look like this. “when an anarch bleeds in the city”, “If anyone enters the city”, “If a minion enters the city”, “When X leaves the city”. Always check with the GM and get your condition approved. 
+
+Bestow gifts: Give one of your minions +1 Lvl permanently. A minion can't go above lvl 3.
+Cost: 25 Blood, Stealth: +1
+
+Get a minion: You recruit a minion into your service. 
+Ghoul - Cost 25/50/75
+Harpy - Cost: 30/60/90
+Eye - Cost: 20/40/60
+Cost: ?, Stealth: +0  
+
+Grow in power: Get 1 EXP for every 50 blood spent. Spend the EXP as you make this action. Trifle 
+Cost: 50X, Stealth: +0 
+
+Awaken: If your vampyre is in torpor you can only perform this action. If you have performed it three times you vampyre levs torpor. Other vampires can perform this action for you if they are in the same city as you. 
+Cost: 0, Stealth: +3 
+
+Diablerie: Name a vampire in the same city as you are in that is in torpor and make a hunt roll. On success you may burn them and get one of their disciplines and +1 in Strength/stealth/intercept for the rest of the game. This might trigger a blood hunt. Or just burn them. This option does not trigger a blood hunt.
+Cost: 0, Stealth: -1  
+
+Hide: Get +5 stealth this turn. You can´t make any more actions this round. 
+Cost: 10, Undetectable 
+Steal an artifact: Name an artifact in the same city you are in. Make a hunt roll against the artifacts carrier. This hunt roll is based on your stealth instead of intercept, and the opposing vampires intercept instead of their stealth. On success, gain possession of the named artifact. 
+Cost: 15 Blood, Stealth: +0 
+
+Look for artifacts: Name a vampyre and make a hunt roll. On success learn of all artifacts that vampyre is in possession of. Trifle 
+Cost: 10,Stealth: +1 
+
+Sail: If you are in a port city, move to any other port city that shares the same sea region. You can´t sail in a sea region with a storm.
+Cost: 15, Stealth: +0
+
+Summon the storm: Name a sea region. At the start of the next round the sea region will have a storm until the end of the round.  
+Cost: 100 Blood, Stealth: +1
+
+Disciplin actions:
+(The actions marked by a M are master discipline actions.) 
+
+Animalism: If you make a hunt roll(s) this round, the GM rolls +3 D4s and picks the best one. 
+Cost: 0 Blood, Undetectable
+(M) Animalism: Choose one:
+Summon a flock of wild wolves to hunt for blood in all adjacent cities. They hunt for one d10 in every adjacent city. 
+Summon a gathering of birds to spy for you. Increase your personal intercept by +2 for the rest of the round. 
+Summon a swarm of rats to sabotage an enemy. Lower an adjacent city´s intercept by -1. 
+Cost: 10 Blood, Stealth: +2 
+
+Auspex: Name a vampire. Then choose two:
+Learn the lowest stealth political action performed by the vampyre this round. 
+Learn the highest stealth personal action performed by the vampyre. 
+Learn all actions performed by the minions controlled by the vampyre that are in the same city as you. 
+	Trifle
+Cost: 10 Blood, Undetectable
+(M) Auspex: Choose one:
+Name a vampire and make a hunt roll. On success learn of all cities that vampire was in this turn and in what order and how they moved. Even if moves are undetectable 
+Learn the location of up to 5 artifacts, vampires or minions. (Name all things you want located) 
+Cost: 10 blood, Undetectable 
+
+Celerity: Your next two actions will be resolved immediately.
+Cost: 10, +0 Stealth 
+(M) Celerity: Move up to 3 cities away from your current location. (If you have used Oblivion it will make these move Undetectable as well)
+Cost: 20 blood Stealth: +0  
+
+Chimerstry: Name a city adjacent to you and a vampyre that is not the controller of that city. In the city's controllers' next information update they will get a message that the named vampire is in their city. Trifle 
+Cost: 10 Blood, Stealth: +2 
+(M) Chimerstry: You may write a 250 words or less message that the GM will post in information highway on the next news update. You decide where the message will be posted.
+Cost: 15 Blood, Stealth: +2 
+
+Dementation: The GM sends you a screenshot from a random chat. Trifle
+Cost: 0, Undetectable 
+(M) Dementation: Name a vampire and make a hunt roll. On a success they will perform one of the following actions at the end of the round (you choose). Move, Bleed or Investigate. But the target of the action is randomized from all available targets. 
+Cost: 10 Blood, Stealth: +3 
+
+Dominate: Name a vampire or minion in the same city as you and a city. Make a hunt roll. If successful, move the named vampyre or minion to the named city at the end of the round. The named vampire can't move as its first action next round. The move uses the named vampire/minions stealth. 
+Cost: 0, Stealth: +1
+(M) Dominate: Name a minion another vampire controls. If you are in the same city as that minion,and make a hunt roll on success, you get control of that minion. 
+Cost: 25/50/100 (Cost depends in minions lvl 1/2/3) Blood, Stealth: +0
+
+Fortitude: If you are burned this round, you instead go to torpor. If you would go to torpor you only need to awaken from torpor once. 
+Cost: 10, Undetectable 
+(M) Fortitude: The next time you press in combat it's free. Trifle 
+Cost: 0, Undetectable 
+
+Obfuscate: Get +4 stealth on a personal or discipline action.
+Cost: 0, Undetectable 
+(M) Obfuscate: The next hunt roll targeting you this turn will fail. 
+Cost: 10, Undetectable
+
+Oblivion: Name a vampyre. If the named vampire makes the Move or Grow in power action this round it becomes Undetectable.
+Cost: 10 Blood, Stealth: + 1
+(M) Oblivion: Make up to 2 of your minion actions Undetectable.
+Cost: 15, Stealth: +2 
+
+Protean: Pick one: 
+Gain +1 Strength for the rest of the round. 
+Gain +1 Stealth for the rest of the round.
+Gain +1 Intercept for the rest of the round
+Cost: 10, Undetectable 
+(M) Protean: You may rearrange your Stealth, Intercept, and Strength. You may not rearrange modifiers like actions, artifacts, minion or other effects. Only your basic stats. 
+Cost: 10, Undetectable
+
+Potence: This round.
+ In combat the GM rolls +3 dice for you and picks the best one as the result. If you win a combat, the losing vampire gets -1 on the wound table roll. 
+Cost: 0, Undetectable
+(M) Potence: Name a lvl 2 or lower minion in the same city as you. Make a hunt roll, on success burn the named minion. The first time every round you perform this action you gain +2 strength for the rest of the round. 
+Cost: 10, Stealth +0
+
+Presens: Get +4 stealth on a faction action you perform this round or give +4 stealth to another vampyres faction action.
+Cost: 0, Undetectable
+(M) Pressens: Make any faction action that does not require a title. This action can only be made once per turn.
+Cost and Stealth is the same as the chosen action. 
+
+Thaumaturgy: Give access to a discipline action to a vampire (you choose) for this and the next round. Trifle
+Cost: 10 Blood, Stealth: -1
+(M) Thaumaturgy: choose one
+Burn an artifact you control and name a vampire in the same city as you. The artifact's special action is now an action the named vampire permanently has access to. But the cost for that action becomes the same as the original +10 blood. 
+Create an artifact with special action that has the same ability as a basic discipline action you have access to. (Both cost and stealth are the same as the discipline) You are in possession of this artifact. 
+Cost: 50 Blood, Stealth: +0 
+
+Visisetude: Choose one
+Gain a Lvl 1 Ghoul, harpy or eye minion.
+Burn two lvl 1 minions of the same type you control, in the same city as you. Gain a Lvl 2 minion of that type. 
+Burn two lvl 2 minions that you control of the same type, in the same city as you. Gain a Lvl 3 minion of the same type as the burned minions. 
+Cost: 10 Blood, Stealth: +0 
+(M) Vicissitude: Choose one:
+Change a minion from one type to any other type. (Except primogen and archon.) 
+Cost: 0, Stealth: +1 
+
