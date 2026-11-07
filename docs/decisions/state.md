@@ -15,7 +15,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 | S8 ⏸️ | Räknas Scepter of Ventrues +1 level in i upkeep? | **Nej**, upkeep räknas på minionens egen level. | Regelboken säger inte. Annars blir artefakten en kostnad. |
 | S16 ✅ | "Första violation i en Camarilla-stad ger ingen blood hunt": första i kampanjen eller per stad? | **En gång per kampanj.** | Per stad skulle ge Camarilla ett gratis-violation i varje stad. |
 | S14 ✅ | Vad händer med brända saker i state? | Minions och artefakter tas bort. Vampyrer ligger kvar med `status: 'burned'`. | Avgör hur historik och referenser fungerar. |
-| S12 | Standardkartan | British Isles finns som **provisorisk** mall med gissade startvärden och havsregioner. Tester använder en syntetisk karta. | Kartan måste bekräftas innan den används i spel. |
+| S12 ⏸️ | Standardkartan | British Isles finns som **provisorisk** mall med gissade startvärden och havsregioner. Tester använder en syntetisk karta. | Kartan måste bekräftas innan den används i spel. |
 
 ---
 
@@ -92,6 +92,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 ## Städer och karta
 
 ### S12. Kartor
+**Status:** ⏸️ Parkerad av Gustaf 2026-11-07. Den riktiga kartan (grannpar, startvärden, havsregioner) saknas; den provisoriska mallen gäller tills den finns.
 **Beslut:**
 - `TEST_MAP`: syntetisk karta med fem städer och två havsregioner, där varje stad har olika startvärden så att förväxlade fält syns i tester. Alla tester använder den (C14).
 - `BRITISH_ISLES_MAP`: de 18 städerna och de **37** grannparen ur `docs/prototype/plans/001_map_improvement.md`, märkt `provisional: true`. Kartan är sammanhängande över land (testat).
