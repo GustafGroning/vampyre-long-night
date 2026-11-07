@@ -14,7 +14,7 @@ Sidofynd som inte hör till pågående scope. Skriv var fyndet gjordes.
 
 - [ ] **Regelbokens stavning av artefakter** (gd:411, 420, 422, 426): Vispers in a bottle, Ring of Tremer, Scepter of Venture, Ravanos boots. Normaliserat i koden (S18); rätta regelboken.
 - [ ] **Kopierad text i Baron-avsnittet** (gd:551): "Princes can build influence in cities they control" står under Barons. Troligen kvar från Prince-avsnittet.
-- [ ] **Rule of Three och avdrag** (gd:530): regeln nämner bara bonusar. Bekräfta att avdrag (Banu Haqim −1, Seduction −1) inte kapas (S7).
+- [x] **Rule of Three och avdrag** (gd:530): Gustaf bekräftade 2026-11-07 att avdrag inte kapas (S7). Lägg till i regelboken att Diablerie är undantaget från Rule of Three.
 
 ## Ronden (hittat under rondens skelett, `docs/engine/round-skeleton-plan.md`)
 - [ ] Riktiga aktionseffekter: skelettets `SKELETON_ACTIONS` är stubbar utan effekt (steg 3).

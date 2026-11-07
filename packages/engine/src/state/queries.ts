@@ -67,7 +67,7 @@ export function isActive(mod: { readonly expiresAfterRound: number | null }, rou
 /**
  * Effektivt värde för en stat: bas + summan per källa, där varje källas
  * sammanlagda *bonus* kapas vid `cap` (Rule of Three, gd:530). Avdrag kapas inte.
- * Modifiers med `ignoresRuleOfThree` (Charge-strength, gd:162) läggs till okapat.
+ * Modifiers med `ignoresRuleOfThree` (Charge-strength gd:162, Diablerie) läggs till okapat.
  */
 export function effectiveStat(
   base: number,

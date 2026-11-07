@@ -72,7 +72,8 @@ export type SourceKey = string;
  * En bonus eller ett avdrag på en personlig stat.
  *
  * `expiresAfterRound`: sista rond då modifiern gäller; `null` = permanent.
- * `ignoresRuleOfThree`: sant bara för Strength köpt med blood i Charge (gd:162).
+ * `ignoresRuleOfThree`: sant för Strength köpt med blood i Charge (gd:162) och
+ * för Diablerie (+1 per lyckad Diablerie, ingen gräns; Gustaf 2026-11-07).
  */
 export interface StatModifier {
   readonly stat: Stat;

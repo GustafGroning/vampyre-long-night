@@ -11,7 +11,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 
 | # | Fråga | Valt | Varför det spelar roll |
 |---|---|---|---|
-| S7 | Hur räknas Rule of Three? | Per källa: bonusar från samma källa summeras och kapas på +3. Avdrag kapas inte. Även permanenta bonusar (EXP, skapande, Diablerie) är källor. | Påverkar varje stat i spelet. "Greater strength max +3" blir samma regel som Rule of Three. |
+| S7 ✅ | Hur räknas Rule of Three? | Per källa: bonusar från samma källa summeras och kapas på +3. Avdrag kapas inte. Även permanenta bonusar (EXP, skapande, Diablerie) är källor. | Påverkar varje stat i spelet. "Greater strength max +3" blir samma regel som Rule of Three. |
 | S8 | Räknas Scepter of Ventrues +1 level in i upkeep? | **Nej**, upkeep räknas på minionens egen level. | Regelboken säger inte. Annars blir artefakten en kostnad. |
 | S16 | "Första violation i en Camarilla-stad ger ingen blood hunt": första i kampanjen eller per stad? | **En gång per kampanj.** | Per stad skulle ge Camarilla ett gratis-violation i varje stad. |
 | S14 | Vad händer med brända saker i state? | Minions och artefakter tas bort. Vampyrer ligger kvar med `status: 'burned'`. | Avgör hur historik och referenser fungerar. |
@@ -55,16 +55,17 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 ## Spelare och stats
 
 ### S7. Stats och Rule of Three
+**Status:** ✅ Bekräftat av Gustaf 2026-11-07, med en ändring: **Diablerie har ingen gräns** (undantag från Rule of Three, som Charge). Startuppgradering och EXP är olika källor (+4 möjligt). Avdrag kapas inte.
 **Beslut:**
 - En vampyrs basvärde i varje stat är **0**. Allt annat, även permanenta bonusar, är `StatModifier { stat, amount, source, expiresAfterRound }`. Permanenta har `expiresAfterRound: null`.
 - Källor namnges `<typ>:<nyckel>`: `creation:stat_upgrade` (startuppgraderingen +1), `exp:greater_strength` / `exp:unseen` / `exp:eyes_of_the_night`, `diablerie`, `clan:banu_haqim`, `discipline:protean`, `artifact:black_gloves`, `action:blood_for_blood` osv.
 - **Effektivt värde = bas + Σ per källa min(källans summa, 3).** Inom en källa nettas bonus och avdrag först.
 - **Avdrag kapas inte.** Regeln säger "never gain more than +3" (gd:530) och säger inget om avdrag.
-- Strength köpt i Charge har `ignoresRuleOfThree` och läggs till okapat (gd:162).
+- Strength köpt i Charge (gd:162) och bonusar från Diablerie har `ignoresRuleOfThree` och läggs till okapat.
 **Konsekvenser:**
 - EXP-uppgraderingens "max +3 from this upgrade" (gd:857–859) följer automatiskt: tre köp med samma källa ger +3, ett fjärde ger inget. Validering vid köp (att inte låta någon betala för en meningslös fjärde) hör till skapandeflödet.
 - Startuppgraderingen "+1 in any stat" och EXP-köpet "Greater strength" är **olika källor**. En Prince kan alltså ha +1 (skapande) + 3 (EXP) = +4 Strength.
-- Diablerie (+1 för resten av spelet, gd:1173) är en källa: högst +3 per stat från Diablerie totalt.
+- Diablerie (+1 för resten av spelet, gd:1173) har **ingen gräns**: varje lyckad Diablerie ger +1, utan tak (Gustaf 2026-11-07).
 **Öppet:** (M)Protean "rearrange your basic stats" (gd:1252). Med basvärde 0 betyder "basic stats" här summan av permanenta modifiers. Hur omfördelningen representeras bestäms när aktionen byggs.
 
 ### S8. Minions stats och upkeep
