@@ -14,6 +14,7 @@ Repot är nystartat och innehåller än så länge bara dokumentation. Ingen kod
 |---|---|
 | `docs/rules/game_design.txt` | Den kanoniska regelboken. Source of truth för reglerna. |
 | `docs/rules/SPEC.md` | Fullständig spec (regler som krav, plattformsbeslut, öppna beslut i Part C). Stack-oberoende. |
+| `docs/engine/` | Research och beslut för spelmotorn. `001_motorbeslut.md` = provisoriska beslut som blockerade motorn. |
 | `docs/playtest-logs/` | Riktiga spelarloggar (stats, rondresultat, action-listor). Bra exempel på hur spelet faktiskt spelas. |
 | `docs/prototype/research/` | Research från prototypen: regler vs implementation, DB-schema, resolve-round-motor, actionreferens. |
 | `docs/prototype/plans/` | Implementationsplaner från prototypen. |
