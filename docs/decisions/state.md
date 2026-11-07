@@ -14,7 +14,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 | S7 ✅ | Hur räknas Rule of Three? | Per källa: bonusar från samma källa summeras och kapas på +3. Avdrag kapas inte. Även permanenta bonusar (EXP, skapande, Diablerie) är källor. | Påverkar varje stat i spelet. "Greater strength max +3" blir samma regel som Rule of Three. |
 | S8 ⏸️ | Räknas Scepter of Ventrues +1 level in i upkeep? | **Nej**, upkeep räknas på minionens egen level. | Regelboken säger inte. Annars blir artefakten en kostnad. |
 | S16 ✅ | "Första violation i en Camarilla-stad ger ingen blood hunt": första i kampanjen eller per stad? | **En gång per kampanj.** | Per stad skulle ge Camarilla ett gratis-violation i varje stad. |
-| S14 | Vad händer med brända saker i state? | Minions och artefakter tas bort. Vampyrer ligger kvar med `status: 'burned'`. | Avgör hur historik och referenser fungerar. |
+| S14 ✅ | Vad händer med brända saker i state? | Minions och artefakter tas bort. Vampyrer ligger kvar med `status: 'burned'`. | Avgör hur historik och referenser fungerar. |
 | S12 | Standardkartan | British Isles finns som **provisorisk** mall med gissade startvärden och havsregioner. Tester använder en syntetisk karta. | Kartan måste bekräftas innan den används i spel. |
 
 ---
@@ -111,6 +111,12 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 **Beslut:** En contested stad **behåller** sin `controllerId` (gd:507: "not uncontrolled"). Contestants ligger i en egen sorterad lista med `sinceRound`. Controllern kan inte stå bland sina egna contestants. En okontrollerad stad kan ha contestants (Conquer New Territory).
 
 ### S14. Brända entiteter
+**Status:** ✅ Bekräftat av Gustaf 2026-11-07, med tillägg om vad en bränd vampyr lämnar efter sig:
+- **Städer** blir neutrala (okontrollerade). Contest på dem ligger kvar.
+- **Minions** bränns.
+- **Artefakter** ges till den som lyckades med Diablerie.
+- Vem som brände vampyren sparas (`burnedBy`), eftersom Soul Gem of Etrius (gd:438) avgör vinnaren utifrån den som diableriserade.
+- **Öppet:** artefakter när vampyren bränns utan Diablerie (wound table 2–3, gd:188, eller Diablerie-alternativet "just burn them"). Se svar från Gustaf.
 **Beslut:** När en **minion** eller **artefakt** bränns tas den bort ur state; historiken finns i rondens events. En bränd **vampyr** ligger kvar med `status: 'burned'` och `location: null`.
 **Motivering:** Brända vampyrer behövs för slutpoäng (0 VP), Soul Gem of Etrius (gd:438) och för att spelarlistan ska vara stabil. För minions och artefakter skulle en `burned`-flagga betyda att varje regel måste filtrera bort dem, vilket är lätt att glömma.
 **Invariant:** en bränd vampyr kan inte kontrollera städer, bära artefakter eller äga minions.
