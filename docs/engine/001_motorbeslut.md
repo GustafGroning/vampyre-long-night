@@ -11,7 +11,7 @@ Motorn byggs i fyra steg: (1) state och typer, (2) rondens skelett, (3) en aktio
 | # | Fråga | Valt | Varför det spelar roll |
 |---|---|---|---|
 | M11 ✅ | När löses combat i förhållande till aktionsordningen? | **Bekräftat av Gustaf.** Rundan pausar efter den **slot** där combat uppstod; alla combats från samma slot förhandlas parallellt. | Kanoniskt måste torpor från combat kunna stoppa senare aktioner (gd:95, gd:946). Detta är det enda valet som håller regeln utan att rundan pausar per combat. |
-| M16 | Ser man en aktion när intercept **=** stealth? | **Ja** (≥). | Regelboken säger emot sig själv (se nedan). Påverkar varje informationsberäkning. |
+| M16 ✅ | Ser man en aktion när intercept **=** stealth? | **Ja** (≥). Bekräftat av Gustaf. | Regelboken säger emot sig själv (se nedan). Påverkar varje informationsberäkning. |
 | M2 | Vilken state är publik? | Allowlist i tabellen under M2. | Grunden för alla vyer och läck-tester. |
 | M6 | Hur många aktioner har en vampyr utan titel? | **3**. | Odefinierat i regelboken men inträffar (förlorad enda stad). |
 
@@ -141,6 +141,7 @@ Koordinatorn föreslog combat. Jag rekommenderar **Move + Bleed (inkl. upkeep oc
 ## Steg 4 — per-spelare-vyer
 
 ### M16. ≥ eller > vid intercept mot stealth
+**Status:** ✅ Bekräftat av Gustaf 2026-11-07: "Har man lika så syns handling, stealth måste vara HÖGRE för att gömmas." Gäller både spelare och städer.
 **Beslut:** **intercept ≥ stealth** ⇒ man ser aktionen (som SPEC A11).
 **Avvikelse att flagga:** Regelboken säger emot sig själv. "Higher or equal" (gd:114), "lower or equal" (gd:115) och gd:925 (man missar bara om stealth är *högre*) talar för ≥. "Lower stealth than the city's intercept" (gd:498) och "lower stealth than your intercept" (gd:913) talar för >. Majoriteten och huvudregeltexten (Actions-kapitlet) säger ≥.
 
