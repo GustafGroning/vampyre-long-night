@@ -13,7 +13,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 |---|---|---|---|
 | S7 ✅ | Hur räknas Rule of Three? | Per källa: bonusar från samma källa summeras och kapas på +3. Avdrag kapas inte. Även permanenta bonusar (EXP, skapande, Diablerie) är källor. | Påverkar varje stat i spelet. "Greater strength max +3" blir samma regel som Rule of Three. |
 | S8 ⏸️ | Räknas Scepter of Ventrues +1 level in i upkeep? | **Nej**, upkeep räknas på minionens egen level. | Regelboken säger inte. Annars blir artefakten en kostnad. |
-| S16 | "Första violation i en Camarilla-stad ger ingen blood hunt": första i kampanjen eller per stad? | **En gång per kampanj.** | Per stad skulle ge Camarilla ett gratis-violation i varje stad. |
+| S16 ✅ | "Första violation i en Camarilla-stad ger ingen blood hunt": första i kampanjen eller per stad? | **En gång per kampanj.** | Per stad skulle ge Camarilla ett gratis-violation i varje stad. |
 | S14 | Vad händer med brända saker i state? | Minions och artefakter tas bort. Vampyrer ligger kvar med `status: 'burned'`. | Avgör hur historik och referenser fungerar. |
 | S12 | Standardkartan | British Isles finns som **provisorisk** mall med gissade startvärden och havsregioner. Tester använder en syntetisk karta. | Kartan måste bekräftas innan den används i spel. |
 
@@ -120,6 +120,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 **Konvention för varaktighet:** `expiresAfterRound` = **sista ronden effekten gäller**; `null` = permanent eller tills den tas bort. Samma konvention för stat-modifiers, problems/specials och pågående effekter.
 
 ### S16. Camarillas första violation
+**Status:** ✅ Bekräftat av Gustaf 2026-11-07: en gång per kampanj.
 **Beslut:** "The first time a masquerade violation triggers in a Camarilla city no blood hunt is called" (gd:915) gäller **en gång per kampanj**, inte en gång per stad. Spåras i `state.flags.camarillaViolationGraceUsed`.
 **Motivering:** Läsningen "the first time" i bestämd form talar för en enda händelse. Per stad skulle göra violations nästan riskfria för Camarilla.
 
