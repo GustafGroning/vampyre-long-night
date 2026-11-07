@@ -39,6 +39,7 @@
 **Motivering:** Vid inlämning vet man inte vad de andra Sabbat-spelarna skickar. Att torpida räknas följer av att de fortfarande är Sabbat-spelare (X = antal Sabbat-spelare, gd:645).
 
 ## R6. Effektiv titel och sekt för Archbishop
+**Status:** ✅ Delvis bekräftat av Gustaf 2026-11-07: en dold Archbishop får göra alla actions förklädnadens titel har tillgång till, både titel- och sektaktioner. Följdfråga ställd: Sabbat-aktioner medan man är dold, och om de avslöjar Archbishopen när de syns.
 **Beslut:** En dold Archbishop får göra Archbishop-aktioner, Sabbat-aktioner **och** förklädnadens titel- och sektaktioner (en Archbishop förklädd som Prince kan alltså göra Camarilla-aktioner). En exponerad Archbishop har bara Archbishop och Sabbat.
 **Motivering:** "They can use all the actions of the title they masquerade as" (gd:635) och vid exponering "lose the ability to use the actions of the sect they had infiltrated" (gd:640), vilket förutsätter att de hade den förmågan innan. Build the Base och Call a Crusade måste gå att göra medan man är dold.
 
