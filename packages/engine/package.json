@@ -1,0 +1,21 @@
+{
+  "name": "@vampyre/engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministisk spelmotor för Vampire: The Long Night. Ingen databas, inget UI.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
