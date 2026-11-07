@@ -8,7 +8,6 @@ Sidofynd som inte hör till pågående scope. Skriv var fyndet gjordes.
 - [ ] **Regelboken säger emot sig själv om ≥/>** vid intercept mot stealth (gd:114/115/925 vs gd:498/913). Gustaf bekräftade ≥ 2026-11-07 (M16): rätta formuleringarna i gd:498 och gd:913 till "lower or equal". — hittad under: docs/engine/001_motorbeslut.md
 - [ ] **Rundbreakdown i regelboken numrerar income-fasen som 4a–4c** (gd:955–957) och end-of-round hoppar från 4c till 4e. Kosmetiskt, men bör rättas. — hittad under: docs/engine/001_motorbeslut.md
 - [x] **Klan-synlighet:** prototypens backlog funderade på att dölja klan. Gustaf bekräftade 2026-11-07 att klan är publik (M2). — hittad under: docs/engine/001_motorbeslut.md
-
 - [ ] **Titellösa vampyrer (M6/S10) är olöst.** Gustaf vill diskutera budget, domän, titelaktioner, VP och om man kan få ny titel. Motorn använder 3 actions som platshållare. — hittad under: genomgång av motorbeslut 2026-11-07
 
 ## State och typer (hittat under `docs/decisions/state.md`)
