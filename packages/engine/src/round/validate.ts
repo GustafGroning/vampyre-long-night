@@ -1,10 +1,11 @@
 import { actionCost, effectiveFactions, effectiveTitles, isTrifle, type ActionRegistry } from './actions.js';
 import { computeBudget, schemeAllocationProblem, type BudgetBreakdown } from './budget.js';
-import { minionUpkeep, type GameState, type Player } from './deps.js';
+import { minionUpkeep, sortedIds, type Content, type GameState, type MinionId, type Player } from './deps.js';
 import type { Submission, ValidationIssue, ValidationResult } from './types.js';
 
 export interface ValidateOptions {
   registry: ActionRegistry;
+  content: Content;
   /**
    * Spelarens extra actions från Sabbat schemes. Vid inlämning är den okänd
    * (andra har kanske inte lämnat in), så standard är spelarens eget förslag.
@@ -59,7 +60,7 @@ export function analyzeSubmission(
     else warnings.push({ code: 'invalid_params', message: 'Sabbat scheme gäller bara om alla Sabbat-spelare skickar identiska förslag' });
   }
   const schemeActions = opts.schemeActions ?? (player.faction === 'sabbat' ? (scheme?.allocation[player.id] ?? 0) : 0);
-  const budget = computeBudget(state, player, submission, schemeActions);
+  const budget = computeBudget(state, opts.content, player, submission, schemeActions);
 
   // --- Entry-nivå + räkning
   let slotsUsed = 0;
@@ -77,7 +78,7 @@ export function analyzeSubmission(
     const err = (code: ValidationIssue['code'], message: string) => errors.push({ code, entryIndex: index, message });
     const def = opts.registry[action.actionId];
     if (!def) return err('unknown_action', `Okänd aktion ${action.actionId}`);
-    const ectx = { state, player, action };
+    const ectx = { state, content: opts.content, player, action };
 
     if (def.performer === 'vampire') {
       if (action.performer.kind !== 'vampire') return err('vampire_only', `${def.name} kan bara utföras av vampyren`);
@@ -115,7 +116,7 @@ export function analyzeSubmission(
         err('max_per_round', `${def.name} får göras högst ${def.maxPerRound} gång(er) per rond`);
 
       if (def.grantsMinionAction) {
-        const target = action.params?.minionId as string;
+        const target = action.params?.minionId as MinionId;
         minionExtra.set(target, Math.min(1, (minionExtra.get(target) ?? 0) + 1));
       }
 
@@ -158,7 +159,7 @@ export function analyzeSubmission(
       message: `Listan kostar ${totalCost} blood, har ${player.blood}`,
     });
   } else {
-    const upkeep = upkeepFor(state, player);
+    const upkeep = upkeepFor(state, opts.content, player);
     if (totalCost + upkeep > player.blood)
       warnings.push({
         code: 'unaffordable',
@@ -174,12 +175,11 @@ export function validateSubmission(state: GameState, submission: Submission, opt
   return { ok, errors, warnings };
 }
 
-export function upkeepFor(state: GameState, player: Player): number {
-  return Object.keys(state.minions)
-    .sort()
+export function upkeepFor(state: GameState, content: Content, player: Player): number {
+  return sortedIds(state.minions)
     .map((id) => state.minions[id]!)
     .filter((m) => m.owner.kind === 'player' && m.owner.id === player.id && m.acquiredRound < state.round)
-    .reduce((s, m) => s + minionUpkeep(m), 0);
+    .reduce((s, m) => s + minionUpkeep(content, m), 0);
 }
 
 export interface NormalizedSubmission {

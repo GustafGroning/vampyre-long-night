@@ -1,4 +1,4 @@
-import type { GameState, MinionId, PlayerId } from './deps.js';
+import type { GameState, MinionId, PlayerId, WorkingState } from './deps.js';
 
 /** JSON-värde. Allt i rondens data måste gå att serialisera (M1-principerna). */
 export type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
@@ -166,7 +166,8 @@ export interface RoundResolution {
   status: 'running' | 'suspended' | 'completed';
   round: number;
   seed: string;
-  state: GameState;
+  /** Arbetskopia; muteras bara inuti motorn. */
+  state: WorkingState;
   cursor: Cursor;
   entries: Record<EntryId, EntryRecord>;
   /** Entry-id per spelare i listordning. */

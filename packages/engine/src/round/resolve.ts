@@ -1,6 +1,20 @@
 import { actionCost, SKELETON_ACTIONS, type ActionContext, type ActionOutcome, type ActionRegistry } from './actions.js';
 import { agreedSabbatScheme, royalPrivilegesSpent } from './budget.js';
-import { burnMinion, createRng, deriveSeed, minionUpkeep, type GameState, type Minion, type PlayerId, type Rng } from './deps.js';
+import {
+  burnMinion,
+  cloneJson,
+  compareIds,
+  createRng,
+  deriveSeed,
+  minionUpkeep,
+  sortedIds,
+  type Content,
+  type GameState,
+  type Minion,
+  type PlayerId,
+  type Rng,
+  type WorkingState,
+} from './deps.js';
 import type {
   EntryId,
   EntryRecord,
@@ -34,7 +48,8 @@ export const PHASES: readonly PhaseId[] = [
 ];
 
 export interface PhaseContext {
-  state: GameState;
+  state: WorkingState;
+  content: Content;
   resolution: RoundResolution;
   phase: PhaseId;
   emit(kind: string, data?: { [key: string]: Json }, playerId?: PlayerId): void;
@@ -47,6 +62,7 @@ export interface PhaseContext {
 export type PhaseHook = (ctx: PhaseContext) => void;
 
 export interface ResolveOptions {
+  content: Content;
   registry?: ActionRegistry;
   /**
    * Regler som kopplas in i faserna. Körs efter fasens inbyggda logik, i
@@ -55,8 +71,7 @@ export interface ResolveOptions {
   hooks?: Partial<Record<PhaseId, PhaseHook[]>>;
 }
 
-/** State är ren JSON (M1-principerna), så JSON-kloning är både säker och deterministisk. */
-const clone = <T>(v: T): T => JSON.parse(JSON.stringify(v)) as T;
+const clone = cloneJson;
 
 // ---------------------------------------------------------------------------
 // Publikt API
@@ -73,14 +88,14 @@ export function resolveRound(
   state: GameState,
   submissions: Record<PlayerId, Submission>,
   seed: string,
-  opts: ResolveOptions = {},
+  opts: ResolveOptions,
 ): RoundResult {
   if (state.phase !== 'submission') throw new Error(`Kan inte lösa ronden i fas ${state.phase}`);
   const res: RoundResolution = {
     status: 'running',
     round: state.round,
     seed,
-    state: clone(state),
+    state: clone(state) as WorkingState,
     cursor: { phaseIndex: 0, slot: 0, slotOrder: null, slotPos: 0 },
     entries: {},
     lists: {},
@@ -100,7 +115,7 @@ export function resolveRound(
 export function continueResolution(
   resolution: RoundResolution,
   answers: InterruptAnswer[],
-  opts: ResolveOptions = {},
+  opts: ResolveOptions,
 ): RoundResult {
   if (resolution.status !== 'suspended') throw new Error('Upplösningen är inte pausad');
   const res = clone(resolution);
@@ -113,7 +128,7 @@ export function continueResolution(
     const def = registry[entry.action.actionId];
     if (!def?.resume) throw new Error(`${entry.action.actionId} kan inte återupptas`);
     emit(res, '3a_actions', 'interrupt_answered', { interruptId: interrupt!.id }, entry.playerId, entry.id);
-    const ctx = makeActionContext(res, entry, registry, '3a_actions');
+    const ctx = makeActionContext(res, entry, registry, opts.content, '3a_actions');
     applyOutcome(res, entry, def.resume(ctx.ctx, clone(answer.result)), '3a_actions');
     ctx.flushImmediate();
   }
@@ -133,13 +148,13 @@ function run(res: RoundResolution, submissions: Record<PlayerId, Submission> | n
     const phase = PHASES[res.cursor.phaseIndex]!;
     switch (phase) {
       case '1a_pay_actions':
-        payActions(res, submissions ?? {}, registry);
+        payActions(res, submissions ?? {}, registry, opts.content);
         break;
       case '1b_pay_upkeep':
-        payUpkeep(res);
+        payUpkeep(res, opts.content);
         break;
       case '3a_actions':
-        if (!resolveSlots(res, registry)) {
+        if (!resolveSlots(res, registry, opts.content)) {
           res.status = 'suspended';
           res.state.phase = 'awaitingCombat';
           return { status: 'suspended', interrupts: clone(res.pendingInterrupts), resolution: res };
@@ -160,13 +175,14 @@ function run(res: RoundResolution, submissions: Record<PlayerId, Submission> | n
     }
   }
   res.status = 'completed';
-  return { status: 'completed', state: res.state, resolution: res };
+  return { status: 'completed', state: res.state as GameState, resolution: res };
 }
 
 function runHooks(res: RoundResolution, phase: PhaseId, opts: ResolveOptions): void {
   for (const hook of opts.hooks?.[phase] ?? []) {
     hook({
       state: res.state,
+      content: opts.content,
       resolution: res,
       phase,
       emit: (kind, data, playerId) => emit(res, phase, kind, data, playerId),
@@ -193,12 +209,17 @@ function emit(
   res.events.push(ev);
 }
 
-const sortedPlayerIds = (state: GameState): PlayerId[] => Object.keys(state.players).sort();
+const sortedPlayerIds = (state: WorkingState): PlayerId[] => sortedIds(state.players);
 
 // ---------------------------------------------------------------------------
 // Fas 1a: normalisera listor, förbruka Royal Privileges, betala allt i förskott.
 
-function payActions(res: RoundResolution, submissions: Record<PlayerId, Submission>, registry: ActionRegistry): void {
+function payActions(
+  res: RoundResolution,
+  submissions: Record<PlayerId, Submission>,
+  registry: ActionRegistry,
+  content: Content,
+): void {
   const { state } = res;
   const scheme = agreedSabbatScheme(state, submissions);
   if (Object.keys(scheme).length > 0) emit(res, '1a_pay_actions', 'sabbat_scheme_agreed', { allocation: scheme });
@@ -213,7 +234,7 @@ function payActions(res: RoundResolution, submissions: Record<PlayerId, Submissi
       updatedAt: 0,
     };
     if (submission.playerId !== pid) throw new Error(`Lista för ${pid} har playerId ${submission.playerId}`);
-    const norm = normalizeSubmission(state, submission, { registry, schemeActions: scheme[pid] ?? 0 });
+    const norm = normalizeSubmission(state, submission, { registry, content, schemeActions: scheme[pid] ?? 0 });
     const rejected = new Map(norm.rejected.map((r) => [r.index, r.reason]));
 
     res.lists[pid] = submission.actions.map((action, index) => {
@@ -241,7 +262,7 @@ function payActions(res: RoundResolution, submissions: Record<PlayerId, Submissi
       const entry = res.entries[id]!;
       if (entry.status !== 'pending') continue;
       const def = registry[entry.action.actionId]!;
-      entry.paid = actionCost(def, { state, player, action: entry.action });
+      entry.paid = actionCost(def, { state, content, player, action: entry.action });
       total += entry.paid;
     }
     // normalizeSubmission garanterar total ≤ blood.
@@ -253,23 +274,23 @@ function payActions(res: RoundResolution, submissions: Record<PlayerId, Submissi
 // ---------------------------------------------------------------------------
 // Fas 1b: upkeep. Obetalda minions bränns: högst upkeep först, sedan nyast, sedan id (M7).
 
-function payUpkeep(res: RoundResolution): void {
+function payUpkeep(res: RoundResolution, content: Content): void {
   const { state } = res;
   for (const pid of sortedPlayerIds(state)) {
     const player = state.players[pid]!;
-    const owned = Object.keys(state.minions)
-      .sort()
+    const owned = sortedIds(state.minions)
       .map((id) => state.minions[id]!)
       .filter((m) => m.owner.kind === 'player' && m.owner.id === pid && m.acquiredRound < state.round);
     if (owned.length === 0) continue;
-    let total = owned.reduce((s, m) => s + minionUpkeep(m), 0);
+    const upkeep = (m: Minion) => minionUpkeep(content, m);
+    let total = owned.reduce((s, m) => s + upkeep(m), 0);
     const burnOrder: Minion[] = [...owned].sort(
-      (a, b) => minionUpkeep(b) - minionUpkeep(a) || b.acquiredRound - a.acquiredRound || (a.id < b.id ? -1 : 1),
+      (a, b) => upkeep(b) - upkeep(a) || b.acquiredRound - a.acquiredRound || compareIds(a.id, b.id),
     );
     for (const m of burnOrder) {
       if (total <= player.blood) break;
-      if (minionUpkeep(m) === 0) continue;
-      total -= minionUpkeep(m);
+      if (upkeep(m) === 0) continue;
+      total -= upkeep(m);
       burnMinion(state, m.id);
       emit(res, '1b_pay_upkeep', 'minion_burned_upkeep', { minionId: m.id }, pid);
     }
@@ -291,13 +312,11 @@ function nextSlot(res: RoundResolution): void {
   res.cursor.slotPos = 0;
 }
 
-function resolveSlots(res: RoundResolution, registry: ActionRegistry): boolean {
+function resolveSlots(res: RoundResolution, registry: ActionRegistry, content: Content): boolean {
   while (res.cursor.slot < maxSlots(res)) {
     const { slot } = res.cursor;
     if (res.cursor.slotOrder === null) {
-      const players = Object.keys(res.lists)
-        .sort()
-        .filter((pid) => {
+      const players = sortedIds(res.lists).filter((pid) => {
           const id = res.lists[pid]![slot];
           return id !== undefined && res.entries[id]!.status === 'pending';
         });
@@ -309,7 +328,7 @@ function resolveSlots(res: RoundResolution, registry: ActionRegistry): boolean {
       const pid = res.cursor.slotOrder[res.cursor.slotPos]!;
       res.cursor.slotPos += 1;
       // Entryn kan redan vara löst via Celerity (M5); då lämnar den en tom slot.
-      resolveEntry(res, res.lists[pid]![slot]!, registry);
+      resolveEntry(res, res.lists[pid]![slot]!, registry, content);
     }
     if (res.pendingInterrupts.length > 0) return false;
     nextSlot(res);
@@ -321,11 +340,13 @@ function makeActionContext(
   res: RoundResolution,
   entry: EntryRecord,
   registry: ActionRegistry,
+  content: Content,
   phase: PhaseId,
 ): { ctx: ActionContext; flushImmediate(): void } {
   let immediate = 0;
   const ctx: ActionContext = {
     state: res.state,
+    content,
     entry,
     player: res.state.players[entry.playerId]!,
     rng: createRng(deriveSeed(res.seed, 'action', entry.id)),
@@ -345,7 +366,7 @@ function makeActionContext(
         .slice(0, immediate);
       for (const id of next) {
         emit(res, phase, 'resolved_immediately', { by: entry.id }, entry.playerId, id);
-        resolveEntry(res, id, registry);
+        resolveEntry(res, id, registry, content);
       }
     },
   };
@@ -367,7 +388,7 @@ function blockedReason(res: RoundResolution, entry: EntryRecord, registry: Actio
   return null;
 }
 
-function resolveEntry(res: RoundResolution, id: EntryId, registry: ActionRegistry): void {
+function resolveEntry(res: RoundResolution, id: EntryId, registry: ActionRegistry, content: Content): void {
   const entry = res.entries[id]!;
   if (entry.status !== 'pending') return;
   const blocked = blockedReason(res, entry, registry);
@@ -376,7 +397,7 @@ function resolveEntry(res: RoundResolution, id: EntryId, registry: ActionRegistr
     return;
   }
   const def = registry[entry.action.actionId]!;
-  const { ctx, flushImmediate } = makeActionContext(res, entry, registry, '3a_actions');
+  const { ctx, flushImmediate } = makeActionContext(res, entry, registry, content, '3a_actions');
   applyOutcome(res, entry, def.resolve(ctx), '3a_actions');
   flushImmediate();
 }

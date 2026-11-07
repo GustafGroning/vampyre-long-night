@@ -1,4 +1,4 @@
-import type { Faction, GameState, MinionType, Player, Rng, Title } from './deps.js';
+import type { Content, Faction, GameState, MinionId, MinionType, Mutable, Player, Rng, Title, WorkingState } from './deps.js';
 import type { ActionId, EntryRecord, Json, SubmittedAction } from './types.js';
 
 export type ActionCategory = 'personal' | 'faction' | 'minion' | 'discipline' | 'artifact';
@@ -13,9 +13,10 @@ export type ActionOutcome =
 
 /** Det en handler får när dess entry löses. `state` är ett arbetsutkast som får muteras. */
 export interface ActionContext {
-  state: GameState;
+  state: WorkingState;
+  content: Content;
   entry: EntryRecord;
-  player: Player;
+  player: Mutable<Player>;
   /** Egen delström för den här entryn (M9): `action/<entryId>`. */
   rng: Rng;
   emit(kind: string, data?: { [key: string]: Json }): void;
@@ -26,6 +27,7 @@ export interface ActionContext {
 
 export interface EligibilityContext {
   state: GameState;
+  content: Content;
   player: Player;
   action: SubmittedAction;
 }
@@ -224,7 +226,7 @@ export const SKELETON_ACTIONS: ActionRegistry = createRegistry([
     eligible: ({ state, player, action }) => {
       const id = minionIdParam(action);
       if (!id) return 'Anarch Mission kräver params.minionId';
-      const m = state.minions[id];
+      const m = state.minions[id as MinionId];
       return m && m.owner.kind === 'player' && m.owner.id === player.id ? null : 'Anarch Mission måste namnge en egen minion';
     },
     resolve: stubResolve,

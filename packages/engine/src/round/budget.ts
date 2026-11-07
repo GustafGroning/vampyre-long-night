@@ -1,4 +1,4 @@
-import { actionBudgetBase, type GameState, type Player, type PlayerId } from './deps.js';
+import { baseActionBudget, sortedIds, type Content, type GameState, type Player, type PlayerId } from './deps.js';
 import type { Submission } from './types.js';
 
 export interface BudgetBreakdown {
@@ -25,11 +25,12 @@ export function royalPrivilegesSpent(player: Player, submission: Submission | un
  */
 export function computeBudget(
   state: GameState,
+  content: Content,
   player: Player,
   submission: Submission | undefined,
   schemeActions: number,
 ): BudgetBreakdown {
-  const base = actionBudgetBase(player);
+  const base = baseActionBudget(state, content, player.id);
   const royalPrivileges = royalPrivilegesSpent(player, submission);
   const mods = player.actionBudgetModifiers.filter((m) => m.round === state.round);
   const bonus = mods.filter((m) => m.kind === 'bonus').reduce((s, m) => s + m.amount, 0);
@@ -50,9 +51,7 @@ export function computeBudget(
 
 /** Spelare som räknas som Sabbat för schemes: Sabbat-sekt (även dolda), inte brända. */
 export function sabbatPlayers(state: GameState): PlayerId[] {
-  return Object.keys(state.players)
-    .sort()
-    .filter((id) => {
+  return sortedIds(state.players).filter((id) => {
       const p = state.players[id]!;
       return p.faction === 'sabbat' && p.status !== 'burned';
     });
@@ -60,8 +59,7 @@ export function sabbatPlayers(state: GameState): PlayerId[] {
 
 function canonicalAllocation(alloc: Record<PlayerId, number>): string {
   return JSON.stringify(
-    Object.keys(alloc)
-      .sort()
+    sortedIds(alloc)
       .filter((k) => alloc[k] !== 0)
       .map((k) => [k, alloc[k]]),
   );
@@ -73,7 +71,7 @@ export function schemeAllocationProblem(state: GameState, alloc: Record<PlayerId
   let sum = 0;
   for (const [id, n] of Object.entries(alloc)) {
     if (!Number.isInteger(n) || n < 0) return `Ogiltigt antal för ${id}`;
-    if (n > 0 && !members.has(id)) return `${id} är inte Sabbat`;
+    if (n > 0 && !members.has(id as PlayerId)) return `${id} är inte Sabbat`;
     sum += n;
   }
   const max = members.size + 1;
@@ -99,7 +97,7 @@ export function agreedSabbatScheme(
     if (!p || canonicalAllocation(p) !== key) return {};
   }
   if (schemeAllocationProblem(state, first) !== null) return {};
-  const out: Record<PlayerId, number> = {};
+  const out = {} as Record<PlayerId, number>;
   for (const id of members) if ((first[id] ?? 0) > 0) out[id] = first[id]!;
   return out;
 }

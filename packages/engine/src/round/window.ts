@@ -1,6 +1,15 @@
-import type { GameState, PlayerId } from './deps.js';
+import { sortedIds, type GameState, type PlayerId } from './deps.js';
 import type { RoundWindow, Submission, ValidationResult } from './types.js';
 import { validateSubmission, type ValidateOptions } from './validate.js';
+
+/**
+ * Startar spelet: från `setup` (rond 0, efter createGameState) till rond 1 med
+ * öppen inlämning.
+ */
+export function startGame(state: GameState): GameState {
+  if (state.phase !== 'setup') throw new Error(`Spelet är redan startat (fas ${state.phase})`);
+  return { ...state, round: 1, phase: 'submission' };
+}
 
 // Inlämningsfönstrets livscykel. Alla funktioner är rena: de returnerar ett nytt
 // fönster och tar tiden (`now`, epoch ms) som argument. Motorn har ingen klocka (M10).
@@ -53,9 +62,7 @@ export function setLocked(window: RoundWindow, playerId: PlayerId, locked: boole
 
 /** Spelare som förväntas lämna in: alla som inte är brända. Torpida lämnar in (Awaken, minions). */
 export function expectedPlayers(state: GameState): PlayerId[] {
-  return Object.keys(state.players)
-    .sort()
-    .filter((id) => state.players[id]!.status !== 'burned');
+  return sortedIds(state.players).filter((id) => state.players[id]!.status !== 'burned');
 }
 
 /** Ronden kan lösas när deadline har passerat eller alla förväntade spelare har låst. */

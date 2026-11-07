@@ -1,7 +1,7 @@
 # Beslut: rondens skelett
 
 **Datum:** 2026-11-07
-**Status:** Fattade av Claude utan Gustafs input (Gustaf offline). Provisoriska standardval; ändra raden här och koden i `packages/engine/src/round/` om du vill annorlunda.
+**Status:** Fattade av Claude utan Gustafs input (Gustaf offline). Provisoriska standardval; ändra raden här och koden i `packages/engine/src/round/` om du vill annorlunda. Numreringen R# är egen för ronden; M#/C# kommer från motorbeslutsdokumentet.
 **Bygger på:** [`docs/engine/001_motorbeslut.md`](../engine/001_motorbeslut.md) (M4–M11, C2, C11), som skelettet följer. Nedan står bara beslut som *inte* redan finns där, plus en avvikelse.
 **Plan:** [`docs/engine/round-skeleton-plan.md`](../engine/round-skeleton-plan.md)
 
@@ -88,6 +88,14 @@
 ## R19. Aktionsdefinitioner är data plus en handler
 **Beslut:** `ActionDefinition` beskriver kostnad, stealth, Trifle, slotregel, titel/sekt/miniontyp, torpor, once-per-turn osv. som data, plus en `resolve`-funktion i TypeScript. Skelettets definitioner är stubbar utan effekt.
 **Motivering:** SPEC B11 vill ha "data + effektprimitiver". Att hitta rätt primitiver kräver att några aktioner byggts på riktigt först (steg 3). Valideringen läser redan bara datafälten.
+
+## R20. Bränd minion som bär en artefakt
+**Beslut:** När en minion bränns (t.ex. obetald upkeep) tas den bort ur state och en artefakt den bar hamnar i minionens stad (`holder: city`), där den kan hittas med Search.
+**Motivering:** Regelboken säger inget. Att artefakten försvinner vore en tyst förlust av en unik resurs; att den går tillbaka till ägaren skulle göra det riskfritt att utrusta minions.
+
+## R21. Content skickas in, inte globalt
+**Beslut:** `resolveRound`, `continueResolution`, `submitActions` och valideringen tar `content` (titlar, miniontyper osv.) i sina options, liksom aktionsregistret. Utan registry används skelettets stubbar.
+**Motivering:** Följer modellprinciperna i 001 (content är separat från state, SPEC B4/B11).
 
 ---
 
