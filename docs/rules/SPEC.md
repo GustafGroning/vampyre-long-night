@@ -663,6 +663,8 @@ The following are **data, not code**, and must be editable/versionable without e
 
 # Part C — Open Decisions Needed Before Build-Complete
 
+> **Status 2026-11-07:** Provisoriska beslut för de punkter som blockerar motorn, plus nya luckor (M1–M20) som inte fanns i denna tabell, finns i [`docs/engine/001_motorbeslut.md`](../engine/001_motorbeslut.md). Där avviker C2 (Sabbat schemes) från rekommendationen nedan.
+
 The tabletop rules delegate several mechanics to live GM judgment. To meet Pillar 3 (determinism, no per-action human input), each must be resolved into a deterministic rule or a structured content/input model. **Recommended defaults are proposed so the system can be built without further input; the GM-content approach is preferred where flavor matters.**
 
 | # | Mechanic | Gap | Recommended resolution |
