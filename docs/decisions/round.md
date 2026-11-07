@@ -9,7 +9,7 @@
 
 | # | Fråga | Valt |
 |---|---|---|
-| R3 | Vad händer med en lista som blivit ogiltig mellan inlämning och upplösning? | Ogiltiga entries stryks, sedan stryks bakifrån tills listan går ihop. Strukna entries kostar inget. |
+| R3 ✅ | Vad händer med en lista som blivit ogiltig mellan inlämning och upplösning? | Ogiltiga entries stryks, sedan stryks bakifrån tills listan går ihop. Strukna entries kostar inget. |
 | R6 | Vilka aktioner får en dold Archbishop göra? | Både Archbishop-aktioner och förklädnadens titel- och sektaktioner. |
 | R8 | Hide och Go Anarch: gäller "inga fler aktioner" minions också? | Nej, bara vampyren. Minions agerar som vanligt. |
 | R12 | Vad räknas som Celerity:s "next two actions"? | Spelarens två nästa entries som fortfarande väntar, även minionaktioner. |
@@ -26,6 +26,7 @@
 **Motivering:** Samma princip som M5. Spelaren planerade sin ordning mot andras slots; att flytta fram allt efter en struken entry skulle ändra planen mer än strykningen själv.
 
 ## R3. Listor som blivit ogiltiga vid upplösning
+**Status:** ✅ Bekräftat av Gustaf 2026-11-07: "Vi körde exakt som det provisoriska" i Discord-spelet.
 **Beslut:** Vid upplösning (fas 1a) valideras varje lista igen mot aktuell state. Entries som är ogiltiga i sig (fel titel, okänd minion, torpor) stryks direkt. Därefter, så länge listan bryter mot en listregel (budget, minionbudget, once-per-turn, Go Anarch ensam, efter Hide, kostnad), stryks den **högsta flaggade entryn**. För kostnad stryks sista entry med kostnad > 0. Strukna entries betalas inte och får status `rejected` och ett event.
 **Motivering:** Utvidgar M7:s "stryk bakifrån" till alla listregler, så att utfallet är förutsägbart. Att stryka en entry med kostnad 0 hjälper inte mot underskott.
 
