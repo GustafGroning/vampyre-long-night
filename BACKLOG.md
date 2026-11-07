@@ -9,6 +9,8 @@ Sidofynd som inte hör till pågående scope. Skriv var fyndet gjordes.
 - [ ] **Rundbreakdown i regelboken numrerar income-fasen som 4a–4c** (gd:955–957) och end-of-round hoppar från 4c till 4e. Kosmetiskt, men bör rättas. — hittad under: docs/engine/001_motorbeslut.md
 - [x] **Klan-synlighet:** prototypens backlog funderade på att dölja klan. Gustaf bekräftade 2026-11-07 att klan är publik (M2). — hittad under: docs/engine/001_motorbeslut.md
 
+- [ ] **Titellösa vampyrer (M6/S10) är olöst.** Gustaf vill diskutera budget, domän, titelaktioner, VP och om man kan få ny titel. Motorn använder 3 actions som platshållare. — hittad under: genomgång av motorbeslut 2026-11-07
+
 ## State och typer (hittat under `docs/decisions/state.md`)
 
 - [ ] **Regelbokens stavning av artefakter** (gd:411, 420, 422, 426): Vispers in a bottle, Ring of Tremer, Scepter of Venture, Ravanos boots. Normaliserat i koden (S18); rätta regelboken.

@@ -13,7 +13,7 @@ Motorn byggs i fyra steg: (1) state och typer, (2) rondens skelett, (3) en aktio
 | M11 ✅ | När löses combat i förhållande till aktionsordningen? | **Bekräftat av Gustaf.** Rundan pausar efter den **slot** där combat uppstod; alla combats från samma slot förhandlas parallellt. | Kanoniskt måste torpor från combat kunna stoppa senare aktioner (gd:95, gd:946). Detta är det enda valet som håller regeln utan att rundan pausar per combat. |
 | M16 ✅ | Ser man en aktion när intercept **=** stealth? | **Ja** (≥). Bekräftat av Gustaf. | Regelboken säger emot sig själv (se nedan). Påverkar varje informationsberäkning. |
 | M2 ✅ | Vilken state är publik? | Allowlist i tabellen under M2. Bekräftat av Gustaf. | Grunden för alla vyer och läck-tester. |
-| M6 | Hur många aktioner har en vampyr utan titel? | **3**. | Odefinierat i regelboken men inträffar (förlorad enda stad). |
+| M6 ⚠️ | Hur många aktioner har en vampyr utan titel? | **3** (provisoriskt). **Olöst, ska diskuteras.** | Odefinierat i regelboken men inträffar (förlorad enda stad). |
 
 ---
 
@@ -71,6 +71,7 @@ Motorn byggs i fyra steg: (1) state och typer, (2) rondens skelett, (3) en aktio
 **Motivering:** Den bokstavliga läsningen; den enda som ger Celerity ett värde utan att skriva om ordningen för andra.
 
 ### M6. Aktionsbudget i kantfall
+**Status:** ⚠️ **Olöst.** Gustaf 2026-11-07: "Det här måste diskuteras, notera att frågan inte är löst." Gäller allt om titellösa vampyrer: budget (3), domän (S10), titelaktioner, VP-källor och om man kan få en ny titel. Motorn använder raden nedan som platshållare tills frågan är avgjord. Övriga rader i tabellen är inte ifrågasatta.
 **Beslut:**
 | Läge | Budget |
 |---|---|

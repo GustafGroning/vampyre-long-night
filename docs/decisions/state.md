@@ -79,6 +79,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 **Motivering:** De sanna värdena behövs för Sabbat-regler och vy-filtrering, de skenbara för allt annat. Att lagra båda som separata fält gör att vy-lagret aldrig behöver räkna ut något för att dölja identiteten (M2).
 
 ### S10. Domän
+**Status:** ⚠️ Domän för titellösa är olöst, hör ihop med M6 (Gustaf 2026-11-07).
 **Beslut:** `domainCityIds` följer gd:534: Prince, Baron och Archbishop har kontrollerade städer; Justicar och Inner Circle har alla Camarilla-städer (stadens sekt enligt M3). En vampyr **utan titel** har sina kontrollerade städer som domän, i praktiken oftast ingen.
 **Motivering:** Regelboken säger att alla vampyrer har en domän men definierar den inte för titellösa.
 
