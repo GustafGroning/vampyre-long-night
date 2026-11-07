@@ -2,6 +2,19 @@
 
 Sidofynd som inte hör till pågående scope. Skriv var fyndet gjordes.
 
+## Motorbeslut (hittat under `docs/engine/001_motorbeslut.md`)
+
+- [ ] **Kartdata saknas/motsägelsefull.** `docs/prototype/plans/001_map_improvement.md` listar 37 adjacency-par men säger 36; `007_campaign_setup.md` säger 34. Startvärden per stad (blood flow, stability, MS, intercept) och sea region per hamn finns inte i repot (prototypens `seed.js` följde inte med). Måste bekräftas med GM innan British Isles-kartan blir standardmall (SPEC Part C #14). — hittad under: docs/engine/001_motorbeslut.md
+- [ ] **Regelboken säger emot sig själv om ≥/>** vid intercept mot stealth (gd:114/115/925 vs gd:498/913). Provisoriskt ≥ (M16). Rätta regelboken när Gustaf bekräftat. — hittad under: docs/engine/001_motorbeslut.md
+- [ ] **Rundbreakdown i regelboken numrerar income-fasen som 4a–4c** (gd:955–957) och end-of-round hoppar från 4c till 4e. Kosmetiskt, men bör rättas. — hittad under: docs/engine/001_motorbeslut.md
+- [ ] **Klan-synlighet:** prototypens backlog funderade på att dölja klan. Provisoriskt publikt (M2). — hittad under: docs/engine/001_motorbeslut.md
+
+## State och typer (hittat under `docs/decisions/state.md`)
+
+- [ ] **Regelbokens stavning av artefakter** (gd:411, 420, 422, 426): Vispers in a bottle, Ring of Tremer, Scepter of Venture, Ravanos boots. Normaliserat i koden (S18); rätta regelboken.
+- [ ] **Kopierad text i Baron-avsnittet** (gd:551): "Princes can build influence in cities they control" står under Barons. Troligen kvar från Prince-avsnittet.
+- [ ] **Rule of Three och avdrag** (gd:530): regeln nämner bara bonusar. Bekräfta att avdrag (Banu Haqim −1, Seduction −1) inte kapas (S7).
+
 ## Ronden (hittat under rondens skelett, `docs/engine/round-skeleton-plan.md`)
 - [ ] Riktiga aktionseffekter: skelettets `SKELETON_ACTIONS` är stubbar utan effekt (steg 3).
 - [ ] Faserna 2a–2c, 4a–4d och 5a–5c är tomma krokar: contest-straff, storm, masquerade-kaskad, Ventrue +10, klan-curses, missions, Archon-loyalty, income från städer och bleeds, start-of-turn-VP.

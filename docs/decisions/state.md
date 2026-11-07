@@ -155,10 +155,6 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 
 ---
 
-## Sidofynd (flyttas till BACKLOG.md)
+## Sidofynd
 
-`BACKLOG.md` skapas i grenen för motorbeslutsdokumentet; dessa punkter läggs till där när båda grenarna är inne.
-
-- **Regelbokens stavning av artefakter** (gd:420, 426, 411, 422): Ring of Tremer, Ravanos boots, Vispers in a bottle, Scepter of Venture. Normaliserat i koden (S18); rätta regelboken.
-- **Kopierad text i Baron-avsnittet** (gd:551): "Princes can build influence in cities they control" står under Barons. Troligen kvar från Prince-avsnittet.
-- **Rule of Three och avdrag** (gd:530): regeln nämner bara bonusar. Bekräfta att avdrag (Banu Haqim −1, Seduction −1) inte kapas (S7).
+Sidofynd från det här arbetet ligger i `BACKLOG.md` under "State och typer".
