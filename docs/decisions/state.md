@@ -12,7 +12,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 | # | Fråga | Valt | Varför det spelar roll |
 |---|---|---|---|
 | S7 ✅ | Hur räknas Rule of Three? | Per källa: bonusar från samma källa summeras och kapas på +3. Avdrag kapas inte. Även permanenta bonusar (EXP, skapande, Diablerie) är källor. | Påverkar varje stat i spelet. "Greater strength max +3" blir samma regel som Rule of Three. |
-| S8 | Räknas Scepter of Ventrues +1 level in i upkeep? | **Nej**, upkeep räknas på minionens egen level. | Regelboken säger inte. Annars blir artefakten en kostnad. |
+| S8 ⏸️ | Räknas Scepter of Ventrues +1 level in i upkeep? | **Nej**, upkeep räknas på minionens egen level. | Regelboken säger inte. Annars blir artefakten en kostnad. |
 | S16 | "Första violation i en Camarilla-stad ger ingen blood hunt": första i kampanjen eller per stad? | **En gång per kampanj.** | Per stad skulle ge Camarilla ett gratis-violation i varje stad. |
 | S14 | Vad händer med brända saker i state? | Minions och artefakter tas bort. Vampyrer ligger kvar med `status: 'burned'`. | Avgör hur historik och referenser fungerar. |
 | S12 | Standardkartan | British Isles finns som **provisorisk** mall med gissade startvärden och havsregioner. Tester använder en syntetisk karta. | Kartan måste bekräftas innan den används i spel. |
@@ -69,6 +69,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 **Öppet:** (M)Protean "rearrange your basic stats" (gd:1252). Med basvärde 0 betyder "basic stats" här summan av permanenta modifiers. Hur omfördelningen representeras bestäms när aktionen byggs.
 
 ### S8. Minions stats och upkeep
+**Status:** ⏸️ Pausad av Gustaf 2026-11-07 (om Scepter of Ventrue höjer upkeep). Provisoriskt beslut gäller tills vidare.
 **Beslut:** En minions bas i alla tre stats är dess **effektiva level** (gd:215): level plus Scepter of Ventrue (+1, max 3). En buren artefakts minionbonus (t.ex. Fog Flute +1 stealth) är en egen källa. **Upkeep räknas på minionens egen level**, utan Scepter.
 **Motivering:** Regelboken säger inte om Scepter höjer upkeep. Att det inte gör det håller artefakten som en ren bonus.
 
