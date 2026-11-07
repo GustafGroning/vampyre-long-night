@@ -3,7 +3,7 @@
 **Datum:** 2026-11-07
 **Status:** Fattade av Claude utan Gustafs input (Gustaf offline). Provisoriska standardval; ändra raden här och koden i `packages/engine/src/round/` om du vill annorlunda. Numreringen R# är egen för ronden; M#/C# kommer från motorbeslutsdokumentet.
 **Bygger på:** [`docs/engine/001_motorbeslut.md`](../engine/001_motorbeslut.md) (M4–M11, C2, C11), som skelettet följer. Nedan står bara beslut som *inte* redan finns där, plus en avvikelse.
-**Plan:** [`docs/engine/round-skeleton-plan.md`](../engine/round-skeleton-plan.md)
+**Plan:** [`docs/engine/round-skeleton-plan.md`](../engine/round-skeleton-plan.md) · **State-beslut:** [`state.md`](state.md)
 
 ## Snabböversikt: de beslut som påverkar spelet mest
 
