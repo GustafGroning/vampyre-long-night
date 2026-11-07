@@ -116,7 +116,7 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 - **Minions** bränns.
 - **Artefakter** ges till den som lyckades med Diablerie.
 - Vem som brände vampyren sparas (`burnedBy`), eftersom Soul Gem of Etrius (gd:438) avgör vinnaren utifrån den som diableriserade.
-- **Öppet:** artefakter när vampyren bränns utan Diablerie (wound table 2–3, gd:188, eller Diablerie-alternativet "just burn them"). Se svar från Gustaf.
+- Bränns vampyren **utan** Diablerie får **vinnaren** artefakterna: vinnaren av combaten (wound table 2–3, gd:188) respektive den som brände (Diablerie-alternativet "just burn them", gd:1173).
 **Beslut:** När en **minion** eller **artefakt** bränns tas den bort ur state; historiken finns i rondens events. En bränd **vampyr** ligger kvar med `status: 'burned'` och `location: null`.
 **Motivering:** Brända vampyrer behövs för slutpoäng (0 VP), Soul Gem of Etrius (gd:438) och för att spelarlistan ska vara stabil. För minions och artefakter skulle en `burned`-flagga betyda att varje regel måste filtrera bort dem, vilket är lätt att glömma.
 **Invariant:** en bränd vampyr kan inte kontrollera städer, bära artefakter eller äga minions.
