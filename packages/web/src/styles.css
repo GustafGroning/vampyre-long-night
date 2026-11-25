@@ -107,3 +107,40 @@ body { margin: 0; background: var(--bg); }
 .multi-step { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; }
 .multi-step legend { font-weight: 600; }
 .action-banner.composing { flex-wrap: wrap; }
+
+
+/* Interactive SVG territory map (five-region prototype). */
+.region-map-wrap { background: #f4f1ea; }
+.region-game-map { max-height: calc(100vh - 80px); touch-action: manipulation; }
+.region-shape { stroke: #fcfaf4; stroke-width: 3.5; stroke-linejoin: round; }
+/* Render real connections above map areas but behind city nodes. */
+.region-links { pointer-events: none; }
+.region-links line, .region-links path { fill: none; stroke: #232323; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.region-selected-outline { stroke: #182b4f; stroke-width: 7; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.region-hover-outline { stroke: #404953; stroke-width: 6; stroke-linejoin: round; stroke-dasharray: 12 8; vector-effect: non-scaling-stroke; }
+.region-node { cursor: pointer; outline: none; }
+.region-node-circle { stroke: #fcfaf4; stroke-width: 3; transition: stroke-width .12s ease; }
+.region-node:hover .region-node-circle, .region-node:focus-visible .region-node-circle { stroke-width: 5; }
+.region-node.is-selected .region-node-circle { stroke: #182b4f; stroke-width: 5; }
+.region-node-focus-ring { fill: none; stroke: transparent; stroke-width: 4; pointer-events: none; }
+.region-node:focus-visible .region-node-focus-ring { stroke: #182b4f; }
+.region-node-name { text-anchor: middle; font-size: 23px; font-weight: 650; fill: #222; paint-order: stroke; stroke: #f4f1ea; stroke-width: 4px; pointer-events: none; }
+.region-node .piece { pointer-events: none; }
+.region-node .piece circle { stroke-width: 2.5; }
+.region-node .piece.own circle { stroke-width: 4; }
+
+.region-dialog-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 24px; background: rgba(18,22,28,.55); }
+.region-dialog { width: min(460px,100%); max-height: min(80vh,650px); overflow-y: auto; background: #f9f7f1; color: #242526; padding: 28px; border: 1px solid #777; border-radius: 6px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+.region-dialog-header { display:flex; justify-content:space-between; align-items:flex-start; gap: 16px; }
+.region-dialog-kicker { color:#555f69; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; }
+.region-dialog h2 { margin: 7px 0 14px; font-size: 2rem; }
+.region-dialog h3 { margin:24px 0 12px; font-size: 1rem; }
+.region-dialog p { line-height: 1.55; margin: 6px 0; }
+.region-dialog-close { flex:none; width:38px; height:38px; border:1px solid #aaa; border-radius:4px; background:#fff; font-size:1.6rem; line-height:1; cursor:pointer; }
+.region-dialog-close:focus-visible { outline: 3px solid #365f9b; }
+.region-status-list { padding-left: 22px; margin: 0; line-height: 1.9; }
+@media (max-width: 900px) {
+  .region-game-map { max-height: 65vh; min-height: 300px; }
+  .region-dialog-backdrop { padding: 12px; }
+  .region-dialog { padding: 22px; }
+}

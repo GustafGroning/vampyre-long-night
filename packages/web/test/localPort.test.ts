@@ -15,7 +15,8 @@ const move = (to: string, label: string) => act('move', { to }, v, { to: label }
 describe('data från PlayerView', () => {
   it('resurser, vampyr och rond för Prince', () => {
     const d = createDemoPort('prince').load();
-    expect(d.resources).toEqual({ blood: 80, vp: 0, artifacts: 0, minions: 1, votes: 2 });
+    // The demo Prince starts with 100 blood and earns 80 from Bleed in round 1.
+    expect(d.resources).toEqual({ blood: 180, vp: 0, artifacts: 0, minions: 1, votes: 2 });
     expect(d.vampire).toEqual({ name: 'Prince Edmund Hale', titleLabel: 'Prince of North', stats: { strength: 0, stealth: 0, intercept: 1 } });
     expect(d.round).toEqual({ round: 2, maxRounds: 8 });
   });
