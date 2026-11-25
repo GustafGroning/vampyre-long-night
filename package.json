@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "scripts": {
+    "build": "npm run build -w @vampyre/web",
     "test": "npm test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "dev": "npm run dev -w @vampyre/web"
