@@ -8,6 +8,7 @@ Frågor som bara lead game designern kan svara på. Designern är inte tillgäng
 
 - [ ] **Röster för exponerad Sabbat/Archbishop i Vampiric Society.** Provisoriskt 0 (Archbishop-titelns värde i `content/titles.ts`). Används i `baseSocietyVotes`, beslut V18 i `docs/decisions/views.md`. — hittad under: kartvyn (PR #7)
 - [ ] **Röster för Anarch-titlar (Baron) i Vampiric Society.** Provisoriskt 0 (content), medan en Anarch utan titel har 1, vilket är bakvänt. Används i `baseSocietyVotes`, beslut V18. — hittad under: kartvyn (PR #7)
+- [ ] **Royal Privileges: får en Prince spendera flera i samma rond?** gd:923 säger "spend a royal privilege to gain 1 extra action for a round". Provisoriskt ja, +1 action per spenderad (motorns `budgetFrom`, M6 i `docs/engine/001_motorbeslut.md`). UI:t tillåter upp till innehavet (`RoyalPrivilegeControl` i `packages/web/src/components/ActionPanel.tsx`). — hittad under: Royal Privileges i UI
 
 ## Motorbeslut (hittat under `docs/engine/001_motorbeslut.md`)
 
@@ -80,3 +81,20 @@ Beslut i `docs/decisions/effects.md`, kod i `packages/engine/src/effects/`.
 - [ ] **Brujah m.fl. klan-curses som rör blood** (Decadence −5, Ventrue wealth +10, Gangrel/Tzimisce-förluster) dras inte än. Byggs i steg 7; Picky eater och Monstrous är redan med eftersom de hör till Bleed och Move.
 - [ ] **`bloodAtEndOfLastRound`** sätts aldrig. Lasombra-cursen (gd:785) behöver det. Sätt det i fas 5d när klanreglerna byggs.
 - [ ] **Nosferatus boon (Always listening)** ska ge +1 intercept när de gör Obfuscate, Hide eller In the Shadows (gd:803). Byggs med klanreglerna (steg 7).
+
+## Spelarens gränssnitt (hittat under Royal Privileges i UI)
+- [ ] **Royal Privileges förbrukas även när de inte ger en action.** Motorn (`royalPrivilegesSpent`) drar det begärda antalet även om ett tak (torpor, Invite to the Camarilla) gör att de inte ger någon action. UI:t stoppar plus-knappen vid `maxUseful` och varnar, men motorn borde kanske klampa mot taket. Logikfråga till Gustaf.
+- [ ] **Inlämnade Royal Privileges vid omladdning.** När serverporten returnerar en inlämnad lista måste den också returnera `royalPrivilegesToSpend`, annars visar panelen 0. Hör till serverkopplingen.
+
+## Spelservern (hittat under `docs/backend/server-plan.md`, beslut P1–P15)
+- [ ] **GM-gränssnitt i webben.** Idag skapas kampanjer, konton och upplösning med `packages/server/scripts/gm.ts`.
+- [ ] **Pausad upplösning (strid) kan inte återupptas.** `gm_resolve` sparar `RoundResolution` och sätter ronden till `suspended`, men det finns ingen operation för interrupt-svar och `continueResolution`. Byggs med combat (B6).
+- [ ] **Automatisk upplösning vid deadline** (M10): kräver `pg_cron` + `pg_net` eller en schemalagd funktion. Idag löser GM.
+- [ ] **Realtime i stället för polling** (P6). Kräver en tabell per spelare som får läsas, t.ex. en "ny rond"-signal utan innehåll.
+- [ ] **Content per kampanj** (B4): server och klient använder `DEFAULT_CONTENT`.
+- [ ] **Invites:** spelare kopplas med e-post av GM (`gm_assign`). Den gamla `invites`-tabellen används inte.
+- [ ] **Osparat utkast mellan omladdningar:** bara den inlämnade listan finns kvar. Ett halvfärdigt utkast försvinner.
+- [ ] **Gamla tabeller i Supabase** (`characters`, `rounds`, `actions`, `combats` m.fl.) och funktionerna `submit_action`, `gm_advance_round`, `create_campaign_with_gm` används inte och läcker via RLS om de fylls. Ta bort eller stäng när Gustaf ok:at.
+- [ ] **Migrationerna från juni 2026** finns bara i projektet (`supabase_migrations.schema_migrations`), inte som filer. Hämta in dem så att `supabase db reset` fungerar lokalt.
+- [ ] **Deadline syns inte på första sidan** (gapanalysen 2A/11). Servern skickar `window.deadline` i `screen`, men UI:t visar den inte.
+- [ ] **Latent fel i `ActionComposer`:** text-steget anropar `onDone` två gånger (rad ~98). Ingen action har text-parametrar just nu (Chimerstry är borttagen), så det går inte att återskapa i gränssnittet. Kontrollera när en text-action kommer tillbaka.

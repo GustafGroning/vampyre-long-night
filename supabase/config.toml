@@ -1,0 +1,5 @@
+# Bara det som avviker från Supabase CLI:s standard. Edge-funktionen `game` är en
+# bundle som byggs med `npm run build:function -w @vampyre/server` (se supabase/README.md).
+[functions.game]
+entrypoint = "./functions/game/index.js"
+verify_jwt = true

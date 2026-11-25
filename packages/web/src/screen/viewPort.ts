@@ -2,7 +2,7 @@
  * Porten mot motorns actionkatalog och kartvy. Allt räknas från spelarens
  * `PlayerView` (motorns `listAvailableActions`, `nextParam`, `analyzeDraft`),
  * så samma kod fungerar i klienten och på servern och kan aldrig visa dold
- * information. Bara inlämningen (`submit`) behöver något mer än vyn.
+ * information. Bara inlämningen (`submit`/`unlock`) behöver något mer än vyn.
  */
 import {
   ACTION_CATALOG,
@@ -11,6 +11,8 @@ import {
   nextParam,
   projectPositions,
   type ActionRegistry,
+  type BudgetBreakdown,
+  type Json,
   type Content,
   type MinionId,
   type ParamRequest,
@@ -22,9 +24,12 @@ import type {
   ConfirmResult,
   DraftAction,
   DraftAnalysis,
+  DraftExtras,
   MainScreenData,
+  Params,
   PerformerRef,
   PlayerScreenPort,
+  RoyalPrivilegeInfo,
   TargetStep,
 } from './model';
 
@@ -33,9 +38,11 @@ export interface ViewPortOptions {
   content: Content;
   registry?: ActionRegistry;
   /** Lämnar in listan. Lokalt: motorns submitActions; i spelet: servern. */
-  submit: (actions: SubmittedAction[]) => ConfirmResult;
-  unlock: () => void;
+  submit: (actions: SubmittedAction[], extras: DraftExtras) => ConfirmResult | Promise<ConfirmResult>;
+  unlock: () => void | Promise<void>;
   isLocked: () => boolean;
+  /** Redan inlämnad lista i ronden (från servern efter omladdning). */
+  submitted?: { actions: readonly SubmittedAction[]; royalPrivilegesToSpend: number } | null;
 }
 
 export function toSubmitted(a: Pick<DraftAction, 'uid' | 'actionId' | 'performer' | 'params'>): SubmittedAction {
@@ -72,6 +79,78 @@ export function titleLabel(view: PlayerView, content: Content): string | null {
   return `${name}${ofDomain}${disguise}`;
 }
 
+/**
+ * Royal Privileges för panelen, räknat från motorns budget.
+ * `maxUseful`: med ett tak (torpor, Invite) ger bara de som ryms under taket en action.
+ * `needed`: så många som krävs för att listans vampyraktioner ska rymmas.
+ */
+export function royalPrivilegeInfo(
+  available: number,
+  spending: number,
+  budget: BudgetBreakdown,
+  apUsed: number,
+): RoyalPrivilegeInfo {
+  const withoutRp = budget.base + budget.sabbatScheme + budget.bonus;
+  const maxUseful = budget.cap === null ? available : Math.max(0, Math.min(available, budget.cap - withoutRp));
+  const totalWithoutRp = budget.cap === null ? withoutRp : Math.min(withoutRp, budget.cap);
+  const needed = Math.min(maxUseful, Math.max(0, apUsed - totalWithoutRp));
+  return { available, spending, maxUseful, needed };
+}
+
+/** Varningar när spelaren spenderar Royal Privileges som inte ger något. */
+export function royalPrivilegeWarnings(rp: RoyalPrivilegeInfo): string[] {
+  if (rp.spending > rp.maxUseful) {
+    return [`Bara ${rp.maxUseful} av ${rp.spending} Royal Privileges ger en extra action den här ronden, men alla förbrukas`];
+  }
+  if (rp.spending > rp.needed) {
+    return [`Du spenderar ${rp.spending} Royal Privileges men listan behöver ${rp.needed}`];
+  }
+  return [];
+}
+
+/** Visningstexten för ett val, som ActionComposer sätter den när spelaren väljer. */
+function labelFor(step: TargetStep, value: Json): string {
+  if (step.kind === 'number') return String(value);
+  if (step.kind === 'text') return `”${String(value)}”`;
+  if (Array.isArray(value)) {
+    return step.options.filter((o) => value.includes(o.value)).map((o) => o.label).join(' + ') || 'inga';
+  }
+  return step.options.find((o) => o.value === value)?.label ?? String(value);
+}
+
+/**
+ * Bygger tillbaka en inlämnad lista till rader med visningstexter (P7). Servern
+ * sparar bara motorns `SubmittedAction`; texterna räknas fram igen genom att
+ * spela upp målvalen (`nextParam`) mot vyn, val för val, i listans ordning.
+ * Entryns `key` blir radens uid, så pekare mellan rader håller.
+ */
+export function restoreDraft(
+  view: PlayerView,
+  content: Content,
+  actions: readonly SubmittedAction[],
+  registry: ActionRegistry = ACTION_CATALOG,
+): DraftAction[] {
+  const out: DraftAction[] = [];
+  actions.forEach((a, i) => {
+    const params = (a.params ?? {}) as Record<string, Json>;
+    const performer: PerformerRef = a.performer.kind === 'vampire' ? { kind: 'vampire' } : { kind: 'minion', minionId: a.performer.minionId };
+    const uid = a.key ?? `restored-${i + 1}`;
+    const paramLabels: Record<string, string> = {};
+    const partial: Record<string, Json> = {};
+    const before = out.map(toSubmitted);
+    for (let guard = 0; guard < 20; guard++) {
+      const list = [...before, { ...a, params: { ...partial } }];
+      const r = nextParam(view, content, list, list.length - 1, registry);
+      if (!r || !(r.key in params)) break;
+      const value = params[r.key]!;
+      paramLabels[r.key] = labelFor(toStep(r), value);
+      partial[r.key] = value;
+    }
+    out.push({ uid, actionId: a.actionId, performer, params: params as Params, paramLabels });
+  });
+  return out;
+}
+
 export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
   const { view, content } = opts;
   const registry = opts.registry ?? ACTION_CATALOG;
@@ -92,9 +171,11 @@ export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
     return here ? `${name} i ${cityName(here)}` : name;
   };
 
-  const analyze = (draft: readonly DraftAction[]): DraftAnalysis => {
+  const analyze = (draft: readonly DraftAction[], extras?: DraftExtras): DraftAnalysis => {
     const actions = draft.map(toSubmitted);
-    const a = analyzeDraft(view, content, { actions, royalPrivilegesToSpend: 0 }, { registry });
+    const spending = extras?.royalPrivilegesToSpend ?? 0;
+    const a = analyzeDraft(view, content, { actions, royalPrivilegesToSpend: spending }, { registry });
+    const rp = royalPrivilegeInfo(view.me.royalPrivileges, spending, a.budget, a.ap.used);
     const byIndex = new Map(a.entries.map((e) => [e.index, e]));
     return {
       entries: draft.map((d, i) => {
@@ -110,6 +191,7 @@ export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
       }),
       apUsed: a.ap.used,
       apTotal: a.ap.total,
+      royalPrivileges: rp,
       minionActions: view.me.minions.map((m) => {
         const c = a.minionActions.find((x) => x.minionId === m.id);
         return { minionId: m.id, name: m.name, used: c?.used ?? 0, allowed: c?.allowed ?? 1 };
@@ -117,7 +199,7 @@ export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
       totalCost: a.totalCost,
       totalIncome: a.totalIncome,
       errors: a.errors.filter((e) => e.entryIndex === undefined).map((e) => e.message),
-      warnings: a.warnings.map((w) => w.message),
+      warnings: [...a.warnings.map((w) => w.message), ...royalPrivilegeWarnings(rp)],
       canConfirm: a.canConfirm,
     };
   };
@@ -154,8 +236,13 @@ export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
       return r ? toStep(r) : null;
     },
     analyze,
-    confirm: (draft) => opts.submit(draft.map(toSubmitted)),
-    unlock: opts.unlock,
+    confirm: async (draft, extras) =>
+      opts.submit(draft.map(toSubmitted), { royalPrivilegesToSpend: extras?.royalPrivilegesToSpend ?? 0 }),
+    unlock: async () => {
+      await opts.unlock();
+    },
     isLocked: opts.isLocked,
+    initialDraft: () => (opts.submitted ? restoreDraft(view, content, opts.submitted.actions, registry) : []),
+    initialExtras: () => ({ royalPrivilegesToSpend: opts.submitted?.royalPrivilegesToSpend ?? 0 }),
   };
 }

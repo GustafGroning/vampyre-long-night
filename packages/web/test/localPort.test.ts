@@ -15,6 +15,7 @@ const move = (to: string, label: string) => act('move', { to }, v, { to: label }
 describe('data från PlayerView', () => {
   it('resurser, vampyr och rond för Prince', () => {
     const d = createDemoPort('prince').load();
+    // 100 − 20 upkeep + 25 stadsinkomst (5a) + 75 Bleed (5b) i demorondens upplösning (PR #10).
     // The demo Prince starts with 100 blood and earns 80 from Bleed in round 1.
     expect(d.resources).toEqual({ blood: 180, vp: 0, artifacts: 0, minions: 1, votes: 2 });
     expect(d.vampire).toEqual({ name: 'Prince Edmund Hale', titleLabel: 'Prince of North', stats: { strength: 0, stealth: 0, intercept: 1 } });
@@ -128,12 +129,12 @@ describe('minionernas actions', () => {
 });
 
 describe('inlämning', () => {
-  it('confirm låser listan och unlock låser upp', () => {
+  it('confirm låser listan och unlock låser upp', async () => {
     const port = createDemoPort('prince');
     expect(port.isLocked()).toBe(false);
-    expect(port.confirm([act('bleed')])).toEqual({ ok: true, errors: [] });
+    expect(await port.confirm([act('bleed')])).toEqual({ ok: true, errors: [] });
     expect(port.isLocked()).toBe(true);
-    port.unlock();
+    await port.unlock();
     expect(port.isLocked()).toBe(false);
   });
 });

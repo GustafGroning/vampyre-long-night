@@ -3,7 +3,7 @@
  *
  * Komponenterna ser aldrig `GameState` eller `PlayerView`. All data går genom
  * `PlayerScreenPort`, som i utveckling kör motorn lokalt (`localPort.ts`) och i
- * produktion ska prata med servern (SPEC B1: motorn körs bara på servern).
+ * spelet pratar med servern (`serverPort.ts`; SPEC B1: motorn körs bara på servern).
  */
 
 export type FactionKey = 'camarilla' | 'anarch' | 'sabbat';
@@ -150,11 +150,34 @@ export interface MinionActionCount {
   allowed: number;
 }
 
+/** Royal Privileges (gd:923): en Prince kan spendera 1 för en extra action i ronden. */
+export interface RoyalPrivilegeInfo {
+  /** Hur många spelaren har. 0 = ingen kontroll ska visas. */
+  available: number;
+  /** Hur många listan spenderar (redan inräknat i `apTotal`). */
+  spending: number;
+  /**
+   * Högst så många ger faktiskt en extra action. Lägre än `available` när
+   * budgeten har ett tak (torpor, Invite to the Camarilla): fler spenderade
+   * förbrukas ändå vid upplösningen men ger inget.
+   */
+  maxUseful: number;
+  /** Så många behövs för listans vampyraktioner. */
+  needed: number;
+}
+
+/** Det som lämnas in med listan utöver själva actions. */
+export interface DraftExtras {
+  royalPrivilegesToSpend: number;
+}
+
 export interface DraftAnalysis {
   entries: DraftEntryInfo[];
   /** Bara vampyrens slots. */
   apUsed: number;
+  /** Inklusive extra actions från spenderade Royal Privileges. */
   apTotal: number;
+  royalPrivileges: RoyalPrivilegeInfo;
   /** En rad per egen minion, i id-ordning. */
   minionActions: MinionActionCount[];
   totalCost: number;
@@ -194,10 +217,15 @@ export interface PlayerScreenPort {
     performer: PerformerRef,
     params: Params,
   ): TargetStep | null;
-  analyze(draft: readonly DraftAction[]): DraftAnalysis;
-  /** Lämnar in listan. */
-  confirm(draft: readonly DraftAction[]): ConfirmResult;
-  /** Låser upp en inlämnad lista. */
-  unlock(): void;
+  /** `extras` saknas = inga Royal Privileges spenderas. */
+  analyze(draft: readonly DraftAction[], extras?: DraftExtras): DraftAnalysis;
+  /** Lämnar in listan, med de Royal Privileges som spenderas. Servern validerar och låser. */
+  confirm(draft: readonly DraftAction[], extras?: DraftExtras): Promise<ConfirmResult>;
+  /** Låser upp en inlämnad lista. Listan finns kvar. */
+  unlock(): Promise<void>;
   isLocked(): boolean;
+  /** Listan som redan är inlämnad i ronden (efter omladdning), annars tom. */
+  initialDraft(): DraftAction[];
+  /** Royal Privileges i den inlämnade listan. */
+  initialExtras(): DraftExtras;
 }

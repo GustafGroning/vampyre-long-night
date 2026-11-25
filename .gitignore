@@ -4,3 +4,6 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Genererad av npm run build:function -w @vampyre/server
+supabase/functions/game/index.js

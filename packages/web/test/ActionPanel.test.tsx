@@ -113,3 +113,38 @@ describe('val av olika slag', () => {
     expect(screen.getByTestId('total-cost').textContent).toContain('20');
   });
 });
+
+describe('Royal Privileges', () => {
+  it('Prince kan spendera en för en femte action och lämna in', async () => {
+    const user = setup();
+    expect(screen.getByTestId('royal-privileges').textContent).toContain('0/2 spenderas');
+    for (let i = 0; i < 5; i++) await addAction(user, 'Bleed');
+    const confirm = () => screen.getByRole('button', { name: 'Confirm actions' }) as HTMLButtonElement;
+    expect(confirm().disabled).toBe(true);
+
+    await user.click(screen.getByRole('button', { name: 'Spendera en Royal Privilege för en extra action' }));
+    expect(screen.getByTestId('royal-privileges').textContent).toContain('1/2 spenderas');
+    expect(screen.getByTestId('ap-used').textContent).toBe('5/5 action points used');
+    expect(confirm().disabled).toBe(false);
+
+    await user.click(confirm());
+    expect(screen.getByText('Actions inlämnade.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /Royal Privilege/ })).toBeNull();
+  });
+
+  it('plus stoppar vid antalet man har', async () => {
+    const user = setup();
+    const plus = () => screen.getByRole('button', { name: 'Spendera en Royal Privilege för en extra action' }) as HTMLButtonElement;
+    await user.click(plus());
+    await user.click(plus());
+    expect(plus().disabled).toBe(true);
+    expect(screen.getByTestId('ap-used').textContent).toBe('0/6 action points used');
+    await user.click(screen.getByRole('button', { name: 'Spendera en Royal Privilege färre' }));
+    expect(screen.getByTestId('ap-used').textContent).toBe('0/5 action points used');
+  });
+
+  it('visas inte för den som saknar Royal Privileges', () => {
+    render(<App port={createDemoPort('innerCircle')} />);
+    expect(screen.queryByTestId('royal-privileges')).toBeNull();
+  });
+});

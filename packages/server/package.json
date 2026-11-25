@@ -1,0 +1,30 @@
+{
+  "name": "@vampyre/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Spelservern: kör motorn bakom Supabase (edge function `game`). Logiken är ren TypeScript mot ett Store-gränssnitt.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./api": "./src/api.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "build:function": "esbuild src/edge.ts --bundle --format=esm --platform=neutral --target=es2022 --outfile=../../supabase/functions/game/index.js",
+    "gm": "node --experimental-strip-types scripts/gm.ts",
+    "dev:server": "vite-node scripts/dev-server.ts"
+  },
+  "dependencies": {
+    "@vampyre/engine": "0.0.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.23.1",
+    "esbuild": "^0.25.0",
+    "pg": "^8.23.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

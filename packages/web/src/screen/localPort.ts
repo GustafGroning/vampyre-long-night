@@ -44,11 +44,11 @@ export function createLocalPort(opts: LocalPortOptions): PlayerScreenPort {
     view,
     content,
     ...(opts.registry ? { registry: opts.registry } : {}),
-    submit(actions) {
+    submit(actions, extras) {
       const res = submitActions(
         window,
         state,
-        { playerId, actions, royalPrivilegesToSpend: 0 },
+        { playerId, actions, royalPrivilegesToSpend: extras.royalPrivilegesToSpend },
         NOW,
         { content, ...(opts.registry ? { registry: opts.registry } : {}) },
       );
