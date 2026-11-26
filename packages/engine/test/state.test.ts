@@ -82,19 +82,19 @@ describe('createGameState', () => {
   it('kastar på okänd stad', () => {
     expect(() =>
       createGameState({ ...SAMPLE_INPUT, players: [{ ...SAMPLE_INPUT.players[0]!, location: 'atlantis' }] }, content),
-    ).toThrow(/okänd stad "atlantis"/);
+    ).toThrow(/unknown city "atlantis"/);
   });
 
   it('kastar om två spelare kontrollerar samma stad', () => {
     const [a, b] = [SAMPLE_INPUT.players[2]!, SAMPLE_INPUT.players[3]!];
     expect(() => createGameState({ ...SAMPLE_INPUT, players: [a, { ...b, controls: ['north'] }] }, content)).toThrow(
-      /kontrolleras redan/,
+      /is already controlled/,
     );
   });
 
   it('kastar om resultatet bryter mot en invariant (titel i fel sekt)', () => {
     const bad = { ...SAMPLE_INPUT.players[3]!, faction: 'camarilla' as const };
-    expect(() => createGameState({ ...SAMPLE_INPUT, players: [bad] }, content)).toThrow(/hör till anarch/);
+    expect(() => createGameState({ ...SAMPLE_INPUT, players: [bad] }, content)).toThrow(/belongs to anarch/);
   });
 
   it('kastar om en artefakt som kräver bunden disciplin saknar den', () => {
@@ -139,12 +139,12 @@ describe('kartor', () => {
       adjacencies: [...TEST_MAP.adjacencies, ['north', 'east'], ['north', 'north'], ['north', 'nowhere']],
     };
     const errors = validateMapTemplate(broken).join('\n');
-    expect(errors).toMatch(/ogiltig stadsnyckel "North City"/);
-    expect(errors).toMatch(/dubblerad stad east/);
-    expect(errors).toMatch(/north–east förekommer två gånger/);
-    expect(errors).toMatch(/samma stad/);
-    expect(errors).toMatch(/okänd stad/);
-    expect(() => instantiateMap(broken)).toThrow(/Ogiltig karta/);
+    expect(errors).toMatch(/invalid city key "North City"/);
+    expect(errors).toMatch(/duplicate city east/);
+    expect(errors).toMatch(/north–east occurs twice/);
+    expect(errors).toMatch(/same city/);
+    expect(errors).toMatch(/unknown city/);
+    expect(() => instantiateMap(broken)).toThrow(/Invalid map/);
   });
 });
 
@@ -158,7 +158,7 @@ describe('validateState hittar brott mot invarianter', () => {
   };
 
   it('osymmetriska grannar', () => {
-    expect(broken((s) => s.cities['isle' as CityId]!.adjacent.push('north' as CityId))).toMatch(/inte symmetriskt/);
+    expect(broken((s) => s.cities['isle' as CityId]!.adjacent.push('north' as CityId))).toMatch(/not symmetric/);
   });
 
   it('negativ blood och EXP över taket', () => {
@@ -166,15 +166,15 @@ describe('validateState hittar brott mot invarianter', () => {
       s.players[P.baron]!.blood = -5;
       s.players[P.baron]!.exp.spentTotal = 13;
     });
-    expect(out).toMatch(/blood måste vara heltal ≥ 0/);
-    expect(out).toMatch(/spenderad EXP 13 > tak 12/);
+    expect(out).toMatch(/blood must be an integer ≥ 0/);
+    expect(out).toMatch(/spent EXP 13 > cap 12/);
   });
 
   it('minion som bär två artefakter', () => {
     const out = broken((s) => {
       for (const a of Object.values(s.artifacts)) if (a.holder.kind === 'pool') a.holder = { kind: 'minion', id: 'minion-1' as never };
     });
-    expect(out).toMatch(/bär redan/);
+    expect(out).toMatch(/already carries/);
   });
 
   it('torpor utan torpor-läge och bränd vampyr med position', () => {
@@ -182,8 +182,8 @@ describe('validateState hittar brott mot invarianter', () => {
       s.players[P.baron]!.status = 'torpor';
       s.players[P.prince]!.status = 'burned';
     });
-    expect(out).toMatch(/torpor-fältet stämmer inte/);
-    expect(out).toMatch(/ogiltig position north för status burned/);
+    expect(out).toMatch(/torpor field does not match/);
+    expect(out).toMatch(/invalid position north for status burned/);
   });
 
   it('stadsstats utanför intervallet', () => {
@@ -191,27 +191,27 @@ describe('validateState hittar brott mot invarianter', () => {
       s.cities['north' as CityId]!.stability = 6;
       s.cities['north' as CityId]!.masquerade = -1;
     });
-    expect(out).toMatch(/stability 6 utanför 0..5/);
-    expect(out).toMatch(/masquerade -1 utanför 0..5/);
+    expect(out).toMatch(/stability 6 outside 0..5/);
+    expect(out).toMatch(/masquerade -1 outside 0..5/);
   });
 
   it('id som krockar med räknaren', () => {
-    expect(broken((s) => (s.counters.minion = 3))).toMatch(/id ≥ räknaren 3/);
+    expect(broken((s) => (s.counters.minion = 3))).toMatch(/id ≥ the counter 3/);
   });
 
   it('disguise på någon som inte är Archbishop', () => {
     expect(broken((s) => (s.players[P.prince]!.disguise = { title: 'baron', faction: 'anarch' }))).toMatch(
-      /disguise kräver en Sabbat Archbishop/,
+      /disguise requires a Sabbat Archbishop/,
     );
   });
 
   it('icke-JSON-värden', () => {
-    expect(broken((s) => ((s as unknown as { extra: unknown }).extra = new Date(0)))).toMatch(/inte ren JSON/);
-    expect(broken((s) => (s.players[P.baron]!.blood = Number.NaN))).toMatch(/inte ett ändligt tal/);
+    expect(broken((s) => ((s as unknown as { extra: unknown }).extra = new Date(0)))).toMatch(/not pure JSON/);
+    expect(broken((s) => (s.players[P.baron]!.blood = Number.NaN))).toMatch(/not a finite number/);
   });
 
   it('Sabbat-bas på level 4', () => {
-    expect(broken((s) => (s.sabbat.bases['east' as CityId] = { level: 4 as 3, builtRound: 1 }))).toMatch(/level utanför 1..3/);
+    expect(broken((s) => (s.sabbat.bases['east' as CityId] = { level: 4 as 3, builtRound: 1 }))).toMatch(/level outside 1..3/);
   });
 });
 

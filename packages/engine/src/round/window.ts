@@ -7,7 +7,7 @@ import { validateSubmission, type ValidateOptions } from './validate.js';
  * öppen inlämning.
  */
 export function startGame(state: GameState): GameState {
-  if (state.phase !== 'setup') throw new Error(`Spelet är redan startat (fas ${state.phase})`);
+  if (state.phase !== 'setup') throw new Error(`The game has already started (phase ${state.phase})`);
   return { ...state, round: 1, phase: 'submission' };
 }
 
@@ -15,7 +15,7 @@ export function startGame(state: GameState): GameState {
 // fönster och tar tiden (`now`, epoch ms) som argument. Motorn har ingen klocka (M10).
 
 export function openRound(state: GameState, params: { seed: string; deadline: number }): RoundWindow {
-  if (state.phase !== 'submission') throw new Error(`Kan inte öppna ronden i fas ${state.phase}`);
+  if (state.phase !== 'submission') throw new Error(`Cannot open the round in phase ${state.phase}`);
   return { round: state.round, seed: params.seed, deadline: params.deadline, status: 'open', submissions: {} };
 }
 
@@ -39,9 +39,9 @@ export function submitActions(
   now: number,
   opts: ValidateOptions,
 ): SubmitResult {
-  if (window.status !== 'open') return fail(window, 'window_closed', 'Ronden är stängd för inlämning');
-  if (now >= window.deadline) return fail(window, 'deadline_passed', 'Deadline har passerat');
-  if (state.round !== window.round) return fail(window, 'wrong_round', `Fönstret gäller rond ${window.round}`);
+  if (window.status !== 'open') return fail(window, 'window_closed', 'The round is closed for submissions');
+  if (now >= window.deadline) return fail(window, 'deadline_passed', 'The deadline has passed');
+  if (state.round !== window.round) return fail(window, 'wrong_round', `The window is for round ${window.round}`);
   const full: Submission = { ...submission, locked: false, updatedAt: now };
   const validation = validateSubmission(state, full, opts);
   if (!validation.ok) return { ok: false, window, validation };
@@ -54,9 +54,9 @@ export function submitActions(
 
 /** Markerar listan som klar (eller ångrar det). Kräver att en lista finns. */
 export function setLocked(window: RoundWindow, playerId: PlayerId, locked: boolean, now: number): RoundWindow {
-  if (window.status !== 'open' || now >= window.deadline) throw new Error('Ronden är stängd för inlämning');
+  if (window.status !== 'open' || now >= window.deadline) throw new Error('The round is closed for submissions');
   const sub = window.submissions[playerId];
-  if (!sub) throw new Error(`${playerId} har ingen lista att låsa`);
+  if (!sub) throw new Error(`${playerId} has no list to lock`);
   return { ...window, submissions: { ...window.submissions, [playerId]: { ...sub, locked, updatedAt: now } } };
 }
 

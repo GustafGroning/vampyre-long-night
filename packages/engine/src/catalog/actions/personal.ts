@@ -33,7 +33,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     cost: ({ view, content }) =>
       (view.me.title === 'justicar' ? 5 : 10) + (content.clans[view.me.clan].curse.key === 'monstrous' ? 5 : 0),
     trifle: (me) => me.title === 'justicar',
-    params: [cityParam('to', 'Till stad', (ctx) => citiesAdjacentTo(ctx, here(ctx)))],
+    params: [cityParam('to', 'To city', (ctx) => citiesAdjacentTo(ctx, here(ctx)))],
     moves: movesTo(),
   }),
   define({ id: 'bleed', name: 'Bleed', category: 'personal', performer: 'vampire', stealth: 0, cost: 0 }),
@@ -71,7 +71,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     performer: 'vampire',
     stealth: -1,
     cost: 0,
-    params: [characterParam('target', 'Mål (vampyr eller minion i samma stad)')],
+    params: [characterParam('target', 'Target (vampire or minion in the same city)')],
     // Stubb: startar en strid som pausar ronden (M11). Striden byggs i ett senare steg.
     resolve: (ctx) => ({
       status: 'interrupt',
@@ -104,7 +104,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     params: [
       {
         key: 'type',
-        label: 'Typ',
+        label: 'Type',
         kind: 'choice',
         options: ({ content }) =>
           RECRUITABLE.map(([value, label]) => ({
@@ -118,7 +118,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     // The broken pyramid (Tremere-curse, gd:832): inga Lvl 3-minions.
     eligible: ({ view, content, action }) =>
       action.params?.level === 3 && content.clans[view.me.clan].curse.key === 'the_broken_pyramid'
-        ? 'The broken pyramid: kan inte ha Lvl 3-minions'
+        ? 'The broken pyramid: cannot have Lvl 3 minions'
         : null,
   }),
   define({
@@ -132,7 +132,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     params: [
       {
         key: 'exp',
-        label: 'EXP (50 blood styck)',
+        label: 'EXP (50 blood each)',
         kind: 'number',
         range: ({ view, content }) => ({
           min: 1,
@@ -142,7 +142,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
       },
     ],
     eligible: ({ view, content }) =>
-      view.me.exp.spentTotal >= content.rules.expLifetimeCap ? `Max ${content.rules.expLifetimeCap} EXP per kampanj` : null,
+      view.me.exp.spentTotal >= content.rules.expLifetimeCap ? `Max ${content.rules.expLifetimeCap} EXP per campaign` : null,
   }),
   define({
     id: 'awaken',
@@ -155,7 +155,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     params: [
       {
         key: 'target',
-        label: 'Vem väcks',
+        label: 'Who is awakened',
         kind: 'player',
         // I torpor kan man bara väcka sig själv. Annars andra (torpor syns inte, V4).
         options: (ctx) =>
@@ -172,7 +172,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     performer: 'vampire',
     stealth: -1,
     cost: 0,
-    params: [playerParam('target', 'Vampyr i torpor i samma stad')],
+    params: [playerParam('target', 'Vampire in torpor in the same city')],
   }),
   define({
     id: 'hide',
@@ -193,7 +193,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     params: [
       {
         key: 'artifact',
-        label: 'Artefakt i samma stad',
+        label: 'Artifact in the same city',
         kind: 'artifact_key',
         options: ({ view, content }) => {
           const mine = new Set(view.me.artifacts.map((a) => a.definition));
@@ -213,7 +213,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     stealth: 1,
     cost: 10,
     trifle: true,
-    params: [playerParam('target', 'Vampyr')],
+    params: [playerParam('target', 'Vampire')],
   }),
   define({
     id: 'sail',
@@ -222,7 +222,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     performer: 'vampire',
     stealth: 0,
     cost: 15,
-    params: [cityParam('to', 'Till hamn', (ctx) => sailDestinations(ctx, here(ctx)))],
+    params: [cityParam('to', 'To port', (ctx) => sailDestinations(ctx, here(ctx)))],
     moves: movesTo(),
   }),
   define({
@@ -235,7 +235,7 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     params: [
       {
         key: 'seaRegion',
-        label: 'Havsregion',
+        label: 'Sea region',
         kind: 'sea_region',
         options: ({ view }) => view.seaRegions.map((s) => ({ value: s.id, label: s.name })),
       },

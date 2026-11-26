@@ -58,13 +58,13 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     cost: 10,
     params: (ctx) => {
       const specs: ParamSpec[] = [
-        choiceParam('mode', 'Välj', [
-          ['wolves', 'Vargar jagar blood i alla grannstäder'],
-          ['birds', 'Fåglar: +2 intercept resten av ronden'],
-          ['rats', 'Råttor: grannstad −1 intercept'],
+        choiceParam('mode', 'Choose', [
+          ['wolves', 'Wolves hunt blood in all adjacent cities'],
+          ['birds', 'Birds: +2 intercept for the rest of the round'],
+          ['rats', 'Rats: adjacent city −1 intercept'],
         ]),
       ];
-      if (strParam(ctx, 'mode') === 'rats') specs.push(cityParam('city', 'Grannstad', (c) => citiesAdjacentTo(c, here(c))));
+      if (strParam(ctx, 'mode') === 'rats') specs.push(cityParam('city', 'Adjacent city', (c) => citiesAdjacentTo(c, here(c))));
       return specs;
     },
   }),
@@ -76,16 +76,16 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     cost: 10,
     trifle: true,
     params: [
-      playerParam('target', 'Vampyr'),
+      playerParam('target', 'Vampire'),
       {
         key: 'learn',
-        label: 'Välj två',
+        label: 'Choose two',
         kind: 'choice',
         multiple: { min: 2, max: 2 },
         options: () => [
-          { value: 'lowest_faction', label: 'Lägsta stealth på en faction action' },
-          { value: 'highest_personal', label: 'Högsta stealth på en personal action' },
-          { value: 'minions_here', label: 'Alla actions av vampyrens minions i din stad' },
+          { value: 'lowest_faction', label: 'Lowest stealth on a faction action' },
+          { value: 'highest_personal', label: 'Highest stealth on a personal action' },
+          { value: 'minions_here', label: 'All actions by the vampire\'s minions in your city' },
         ],
       },
     ],
@@ -97,23 +97,23 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     cost: 10,
     params: (ctx) => {
       const specs: ParamSpec[] = [
-        choiceParam('mode', 'Välj', [
-          ['track', 'Följ en vampyrs väg denna rond'],
-          ['locate', 'Hitta upp till 5 vampyrer, minions eller artefakter'],
+        choiceParam('mode', 'Choose', [
+          ['track', 'Follow a vampire\'s path this round'],
+          ['locate', 'Find up to 5 vampires, minions or artifacts'],
         ]),
       ];
-      if (strParam(ctx, 'mode') === 'track') specs.push(playerParam('target', 'Vampyr'));
+      if (strParam(ctx, 'mode') === 'track') specs.push(playerParam('target', 'Vampire'));
       if (strParam(ctx, 'mode') === 'locate') {
         specs.push({
           key: 'targets',
-          label: 'Vampyrer och minions',
+          label: 'Vampires and minions',
           kind: 'character',
           multiple: { min: 0, max: 5 },
           options: (c) => [...vampires(c), ...othersMinions(c)],
         });
         specs.push({
           key: 'artifacts',
-          label: 'Artefakter',
+          label: 'Artifacts',
           kind: 'artifact_key',
           multiple: { min: 0, max: 5 },
           options: (c) =>
@@ -127,7 +127,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     eligible: (ctx) => {
       if (strParam(ctx, 'mode') !== 'locate') return null;
       const n = listParam(ctx, 'targets').length + listParam(ctx, 'artifacts').length;
-      return n >= 1 && n <= 5 ? null : 'Välj 1–5 att hitta';
+      return n >= 1 && n <= 5 ? null : 'Choose 1–5 to find';
     },
   }),
   // --- Celerity
@@ -146,7 +146,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     name: '(M) Celerity',
     stealth: 0,
     cost: 20,
-    params: [cityParam('to', 'Stad högst 3 steg bort', (ctx) => citiesWithin(ctx, here(ctx), 3))],
+    params: [cityParam('to', 'City at most 3 steps away', (ctx) => citiesWithin(ctx, here(ctx), 3))],
     moves: movesTo(),
   }),
   // Chimerstry och (M) Chimerstry byggs om och är borttagna (docs/engine/not-fixed-actions.md).
@@ -157,7 +157,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     name: 'Dominate',
     stealth: 1,
     cost: 0,
-    params: [characterParam('target', 'Vampyr eller minion i samma stad'), cityParam('to', 'Till stad', (ctx) => allCities(ctx))],
+    params: [characterParam('target', 'Vampire or minion in the same city'), cityParam('to', 'To city', (ctx) => allCities(ctx))],
   }),
   disc('dominate', M, {
     id: 'dominate_m',
@@ -167,7 +167,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
       const level = knownMinionLevel(ctx.view, strParam(ctx, 'target') ?? '');
       return level === null ? 0 : ([25, 50, 100][level - 1] ?? 100);
     },
-    params: [{ key: 'target', label: 'Annans minion', kind: 'minion', options: (ctx) => othersMinions(ctx) }],
+    params: [{ key: 'target', label: 'Another player\'s minion', kind: 'minion', options: (ctx) => othersMinions(ctx) }],
   }),
   // --- Fortitude
   disc('fortitude', B, { id: 'fortitude', name: 'Fortitude', stealth: 'undetectable', cost: 10 }),
@@ -178,7 +178,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     name: 'Obfuscate',
     stealth: 'undetectable',
     cost: 0,
-    params: [ownLaterEntry('entry', 'Personal- eller discipline-action längre ner', ['personal', 'discipline'])],
+    params: [ownLaterEntry('entry', 'Personal or discipline action further down', ['personal', 'discipline'])],
   }),
   disc('obfuscate', M, { id: 'obfuscate_m', name: '(M) Obfuscate', stealth: 'undetectable', cost: 10 }),
   // --- Oblivion
@@ -187,7 +187,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     name: 'Oblivion',
     stealth: 1,
     cost: 10,
-    params: [playerParam('target', 'Vampyr', { includeSelf: true })],
+    params: [playerParam('target', 'Vampire', { includeSelf: true })],
   }),
   disc('oblivion', M, {
     id: 'oblivion_m',
@@ -197,7 +197,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     params: [
       {
         key: 'entries',
-        label: 'Upp till 2 minion-actions längre ner',
+        label: 'Up to 2 minion actions further down',
         kind: 'entry',
         multiple: { min: 1, max: 2 },
         options: (ctx) =>
@@ -216,7 +216,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     name: '(M) Potence',
     stealth: 0,
     cost: 10,
-    params: [{ key: 'target', label: 'Minion LV2 eller lägre i samma stad', kind: 'minion', options: (ctx) => othersMinions(ctx, { maxLevel: 2 }) }],
+    params: [{ key: 'target', label: 'Minion LV2 or lower in the same city', kind: 'minion', options: (ctx) => othersMinions(ctx, { maxLevel: 2 }) }],
   }),
   // --- Presence
   disc('presence', B, {
@@ -226,13 +226,13 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     cost: 0,
     params: (ctx) => {
       const specs: ParamSpec[] = [
-        choiceParam('mode', 'Vems faction action', [
-          ['own', 'Min egen, längre ner i listan'],
-          ['other', 'En annan vampyrs'],
+        choiceParam('mode', 'Whose faction action', [
+          ['own', 'My own, further down the list'],
+          ['other', 'Another vampire\'s'],
         ]),
       ];
-      if (strParam(ctx, 'mode') === 'own') specs.push(ownLaterEntry('entry', 'Faction action längre ner', ['faction']));
-      if (strParam(ctx, 'mode') === 'other') specs.push(playerParam('target', 'Vampyr'));
+      if (strParam(ctx, 'mode') === 'own') specs.push(ownLaterEntry('entry', 'Faction action further down', ['faction']));
+      if (strParam(ctx, 'mode') === 'other') specs.push(playerParam('target', 'Vampire'));
       return specs;
     },
   }),
@@ -243,7 +243,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     name: 'Protean',
     stealth: 'undetectable',
     cost: 10,
-    params: [choiceParam('stat', '+1 på', STAT_CHOICES)],
+    params: [choiceParam('stat', '+1 to', STAT_CHOICES)],
   }),
   disc('protean', M, {
     id: 'protean_m',
@@ -253,7 +253,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     params: [
       {
         key: 'arrangement',
-        label: 'Ny fördelning av basvärden',
+        label: 'New distribution of base stats',
         kind: 'choice',
         options: (ctx) => {
           const base = { strength: 0, stealth: 0, intercept: 0 };
@@ -287,10 +287,10 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     cost: 10,
     trifle: true,
     params: [
-      playerParam('target', 'Vampyr', { includeSelf: true }),
+      playerParam('target', 'Vampire', { includeSelf: true }),
       {
         key: 'discipline',
-        label: 'Disciplin (basaktion)',
+        label: 'Discipline (basic action)',
         kind: 'choice',
         options: (ctx) => DISCIPLINES.map((d) => ({ value: d, label: DISCIPLINE_NAMES(ctx, d) })),
       },
@@ -303,24 +303,24 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     cost: 50,
     params: (ctx) => {
       const specs: ParamSpec[] = [
-        choiceParam('mode', 'Välj', [
-          ['burn_artifact', 'Bränn en artefakt och ge dess action till en vampyr'],
-          ['create', 'Skapa en artefakt med en av dina basdiscipliner'],
+        choiceParam('mode', 'Choose', [
+          ['burn_artifact', 'Burn an artifact and give its action to a vampire'],
+          ['create', 'Create an artifact with one of your basic disciplines'],
         ]),
       ];
       if (strParam(ctx, 'mode') === 'burn_artifact') {
         specs.push({
           key: 'artifact',
-          label: 'Egen artefakt',
+          label: 'Own artifact',
           kind: 'artifact',
           options: (c) => c.view.me.artifacts.map((a) => ({ value: a.id, label: c.content.artifacts[a.definition].name })),
         });
-        specs.push(playerParam('target', 'Vampyr i samma stad', { includeSelf: true }));
+        specs.push(playerParam('target', 'Vampire in the same city', { includeSelf: true }));
       }
       if (strParam(ctx, 'mode') === 'create') {
         specs.push({
           key: 'discipline',
-          label: 'Disciplin',
+          label: 'Discipline',
           kind: 'choice',
           options: (c) =>
             DISCIPLINES.filter((d) => c.view.me.disciplines[d] !== undefined).map((d) => ({
@@ -340,17 +340,17 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     cost: 10,
     params: (ctx) => {
       const specs: ParamSpec[] = [
-        choiceParam('mode', 'Välj', [
-          ['gain_ghoul', 'Få en LV1 Ghoul'],
-          ['gain_harpy', 'Få en LV1 Harpy'],
-          ['gain_eye', 'Få en LV1 Eye'],
-          ['merge', 'Bränn två likadana minions, få en level högre'],
+        choiceParam('mode', 'Choose', [
+          ['gain_ghoul', 'Gain a LV1 Ghoul'],
+          ['gain_harpy', 'Gain a LV1 Harpy'],
+          ['gain_eye', 'Gain a LV1 Eye'],
+          ['merge', 'Burn two identical minions, gain one a level higher'],
         ]),
       ];
       if (strParam(ctx, 'mode') === 'merge')
         specs.push({
           key: 'minions',
-          label: 'Två minions av samma typ och level i din stad',
+          label: 'Two minions of the same type and level in your city',
           kind: 'minion',
           multiple: { min: 2, max: 2 },
           options: (c) => ownMinions(c, { maxLevel: 2, types: ['ghoul', 'harpy', 'eye'], inCity: c.positions.vampire }),
@@ -360,8 +360,8 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
     eligible: (ctx) => {
       if (strParam(ctx, 'mode') !== 'merge') return null;
       const [a, b] = listParam(ctx, 'minions').map((id) => ownMinion(ctx.view, id as MinionId));
-      if (!a || !b) return 'Välj två egna minions';
-      return a.type === b.type && a.effectiveLevel === b.effectiveLevel ? null : 'Minionerna måste ha samma typ och level';
+      if (!a || !b) return 'Choose two of your own minions';
+      return a.type === b.type && a.effectiveLevel === b.effectiveLevel ? null : 'The minions must have the same type and level';
     },
   }),
   disc('vicissitude', M, {
@@ -373,7 +373,7 @@ export const DISCIPLINE_ACTIONS: ActionDefinition[] = [
       { key: 'minionId', label: 'Minion', kind: 'minion', options: (ctx) => ownMinions(ctx, { types: ['ghoul', 'harpy', 'eye'] }) },
       {
         key: 'type',
-        label: 'Ny typ',
+        label: 'New type',
         kind: 'choice',
         options: (ctx) => {
           const current = ownMinion(ctx.view, strParam(ctx, 'minionId') as MinionId)?.type;

@@ -21,8 +21,8 @@ import {
 const minion = (types: MinionType[], d: Omit<Def, 'category' | 'performer' | 'minionTypes'>): ActionDefinition =>
   define({ ...d, category: 'minion', performer: 'minion', minionTypes: types });
 
-const toAdjacent: ParamSpec = cityParam('to', 'Till stad', (ctx) => citiesAdjacentTo(ctx, here(ctx)));
-const toPort: ParamSpec = cityParam('to', 'Till hamn', (ctx) => sailDestinations(ctx, here(ctx)));
+const toAdjacent: ParamSpec = cityParam('to', 'To city', (ctx) => citiesAdjacentTo(ctx, here(ctx)));
+const toPort: ParamSpec = cityParam('to', 'To port', (ctx) => sailDestinations(ctx, here(ctx)));
 
 const level = (ctx: Parameters<NonNullable<ParamSpec['options']>>[0]): number => {
   const p = ctx.action.performer;
@@ -68,7 +68,7 @@ export const MINION_ACTIONS: ActionDefinition[] = [
     stealth: 2,
     cost: 15,
     params: [
-      choiceParam('stat', 'Effekt', [
+      choiceParam('stat', 'Effect', [
         ['stability', '−1 Stability'],
         ['intercept', '−1 Intercept'],
       ]),
@@ -89,7 +89,7 @@ export const MINION_ACTIONS: ActionDefinition[] = [
     name: 'Suicide Mission',
     stealth: -2,
     cost: 10,
-    params: [{ key: 'feature', label: 'Special i minionens stad', kind: 'feature', options: (ctx) => cityFeatures(ctx, here(ctx), 'specials') }],
+    params: [{ key: 'feature', label: 'Special in the minion\'s city', kind: 'feature', options: (ctx) => cityFeatures(ctx, here(ctx), 'specials') }],
   }),
   minion(['harpy'], { id: 'guard_the_master', name: 'Guard the Master', stealth: 1, cost: 10 }),
   // --- Eye
@@ -100,11 +100,11 @@ export const MINION_ACTIONS: ActionDefinition[] = [
     stealth: 2,
     cost: 10,
     params: [
-      playerParam('target', 'Vampyr i samma stad'),
-      choiceParam('question', 'Fråga', [
-        ['blood', 'Hur mycket blood har vampyren?'],
-        ['artifacts', 'Vilka artefakter har den?'],
-        ['vp', 'Har den mer VP än jag?'],
+      playerParam('target', 'Vampire in the same city'),
+      choiceParam('question', 'Question', [
+        ['blood', 'How much blood does the vampire have?'],
+        ['artifacts', 'Which artifacts does it have?'],
+        ['vp', 'Does it have more VP than me?'],
       ]),
     ],
   }),
@@ -117,7 +117,7 @@ export const MINION_ACTIONS: ActionDefinition[] = [
     cost: 0,
     // Ett val per level; samma val får tas flera gånger (Elysium kan byggas flera gånger, gd:318).
     params: (ctx) =>
-      Array.from({ length: level(ctx) }, (_, i) => choiceParam(`choice${i + 1}`, `Förbättring ${i + 1}`, PRIMOGEN_CHOICES)),
+      Array.from({ length: level(ctx) }, (_, i) => choiceParam(`choice${i + 1}`, `Improvement ${i + 1}`, PRIMOGEN_CHOICES)),
   }),
   // --- Archon
   minion(['archon'], {
@@ -125,7 +125,7 @@ export const MINION_ACTIONS: ActionDefinition[] = [
     name: 'Archon Movement',
     stealth: 2,
     cost: 5,
-    params: [cityParam('to', 'Stad högst 2 steg bort', (ctx) => citiesWithin(ctx, here(ctx), 2))],
+    params: [cityParam('to', 'City at most 2 steps away', (ctx) => citiesWithin(ctx, here(ctx), 2))],
     moves: movesTo(),
   }),
   minion(['archon'], {
@@ -133,14 +133,14 @@ export const MINION_ACTIONS: ActionDefinition[] = [
     name: 'Attack',
     stealth: -1,
     cost: 10,
-    params: [characterParam('target', 'Vampyr eller minion i samma stad')],
+    params: [characterParam('target', 'Vampire or minion in the same city')],
   }),
   minion(['archon'], {
     id: 'follow_them',
     name: 'Follow Them',
     stealth: 2,
     cost: 15,
-    params: [characterParam('target', 'Vampyr eller minion i samma stad')],
+    params: [characterParam('target', 'Vampire or minion in the same city')],
   }),
   minion(['archon'], { id: 'sabbat_interrogations', name: 'Sabbat Interrogations', stealth: 0, cost: 20 }),
   minion(['archon'], { id: 'the_masters_will', name: "The Master's Will", stealth: 0, cost: 30 }),

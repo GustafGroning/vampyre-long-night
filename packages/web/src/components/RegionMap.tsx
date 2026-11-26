@@ -11,8 +11,8 @@ const NODE_RADIUS = 26;
 const REGION_ORDER: readonly DemoRegionId[] = ['east', 'south', 'north', 'isle', 'west'];
 
 function pieceTitle(p: MapPiece): string {
-  const what = p.kind === 'vampire' ? 'Vampyr' : `Minion${p.minionType ? ` (${p.minionType})` : ''}`;
-  return p.own ? `${p.name}: din ${what.toLowerCase()}` : `${p.name}: ${what.toLowerCase()} som tillhör ${p.ownerName}`;
+  const what = p.kind === 'vampire' ? 'Vampire' : `Minion${p.minionType ? ` (${p.minionType})` : ''}`;
+  return p.own ? `${p.name}: your ${what.toLowerCase()}` : `${p.name}: ${what.toLowerCase()} owned by ${p.ownerName}`;
 }
 
 export function RegionMap({ map, round }: { map: MapModel; round: RoundInfo }) {
@@ -36,7 +36,7 @@ export function RegionMap({ map, round }: { map: MapModel; round: RoundInfo }) {
 
   return (
     <div className="map-wrap region-map-wrap">
-      <svg className="game-map region-game-map" viewBox={REGION_VIEWBOX} role="group" aria-label="Interaktiv karta med fem regioner">
+      <svg className="game-map region-game-map" viewBox={REGION_VIEWBOX} role="group" aria-label="Interactive map with five regions">
         <g className="territory-shapes" aria-hidden="true">
           {REGION_ORDER.map(id => (
             <path
@@ -88,12 +88,12 @@ export function RegionMap({ map, round }: { map: MapModel; round: RoundInfo }) {
           />
         ))}
       </svg>
-      <div className="round-badge">Rond {round.round} av {round.maxRounds}</div>
-      <ul className="map-legend" aria-label="Teckenförklaring">
+      <div className="round-badge">Round {round.round} of {round.maxRounds}</div>
+      <ul className="map-legend" aria-label="Legend">
         {(Object.keys(FACTION_LABEL) as FactionKey[]).map(f => (
           <li key={f}><span className={`swatch faction-${f}`} /> {FACTION_LABEL[f]}</li>
         ))}
-        <li><span className="swatch faction-none" /> Ingen controller</li>
+        <li><span className="swatch faction-none" /> No controller</li>
       </ul>
       {modalOpen && selectedCity && (
         <RegionModal city={selectedCity} onClose={closeRegion} />
@@ -118,7 +118,7 @@ function CityNode({ city, id, selected, onOpen, onEnter, onLeave }: {
       data-faction={city.faction ?? 'none'}
       role="button"
       tabIndex={0}
-      aria-label={`Visa information om ${city.name}`}
+      aria-label={`Show information about ${city.name}`}
       aria-pressed={selected}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
@@ -131,7 +131,7 @@ function CityNode({ city, id, selected, onOpen, onEnter, onLeave }: {
         }
       }}
     >
-      <title>{`${city.name}: ${city.faction ? FACTION_LABEL[city.faction] : 'ingen controller'}`}</title>
+      <title>{`${city.name}: ${city.faction ? FACTION_LABEL[city.faction] : 'no controller'}`}</title>
       <circle cx={x} cy={y} r={NODE_RADIUS + 7} className="region-node-focus-ring" />
       <circle cx={x} cy={y} r={NODE_RADIUS} className={`region-node-circle faction-${city.faction ?? 'none'}`} />
       <text x={x} y={y + NODE_RADIUS + 31} className="region-node-name">{city.name}</text>

@@ -51,7 +51,7 @@ describe('Royal Privileges i analysen', () => {
   it('varnar när en spenderad Royal Privilege inte behövs', () => {
     const a = createDemoPort('prince').analyze(bleeds(4), { royalPrivilegesToSpend: 1 });
     expect(a.canConfirm).toBe(true);
-    expect(a.warnings).toContain('Du spenderar 1 Royal Privileges men listan behöver 0');
+    expect(a.warnings).toContain('You are spending 1 Royal Privileges but the list needs 0');
   });
 
   it('spelare utan Royal Privileges får available 0', () => {
@@ -67,7 +67,7 @@ describe('royalPrivilegeInfo med tak', () => {
   it('torpor (tak 1) gör dem oanvändbara och varnar', () => {
     const info = royalPrivilegeInfo(2, 1, budget({ cap: 1, total: 1 }), 1);
     expect(info).toMatchObject({ maxUseful: 0, needed: 0 });
-    expect(royalPrivilegeWarnings(info)[0]).toMatch(/Bara 0 av 1/);
+    expect(royalPrivilegeWarnings(info)[0]).toMatch(/Only 0 of 1/);
   });
 
   it('tak över grundbudgeten släpper igenom upp till taket', () => {

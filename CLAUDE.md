@@ -66,6 +66,7 @@ Varje paket har en README med filkarta: `packages/engine/README.md`, `packages/s
 ## Arbetssätt
 
 - Svenska i dokument och kommunikation med användaren, engelska för spelets termer (Stealth, Intercept, VP, Blood, Prince osv.).
+- All text som syns på sidan är på engelska: gränssnittet i `packages/web`, och felmeddelanden, etiketter och skäl från servern och motorn som når spelaren. Kodkommentarer och dokument får vara på svenska.
 - Hoppa inte direkt till implementation: research -> plan -> implement -> validera. Spara research och planer som filer i repot så kontexten överlever mellan sessioner (särskilt viktigt i molnsessioner).
 - Sidofynd som inte hör till nuvarande scope går i `BACKLOG.md`, inte in i planen.
 - Spelmotorn ska vara deterministisk. Allt som regelboken lämnar åt GM:s bedömning ska lösas explicit och spåras i SPEC.md Part C (eller i `docs/decisions/`).

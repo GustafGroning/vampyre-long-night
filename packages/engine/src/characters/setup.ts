@@ -49,7 +49,7 @@ export function buildCampaignInput(setup: CampaignSetupInput, content: Content):
     issues.push({ path, message });
   };
   const { lobby } = setup;
-  if (lobby.seats.length === 0) add('lobby', 'kampanjen har inga spelare');
+  if (lobby.seats.length === 0) add('lobby', 'the campaign has no players');
 
   const cityKeys = new Set(setup.map.cities.map((c) => c.key));
   const homeCities = new Map<string, string>();
@@ -59,7 +59,7 @@ export function buildCampaignInput(setup: CampaignSetupInput, content: Content):
   );
   // Artefakter som kräver ett val när man får dem (Ring of Tremere) kan inte dras än (K14).
   for (const key of setup.artifactKeys ?? []) {
-    if (requiresBoundDiscipline(key)) add('artifactKeys', `${key} kan inte ligga i poolen än: valet av disciplin saknar flöde`);
+    if (requiresBoundDiscipline(key)) add('artifactKeys', `${key} cannot be in the pool yet: choosing the discipline has no flow`);
   }
 
   const players: PlayerSetup[] = [];
@@ -76,16 +76,16 @@ export function buildCampaignInput(setup: CampaignSetupInput, content: Content):
 
     const placement = setup.placements[seat.userId];
     if (placement === undefined) {
-      add(`${path}.placement`, `${c.name} saknar startplats`);
+      add(`${path}.placement`, `${c.name} has no starting location`);
       return;
     }
     if (!cityKeys.has(placement.location)) {
-      add(`${path}.placement`, `okänd stad "${placement.location}"`);
+      add(`${path}.placement`, `unknown city "${placement.location}"`);
       return;
     }
     if (c.startsWithCity) {
       const other = homeCities.get(placement.location);
-      if (other !== undefined) add(`${path}.placement`, `${placement.location} är redan startstad för ${other}`);
+      if (other !== undefined) add(`${path}.placement`, `${placement.location} is already the starting city of ${other}`);
       homeCities.set(placement.location, c.name);
     }
 
@@ -93,7 +93,7 @@ export function buildCampaignInput(setup: CampaignSetupInput, content: Content):
     for (let n = 0; n < c.randomArtifacts; n++) {
       const key = deck.shift();
       if (key === undefined) {
-        add(`${path}.artifacts`, 'artefaktpoolen räcker inte till alla startartefakter');
+        add(`${path}.artifacts`, 'the artifact pool is not large enough for all starting artifacts');
         break;
       }
       artifacts.push({ definition: key });

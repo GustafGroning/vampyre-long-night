@@ -5,15 +5,15 @@ const FACTION_LABEL: Record<FactionKey, string> = { camarilla: 'Camarilla', anar
 const R = 34;
 
 function pieceTitle(p: MapPiece): string {
-  const what = p.kind === 'vampire' ? 'Vampyr' : `Minion${p.minionType ? ` (${p.minionType})` : ''}`;
-  return p.own ? `${p.name}: din ${what.toLowerCase()}` : `${p.name}: ${what.toLowerCase()} som tillhör ${p.ownerName}`;
+  const what = p.kind === 'vampire' ? 'Vampire' : `Minion${p.minionType ? ` (${p.minionType})` : ''}`;
+  return p.own ? `${p.name}: your ${what.toLowerCase()}` : `${p.name}: ${what.toLowerCase()} owned by ${p.ownerName}`;
 }
 
 export function LegacyGraphMap({ map, round }: { map: MapModel; round: RoundInfo }) {
   const byId = new Map(map.cities.map((c) => [c.id, c]));
   return (
     <div className="map-wrap">
-      <svg className="game-map" viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} role="img" aria-label="Karta">
+      <svg className="game-map" viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} role="img" aria-label="Map">
         <g className="links">
           {map.links.map(([a, b]) => {
             const ca = byId.get(a);
@@ -24,7 +24,7 @@ export function LegacyGraphMap({ map, round }: { map: MapModel; round: RoundInfo
         </g>
         {map.cities.map((c) => (
           <g key={c.id} className="city" data-testid={`city-${c.id}`} data-faction={c.faction ?? 'none'}>
-            <title>{`${c.name}: ${c.faction ? FACTION_LABEL[c.faction] : 'ingen controller'}`}</title>
+            <title>{`${c.name}: ${c.faction ? FACTION_LABEL[c.faction] : 'no controller'}`}</title>
             <circle cx={c.x} cy={c.y} r={R} className={`faction-${c.faction ?? 'none'}`} />
             <text x={c.x} y={c.y + R + 22} className="city-name">
               {c.name}
@@ -48,16 +48,16 @@ export function LegacyGraphMap({ map, round }: { map: MapModel; round: RoundInfo
         ))}
       </svg>
       <div className="round-badge">
-        Rond {round.round} av {round.maxRounds}
+        Round {round.round} of {round.maxRounds}
       </div>
-      <ul className="map-legend" aria-label="Teckenförklaring">
+      <ul className="map-legend" aria-label="Legend">
         {(Object.keys(FACTION_LABEL) as FactionKey[]).map((f) => (
           <li key={f}>
             <span className={`swatch faction-${f}`} /> {FACTION_LABEL[f]}
           </li>
         ))}
         <li>
-          <span className="swatch faction-none" /> Ingen controller
+          <span className="swatch faction-none" /> No controller
         </li>
       </ul>
     </div>

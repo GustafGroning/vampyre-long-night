@@ -28,7 +28,7 @@ export function createServerPort(api: ApiClient, screen: ScreenResponse, content
         locked = true;
         return { ok: true, errors: [] };
       } catch (e) {
-        return { ok: false, errors: [e instanceof ApiClientError ? e.message : 'Kunde inte lämna in'] };
+        return { ok: false, errors: [e instanceof ApiClientError ? e.message : 'Could not submit'] };
       }
     },
     async unlock() {

@@ -23,7 +23,7 @@ describe('data från PlayerView', () => {
   });
 
   it('dold Archbishop ser sin sanna titel och förklädnaden', () => {
-    expect(createDemoPort('hiddenArchbishop').load().vampire.titleLabel).toBe('Archbishop (som Prince)');
+    expect(createDemoPort('hiddenArchbishop').load().vampire.titleLabel).toBe('Archbishop (as Prince)');
   });
 
   it('kartan: alla städer inom ritytan, kopplingar och faction som spelaren ser den', () => {
@@ -66,7 +66,7 @@ describe('actions från motorns katalog', () => {
     expect(find('Lady Margaret Ashworth', 'call_a_crusade')).toBeUndefined();
     expect(find('Ronald', 'bleed_the_enemy')).toMatchObject({ performerKind: 'minion' });
     expect(find('Jenny Wren', 'bleed_the_enemy')).toBeUndefined();
-    expect(find('Lady Margaret Ashworth', 'pardon')?.disabledReason).toMatch(/Inga giltiga val/);
+    expect(find('Lady Margaret Ashworth', 'pardon')?.disabledReason).toMatch(/No valid choices/);
   });
 
   it('Move erbjuder grannstäder från platsen efter tidigare Move', () => {
@@ -82,7 +82,7 @@ describe('actions från motorns katalog', () => {
     const port = createDemoPort('prince');
     const draft = [act('bleed'), move('south', 'South'), move('isle', 'Isle'), act('bleed')];
     const a = port.analyze(draft);
-    expect(a.entries.map((e) => e.label)).toEqual(['Bleed i North', 'Move från North till South', 'Move från South till Isle', 'Bleed i Isle']);
+    expect(a.entries.map((e) => e.label)).toEqual(['Bleed i North', 'Move from North to South', 'Move from South to Isle', 'Bleed i Isle']);
     expect(a.entries.map((e) => e.cost)).toEqual([0, 10, 10, 0]);
     expect(a.totalCost).toBe(20);
     expect([a.apUsed, a.apTotal]).toEqual([4, 4]);
@@ -121,7 +121,7 @@ describe('minionernas actions', () => {
       ['Jenny Wren', 0, 1],
     ]);
     expect(a.apUsed).toBe(0);
-    expect(a.entries[0]).toMatchObject({ label: 'Move från South till North', performerName: 'Ronald', cost: 5, errors: [] });
+    expect(a.entries[0]).toMatchObject({ label: 'Move from South to North', performerName: 'Ronald', cost: 5, errors: [] });
     const two = port.analyze([act('minion_move', { to: 'north' }, ronald, { to: 'North' }), act('bleed_the_enemy', {}, ronald)]);
     expect(two.minionActions[0]).toMatchObject({ used: 2, allowed: 1 });
     expect(two.canConfirm).toBe(false);

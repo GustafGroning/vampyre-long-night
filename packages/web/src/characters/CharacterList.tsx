@@ -1,5 +1,5 @@
 /**
- * "Mina vampyrer" (P18): kontots vampyrer utan kampanj. Lista, ny, ändra, ta bort.
+ * "My vampires" (P18): kontots vampyrer utan kampanj. Lista, ny, ändra, ta bort.
  * Servern äger backloggen (P17); listan laddas om från svaret efter varje ändring.
  */
 import { useEffect, useState } from 'react';
@@ -7,7 +7,7 @@ import { DEFAULT_CONTENT, type CharacterBuild, type CharacterSheet } from '@vamp
 import type { ApiClient } from '../server/apiClient';
 import { CharacterBuilder, newBuild } from './CharacterBuilder';
 
-const message = (e: unknown) => (e instanceof Error ? e.message : 'Något gick fel');
+const message = (e: unknown) => (e instanceof Error ? e.message : 'Something went wrong');
 
 type Editing = { kind: 'new' } | { kind: 'edit'; sheet: CharacterSheet } | null;
 
@@ -54,8 +54,8 @@ export function CharacterList({ api }: { api: ApiClient }) {
 
   if (editing) {
     return (
-      <section aria-label={editing.kind === 'new' ? 'Ny vampyr' : `Ändra ${editing.sheet.build.name}`}>
-        <h2>{editing.kind === 'new' ? 'Ny vampyr' : `Ändra ${editing.sheet.build.name}`}</h2>
+      <section aria-label={editing.kind === 'new' ? 'New vampire' : `Edit ${editing.sheet.build.name}`}>
+        <h2>{editing.kind === 'new' ? 'New vampire' : `Edit ${editing.sheet.build.name}`}</h2>
         <CharacterBuilder
           initial={editing.kind === 'new' ? newBuild(content) : editing.sheet.build}
           content={content}
@@ -67,35 +67,35 @@ export function CharacterList({ api }: { api: ApiClient }) {
   }
 
   return (
-    <section aria-label="Mina vampyrer">
-      <h2>Mina vampyrer</h2>
+    <section aria-label="My vampires">
+      <h2>My vampires</h2>
       {error && <p role="alert">{error}</p>}
-      {!characters && !error && <p>Laddar…</p>}
-      {characters && characters.length === 0 && <p>Du har inga vampyrer än.</p>}
+      {!characters && !error && <p>Loading…</p>}
+      {characters && characters.length === 0 && <p>You have no vampires yet.</p>}
       {characters && characters.length > 0 && (
         <ul className="character-list">
           {characters.map((c) => {
             const title = content.titles[c.build.title].name;
-            const disguise = c.build.disguise ? ` (förklädd som ${content.titles[c.build.disguise].name})` : '';
+            const disguise = c.build.disguise ? ` (disguised as ${content.titles[c.build.disguise].name})` : '';
             return (
               <li key={c.id}>
                 <strong>{c.build.name}</strong> {content.clans[c.build.clan].name}, {title}
                 {disguise}{' '}
                 <button type="button" onClick={() => setEditing({ kind: 'edit', sheet: c })}>
-                  Ändra
+                  Edit
                 </button>{' '}
                 {confirming === c.id ? (
                   <>
                     <button type="button" onClick={() => void remove(c)}>
-                      Ja, ta bort {c.build.name}
+                      Yes, remove {c.build.name}
                     </button>{' '}
                     <button type="button" onClick={() => setConfirming(null)}>
-                      Behåll
+                      Keep
                     </button>
                   </>
                 ) : (
-                  <button type="button" onClick={() => setConfirming(c.id)} aria-label={`Ta bort ${c.build.name}`}>
-                    Ta bort
+                  <button type="button" onClick={() => setConfirming(c.id)} aria-label={`Remove ${c.build.name}`}>
+                    Remove
                   </button>
                 )}
               </li>
@@ -104,7 +104,7 @@ export function CharacterList({ api }: { api: ApiClient }) {
         </ul>
       )}
       <button type="button" onClick={() => setEditing({ kind: 'new' })}>
-        + Ny vampyr
+        + New vampire
       </button>
     </section>
   );

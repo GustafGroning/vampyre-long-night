@@ -318,7 +318,7 @@ export function buildPlayerView(
   opts: PlayerViewOptions = {},
 ): PlayerView {
   const viewer = state.players[viewerId];
-  if (!viewer) throw new Error(`buildPlayerView: okänd spelare ${viewerId}`);
+  if (!viewer) throw new Error(`buildPlayerView: unknown player ${viewerId}`);
   const isSabbat = viewer.faction === 'sabbat';
   const me = selfView(state, content, viewer);
   const events = opts.events ?? [];

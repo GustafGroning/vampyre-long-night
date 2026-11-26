@@ -3,7 +3,7 @@ import type { VampireSummary } from '../screen/model';
 export function VampirePanel({ vampire }: { vampire: VampireSummary }) {
   const s = vampire.stats;
   return (
-    <section className="vampire-panel" aria-label="Din vampyr">
+    <section className="vampire-panel" aria-label="Your vampire">
       <h2 className="vampire-name">{vampire.name}</h2>
       {vampire.titleLabel && <p className="vampire-title">{vampire.titleLabel}</p>}
       <dl className="vampire-stats">

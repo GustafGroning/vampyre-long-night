@@ -22,7 +22,7 @@ export function App({ port }: { port: PlayerScreenPort }) {
         ) : (
           <div className="placeholder">
             <h2>{tabLabel}</h2>
-            <p>Den här fliken är inte byggd än.</p>
+            <p>This tab is not built yet.</p>
           </div>
         )}
       </main>

@@ -58,12 +58,12 @@ describe('förflyttning', () => {
   it('moveBlocked: grannskap, avstånd och Sail vid upplösning', () => {
     const s = cloneJson(world({ a: {} }).state) as Mutable<GameState>;
     expect(moveBlocked(s, c('north'), c('east'), { kind: 'adjacent' })).toBeNull();
-    expect(moveBlocked(s, c('north'), c('isle'), { kind: 'adjacent' })).toMatch(/grannstad/);
+    expect(moveBlocked(s, c('north'), c('isle'), { kind: 'adjacent' })).toMatch(/adjacent/);
     expect(moveBlocked(s, c('north'), c('isle'), { kind: 'within', steps: 2 })).toBeNull();
-    expect(moveBlocked(s, c('west'), c('isle'), { kind: 'within', steps: 1 })).toMatch(/steg/);
+    expect(moveBlocked(s, c('west'), c('isle'), { kind: 'within', steps: 1 })).toMatch(/steps/);
     expect(moveBlocked(s, c('north'), c('south'), { kind: 'sail' })).toBeNull();
-    expect(moveBlocked(s, c('north'), c('isle'), { kind: 'sail' })).toMatch(/havsregion/);
-    expect(moveBlocked(s, c('east'), c('south'), { kind: 'sail' })).toMatch(/hamn/);
+    expect(moveBlocked(s, c('north'), c('isle'), { kind: 'sail' })).toMatch(/sea region/);
+    expect(moveBlocked(s, c('east'), c('south'), { kind: 'sail' })).toMatch(/port/);
     s.seaRegions['north_sea' as keyof typeof s.seaRegions]!.storm = { untilEndOfRound: s.round };
     expect(moveBlocked(s, c('north'), c('south'), { kind: 'sail' })).toMatch(/Storm/);
     // South–isle delar west_sea, som inte har storm.

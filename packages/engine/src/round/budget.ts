@@ -100,12 +100,12 @@ export function schemeAllocationProblemFor(sabbatMembers: readonly PlayerId[], a
   const members = new Set(sabbatMembers);
   let sum = 0;
   for (const [id, n] of Object.entries(alloc)) {
-    if (!Number.isInteger(n) || n < 0) return `Ogiltigt antal för ${id}`;
-    if (n > 0 && !members.has(id as PlayerId)) return `${id} är inte Sabbat`;
+    if (!Number.isInteger(n) || n < 0) return `Invalid count for ${id}`;
+    if (n > 0 && !members.has(id as PlayerId)) return `${id} is not Sabbat`;
     sum += n;
   }
   const max = members.size + 1;
-  return sum > max ? `Fördelningen ger ${sum} aktioner, max är ${max}` : null;
+  return sum > max ? `The allocation gives ${sum} actions, the maximum is ${max}` : null;
 }
 
 /**

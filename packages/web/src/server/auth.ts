@@ -39,14 +39,14 @@ export function createSupabaseAuth(url: string, anonKey: string): AuthClient {
     },
     async signIn(email, password) {
       const { error } = await sb.auth.signInWithPassword({ email: email.trim(), password });
-      return { error: error ? 'Fel e-post eller lösenord' : null };
+      return { error: error ? 'Wrong email or password' : null };
     },
     async signUp(email, password) {
       const { data, error } = await sb.auth.signUp({ email: email.trim(), password });
-      if (error) return { error: `Kunde inte skapa kontot: ${error.message}` };
+      if (error) return { error: `Could not create the account: ${error.message}` };
       // Utan session kräver Supabase e-postbekräftelse, som inte fungerar utan SMTP.
       if (!data.session) {
-        return { error: 'Kontot skapades men kräver e-postbekräftelse, som inte är påslagen. Säg till admin.' };
+        return { error: 'The account was created but requires email confirmation, which is not enabled. Tell the admin.' };
       }
       return { error: null };
     },
@@ -100,7 +100,7 @@ export function createDevAuth(baseUrl: string): AuthClient {
     },
     async signIn(email, password) {
       const res = await post('/dev/login', { email, password });
-      if (!res?.ok) return { error: 'Fel e-post eller lösenord' };
+      if (!res?.ok) return { error: 'Wrong email or password' };
       memory = (await res.json()) as { token: string; user: AuthUser };
       write(memory);
       return { error: null };
@@ -109,7 +109,7 @@ export function createDevAuth(baseUrl: string): AuthClient {
       const res = await post('/dev/signup', { email, password });
       if (!res?.ok) {
         const body = (await res?.json().catch(() => null)) as { error?: string } | null;
-        return { error: `Kunde inte skapa kontot: ${body?.error ?? 'okänt fel'}` };
+        return { error: `Could not create the account: ${body?.error ?? 'unknown error'}` };
       }
       memory = (await res.json()) as { token: string; user: AuthUser };
       write(memory);

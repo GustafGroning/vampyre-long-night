@@ -19,7 +19,7 @@ function Blood({ amount, income }: { amount: number | null; income?: boolean }) 
     <span className={income ? 'blood income' : 'blood'}>
       {income ? '+' : ''}
       {amount ?? '?'} <span aria-hidden>🩸</span>
-      <span className="sr-only"> blood{income ? ' inkomst' : ''}</span>
+      <span className="sr-only"> blood{income ? ' income' : ''}</span>
     </span>
   );
 }
@@ -47,11 +47,11 @@ function DraftRow({ action, info, index, count, locked, onRemove, onShift }: Row
       data-testid="draft-row"
     >
       {!locked && (
-        <button type="button" className="drag-handle" aria-label={`Flytta ${info.label}`} {...attributes} {...listeners}>
+        <button type="button" className="drag-handle" aria-label={`Move ${info.label}`} {...attributes} {...listeners}>
           ⠿
         </button>
       )}
-      <span className="performer" title={info.performerName} aria-label={info.performerKind === 'vampire' ? 'Vampyr' : `Minion ${info.performerName}`}>
+      <span className="performer" title={info.performerName} aria-label={info.performerKind === 'vampire' ? 'Vampire' : `Minion ${info.performerName}`}>
         {info.performerKind === 'vampire' ? 'V' : 'M'}
       </span>
       <span className="action-label">
@@ -69,13 +69,13 @@ function DraftRow({ action, info, index, count, locked, onRemove, onShift }: Row
       </span>
       {!locked && (
         <span className="row-tools">
-          <button type="button" aria-label="Flytta upp" disabled={index === 0} onClick={() => onShift(-1)}>
+          <button type="button" aria-label="Move up" disabled={index === 0} onClick={() => onShift(-1)}>
             ↑
           </button>
-          <button type="button" aria-label="Flytta ned" disabled={index === count - 1} onClick={() => onShift(1)}>
+          <button type="button" aria-label="Move down" disabled={index === count - 1} onClick={() => onShift(1)}>
             ↓
           </button>
-          <button type="button" aria-label={`Ta bort ${info.label}`} onClick={onRemove}>
+          <button type="button" aria-label={`Remove ${info.label}`} onClick={onRemove}>
             ✕
           </button>
         </span>
@@ -85,7 +85,7 @@ function DraftRow({ action, info, index, count, locked, onRemove, onShift }: Row
 }
 
 function errorMessage(e: unknown): string {
-  return e instanceof Error ? e.message : 'Något gick fel';
+  return e instanceof Error ? e.message : 'Something went wrong';
 }
 
 /**
@@ -105,13 +105,13 @@ function RoyalPrivilegeControl({
   return (
     <div className="royal-privileges" data-testid="royal-privileges">
       <span>
-        Royal Privileges: {rp.spending}/{rp.available} spenderas
+        Royal Privileges: {rp.spending}/{rp.available} spent
       </span>
       {!locked && (
         <>
           <button
             type="button"
-            aria-label="Spendera en Royal Privilege färre"
+            aria-label="Spend one fewer Royal Privilege"
             disabled={rp.spending === 0}
             onClick={() => onChange(rp.spending - 1)}
           >
@@ -119,7 +119,7 @@ function RoyalPrivilegeControl({
           </button>
           <button
             type="button"
-            aria-label="Spendera en Royal Privilege för en extra action"
+            aria-label="Spend a Royal Privilege for an extra action"
             disabled={rp.spending >= rp.maxUseful}
             onClick={() => onChange(rp.spending + 1)}
           >
@@ -153,7 +153,7 @@ export function ActionPanel({ port, round }: { port: PlayerScreenPort; round: nu
 
   return (
     <section className="action-panel" aria-label="Actions">
-      <h2>Actions rond {round}</h2>
+      <h2>Actions round {round}</h2>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
         <SortableContext items={draft.map((a) => a.uid)} strategy={verticalListSortingStrategy}>
           <ol className="draft-list">
@@ -193,7 +193,7 @@ export function ActionPanel({ port, round }: { port: PlayerScreenPort; round: nu
             {m.name}: {m.used}/{m.allowed}
           </div>
         ))}
-        <div className="total-cost" data-testid="total-cost" title="Total kostnad minus säker inkomst">
+        <div className="total-cost" data-testid="total-cost" title="Total cost minus guaranteed income">
           <Blood amount={net} />
         </div>
       </div>
@@ -209,7 +209,7 @@ export function ActionPanel({ port, round }: { port: PlayerScreenPort; round: nu
       ))}
       {locked ? (
         <div className="confirmed">
-          <p>Actions inlämnade.</p>
+          <p>Actions submitted.</p>
           <button
             type="button"
             disabled={busy}
@@ -226,7 +226,7 @@ export function ActionPanel({ port, round }: { port: PlayerScreenPort; round: nu
               }
             }}
           >
-            Ändra
+            Edit
           </button>
         </div>
       ) : (
@@ -234,7 +234,7 @@ export function ActionPanel({ port, round }: { port: PlayerScreenPort; round: nu
           type="button"
           className="confirm"
           disabled={!analysis.canConfirm || busy}
-          title={overAp ? 'För många actions för dina action points' : undefined}
+          title={overAp ? 'Too many actions for your action points' : undefined}
           onClick={async () => {
             setBusy(true);
             try {

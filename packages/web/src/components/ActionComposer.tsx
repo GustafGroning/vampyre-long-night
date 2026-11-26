@@ -16,7 +16,7 @@ interface Props {
 }
 
 function choiceText(c: ActionChoice): string {
-  const cost = c.costVaries ? 'varierar' : `${c.cost} blood`;
+  const cost = c.costVaries ? 'varies' : `${c.cost} blood`;
   const income = c.income ? `, +${c.income} blood` : '';
   const off = c.disabledReason ? ` (${c.disabledReason})` : '';
   return `${c.name} – ${cost}${income}${off}`;
@@ -81,7 +81,7 @@ function StepInput({ step, onDone }: { step: TargetStep; onDone: (value: ParamVa
               step.options
                 .filter((o) => picked.includes(o.value))
                 .map((o) => o.label)
-                .join(' + ') || 'inga',
+                .join(' + ') || 'none',
             )
           }
         >
@@ -118,7 +118,7 @@ function StepInput({ step, onDone }: { step: TargetStep; onDone: (value: ParamVa
           autoFocus
           type="text"
           aria-label={step.label}
-          placeholder={step.maxWords ? `högst ${step.maxWords} ord` : undefined}
+          placeholder={step.maxWords ? `at most ${step.maxWords} words` : undefined}
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -144,14 +144,14 @@ export function ActionComposer({ port, draft, onAdd }: Props) {
   if (mode.kind === 'closed') {
     return (
       <button type="button" className="action-banner empty" onClick={() => setMode({ kind: 'choosing' })}>
-        + Lägg till action
+        + Add action
       </button>
     );
   }
 
   const cancel = (
     <button type="button" className="link-button" onClick={() => setMode({ kind: 'closed' })}>
-      Avbryt
+      Cancel
     </button>
   );
 
@@ -166,7 +166,7 @@ export function ActionComposer({ port, draft, onAdd }: Props) {
       <div className="action-banner composing">
         <select
           autoFocus
-          aria-label="Välj action"
+          aria-label="Choose action"
           defaultValue=""
           onChange={(e) => {
             const choice = choices.find((c) => c.key === e.target.value);
@@ -174,7 +174,7 @@ export function ActionComposer({ port, draft, onAdd }: Props) {
           }}
         >
           <option value="" disabled>
-            Välj action…
+            Choose action…
           </option>
           {[...groups].map(([name, list]) => (
             <optgroup key={name} label={name}>

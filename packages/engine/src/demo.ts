@@ -118,6 +118,6 @@ export function createDemoRound(content: Content = DEFAULT_CONTENT): { state: Ga
     [DEMO_PLAYERS.untitled]: sub(DEMO_PLAYERS.untitled, [{ actionId: 'bleed', performer: v }]),
   };
   const result = resolveRound(state, submissions, 'demo-round-1', { content });
-  if (result.status !== 'completed') throw new Error('Demoronden pausade oväntat');
+  if (result.status !== 'completed') throw new Error('The demo round paused unexpectedly');
   return { state: result.state, events: result.resolution.events };
 }

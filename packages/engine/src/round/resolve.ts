@@ -104,7 +104,7 @@ export function resolveRound(
   seed: string,
   opts: ResolveOptions,
 ): RoundResult {
-  if (state.phase !== 'submission') throw new Error(`Kan inte lösa ronden i fas ${state.phase}`);
+  if (state.phase !== 'submission') throw new Error(`Cannot resolve the round in phase ${state.phase}`);
   const res: RoundResolution = {
     status: 'running',
     round: state.round,
@@ -131,16 +131,16 @@ export function continueResolution(
   answers: InterruptAnswer[],
   opts: ResolveOptions,
 ): RoundResult {
-  if (resolution.status !== 'suspended') throw new Error('Upplösningen är inte pausad');
+  if (resolution.status !== 'suspended') throw new Error('The resolution is not paused');
   const res = clone(resolution);
   const registry = opts.registry ?? ACTION_CATALOG;
   for (const answer of answers) {
     const i = res.pendingInterrupts.findIndex((it) => it.id === answer.interruptId);
-    if (i < 0) throw new Error(`Okänd eller redan besvarad interrupt ${answer.interruptId}`);
+    if (i < 0) throw new Error(`Unknown or already answered interrupt ${answer.interruptId}`);
     const [interrupt] = res.pendingInterrupts.splice(i, 1);
     const entry = res.entries[interrupt!.entryId]!;
     const def = registry[entry.action.actionId];
-    if (!def?.resume) throw new Error(`${entry.action.actionId} kan inte återupptas`);
+    if (!def?.resume) throw new Error(`${entry.action.actionId} cannot be resumed`);
     emit(res, '3a_actions', 'interrupt_answered', { interruptId: interrupt!.id }, entry.playerId, entry.id);
     const ctx = makeActionContext(res, entry, registry, opts.content, '3a_actions');
     applyOutcome(res, entry, def.resume(ctx.ctx, clone(answer.result)), '3a_actions');
@@ -273,7 +273,7 @@ function payActions(
       locked: false,
       updatedAt: 0,
     };
-    if (submission.playerId !== pid) throw new Error(`Lista för ${pid} har playerId ${submission.playerId}`);
+    if (submission.playerId !== pid) throw new Error(`List for ${pid} has playerId ${submission.playerId}`);
     const norm = normalizeSubmission(state, submission, { registry, content, schemeActions: scheme[pid] ?? 0 });
     const rejected = new Map(norm.rejected.map((r) => [r.index, r.reason]));
 
@@ -414,15 +414,15 @@ function makeActionContext(
 /** Varför en entry inte kan lösas just nu, eller null. Kostnaden återbetalas då (C11). */
 function blockedReason(res: RoundResolution, entry: EntryRecord, registry: ActionRegistry): string | null {
   const player = res.state.players[entry.playerId];
-  if (!player) return 'Spelaren finns inte längre';
+  if (!player) return 'The player no longer exists';
   const def = registry[entry.action.actionId]!;
   if (entry.action.performer.kind === 'vampire') {
-    if (player.status === 'burned') return 'Vampyren är bränd';
-    if (player.status === 'torpor' && !def.allowedInTorpor) return 'Vampyren är i torpor';
+    if (player.status === 'burned') return 'The vampire is burned';
+    if (player.status === 'torpor' && !def.allowedInTorpor) return 'The vampire is in torpor';
   } else {
     const minion = res.state.minions[entry.action.performer.minionId];
-    if (!minion) return 'Minionen finns inte längre';
-    if (minion.owner.kind !== 'player' || minion.owner.id !== entry.playerId) return 'Minionen har bytt ägare';
+    if (!minion) return 'The minion no longer exists';
+    if (minion.owner.kind !== 'player' || minion.owner.id !== entry.playerId) return 'The minion has changed owner';
   }
   return null;
 }

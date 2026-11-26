@@ -83,18 +83,18 @@ const conflict = (message: string) => new ApiError(409, 'conflict', message);
 // Indata
 
 function str(v: unknown, name: string): string {
-  if (typeof v !== 'string' || v.length === 0) throw bad(`${name} saknas`);
+  if (typeof v !== 'string' || v.length === 0) throw bad(`${name} is missing`);
   return v;
 }
 
 function int(v: unknown, name: string, min = 0): number {
-  if (typeof v !== 'number' || !Number.isInteger(v) || v < min) throw bad(`${name} måste vara ett heltal ≥ ${min}`);
+  if (typeof v !== 'number' || !Number.isInteger(v) || v < min) throw bad(`${name} must be an integer ≥ ${min}`);
   return v;
 }
 
 function hours(v: unknown): number {
   if (v === undefined) return DEFAULT_DEADLINE_HOURS;
-  if (typeof v !== 'number' || !Number.isFinite(v) || v <= 0 || v > 24 * 60) throw bad('deadlineHours måste vara 0–1440');
+  if (typeof v !== 'number' || !Number.isFinite(v) || v <= 0 || v > 24 * 60) throw bad('deadlineHours must be 0–1440');
   return v;
 }
 
@@ -109,21 +109,21 @@ function isJson(v: unknown, depth = 0): v is Json {
 
 /** Plockar bara de fält motorn känner till, så att klienten inte kan smuggla in något. */
 export function parseActions(v: unknown): SubmittedAction[] {
-  if (!Array.isArray(v)) throw bad('actions måste vara en lista');
-  if (v.length > 50) throw bad('För många actions');
+  if (!Array.isArray(v)) throw bad('actions must be a list');
+  if (v.length > 50) throw bad('Too many actions');
   return v.map((raw, i) => {
-    if (typeof raw !== 'object' || raw === null) throw bad(`actions[${i}] är inte ett objekt`);
+    if (typeof raw !== 'object' || raw === null) throw bad(`actions[${i}] is not an object`);
     const a = raw as Record<string, unknown>;
     const actionId = str(a.actionId, `actions[${i}].actionId`);
     const p = a.performer as Record<string, unknown> | undefined;
     let performer: SubmittedAction['performer'];
     if (p?.kind === 'vampire') performer = { kind: 'vampire' };
     else if (p?.kind === 'minion') performer = { kind: 'minion', minionId: str(p.minionId, `actions[${i}].performer.minionId`) as never };
-    else throw bad(`actions[${i}].performer är ogiltig`);
+    else throw bad(`actions[${i}].performer is invalid`);
     const out: SubmittedAction = { actionId, performer };
     if (a.params !== undefined) {
       if (typeof a.params !== 'object' || a.params === null || Array.isArray(a.params) || !isJson(a.params)) {
-        throw bad(`actions[${i}].params är ogiltig`);
+        throw bad(`actions[${i}].params is invalid`);
       }
       out.params = a.params as { [key: string]: Json };
     }
@@ -133,25 +133,25 @@ export function parseActions(v: unknown): SubmittedAction[] {
 }
 
 const obj = (v: unknown, name: string): Record<string, unknown> => {
-  if (typeof v !== 'object' || v === null || Array.isArray(v)) throw bad(`${name} måste vara ett objekt`);
+  if (typeof v !== 'object' || v === null || Array.isArray(v)) throw bad(`${name} must be an object`);
   return v as Record<string, unknown>;
 };
 
 /** Text som får vara tom; motorn kontrollerar längd och innehåll. Taket skyddar bara lagringen. */
 function text(v: unknown, name: string, max = 5000): string {
-  if (typeof v !== 'string') throw bad(`${name} måste vara text`);
-  if (v.length > max) throw bad(`${name} är för lång`);
+  if (typeof v !== 'string') throw bad(`${name} must be text`);
+  if (v.length > max) throw bad(`${name} is too long`);
   return v;
 }
 
 function num(v: unknown, name: string): number {
-  if (typeof v !== 'number' || !Number.isFinite(v)) throw bad(`${name} måste vara ett tal`);
+  if (typeof v !== 'number' || !Number.isFinite(v)) throw bad(`${name} must be a number`);
   return v;
 }
 
 function list(v: unknown, name: string, max: number): unknown[] {
-  if (!Array.isArray(v)) throw bad(`${name} måste vara en lista`);
-  if (v.length > max) throw bad(`${name} har för många val`);
+  if (!Array.isArray(v)) throw bad(`${name} must be a list`);
+  if (v.length > max) throw bad(`${name} has too many choices`);
   return v;
 }
 
@@ -189,7 +189,7 @@ export function parseBuild(v: unknown): CharacterBuild {
       const u = obj(raw, name);
       const option = num(u.option, `${name}.option`);
       const kind = text(u.kind, `${name}.kind`, 40);
-      if (!UPGRADE_KINDS.includes(kind)) throw bad(`${name}.kind är okänd`);
+      if (!UPGRADE_KINDS.includes(kind)) throw bad(`${name}.kind is unknown`);
       switch (kind) {
         case 'extra_discipline':
           return { option, kind, discipline: text(u.discipline, `${name}.discipline`, 40) as never };
@@ -207,7 +207,7 @@ export function parseBuild(v: unknown): CharacterBuild {
       const name = `build.expPurchases[${i}]`;
       const p = obj(raw, name);
       const upgrade = text(p.upgrade, `${name}.upgrade`, 40);
-      if (!EXP_UPGRADES.includes(upgrade)) throw bad(`${name}.upgrade är okänd`);
+      if (!EXP_UPGRADES.includes(upgrade)) throw bad(`${name}.upgrade is unknown`);
       if (upgrade === 'extra_discipline' || upgrade === 'mastered_discipline') {
         return { upgrade, discipline: text(p.discipline, `${name}.discipline`, 40) as never };
       }
@@ -220,38 +220,38 @@ export function parseBuild(v: unknown): CharacterBuild {
 // Hjälpare
 
 function requireUser(ctx: ServerContext): string {
-  if (!ctx.userId) throw new ApiError(401, 'unauthenticated', 'Du är inte inloggad');
+  if (!ctx.userId) throw new ApiError(401, 'unauthenticated', 'You are not signed in');
   return ctx.userId;
 }
 
 async function requireMember(ctx: ServerContext, campaignId: string): Promise<Membership> {
   const m = await ctx.store.membership(campaignId, requireUser(ctx));
   // Samma svar för "finns inte" och "inte medlem": avslöjar inte andras kampanjer.
-  if (!m) throw notFound('Kampanjen finns inte');
+  if (!m) throw notFound('The campaign does not exist');
   return m;
 }
 
 async function requireGm(ctx: ServerContext, campaignId: string): Promise<void> {
   const m = await requireMember(ctx, campaignId);
-  if (m.role !== 'gm') throw forbidden('Bara GM kan göra det');
+  if (m.role !== 'gm') throw forbidden('Only the GM can do that');
 }
 
 async function requireAdmin(ctx: ServerContext): Promise<string> {
   const user = requireUser(ctx);
-  if (!(await ctx.store.isPlatformAdmin(user))) throw forbidden('Bara plattformsadmin kan göra det');
+  if (!(await ctx.store.isPlatformAdmin(user))) throw forbidden('Only the platform admin can do that');
   return user;
 }
 
 async function loadGame(ctx: ServerContext, campaignId: string): Promise<LoadedGame> {
   const g = await ctx.store.load(campaignId);
-  if (!g) throw notFound('Kampanjen har inget spel');
+  if (!g) throw notFound('The campaign has no game');
   return g;
 }
 
 function requirePlayer(m: Membership, state: GameState): PlayerId {
-  if (!m.playerId) throw forbidden('Du har ingen spelare i kampanjen');
+  if (!m.playerId) throw forbidden('You have no player in the campaign');
   const id = m.playerId as PlayerId;
-  if (!state.players[id]) throw notFound('Din spelare finns inte i spelet');
+  if (!state.players[id]) throw notFound('Your player does not exist in the game');
   return id;
 }
 
@@ -292,7 +292,7 @@ async function changeBacklog<T>(
     if (!('backlog' in out)) return out.result;
     if (await ctx.store.saveBacklog(user, out.backlog, stored?.revision ?? 0)) return out.result;
   }
-  throw conflict('Vampyrerna ändrades samtidigt någon annanstans. Försök igen.');
+  throw conflict('Your vampires were changed somewhere else at the same time. Try again.');
 }
 
 // ---------------------------------------------------------------------------
@@ -322,14 +322,14 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
       let characterId: CharacterId;
       if (id === null) {
         if (Object.keys(backlog.characters).length >= MAX_CHARACTERS) {
-          throw conflict(`Du kan ha högst ${MAX_CHARACTERS} vampyrer`);
+          throw conflict(`You can have at most ${MAX_CHARACTERS} vampires`);
         }
         const res = addCharacter(backlog, build, content(ctx));
         if (!res.ok) return { result: { ok: false, issues: [...res.issues] } };
         next = res.backlog;
         characterId = res.characterId;
       } else {
-        if (!backlog.characters[id]) throw notFound('Vampyren finns inte');
+        if (!backlog.characters[id]) throw notFound('The vampire does not exist');
         const res = updateCharacter(backlog, id, build, content(ctx));
         if (!res.ok) return { result: { ok: false, issues: [...res.issues] } };
         next = res.backlog;
@@ -344,7 +344,7 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
     const id = str(req.characterId, 'characterId') as CharacterId;
     return changeBacklog(ctx, user, (backlog) => {
       const res = removeCharacter(backlog, id);
-      if (!res.ok) throw notFound('Vampyren finns inte');
+      if (!res.ok) throw notFound('The vampire does not exist');
       return { backlog: res.backlog, result: { characters: listCharacters(res.backlog) } };
     });
   },
@@ -383,7 +383,7 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
     const game = await loadGame(ctx, campaignId);
     const playerId = requirePlayer(m, game.state);
     if (round !== game.state.round || game.round.round !== round) {
-      throw conflict(`Ronden har bytts: aktuell rond är ${game.state.round}`);
+      throw conflict(`The round has changed: the current round is ${game.state.round}`);
     }
     const now = ctx.now();
     const res = submitActions(windowOf(game), game.state, { playerId, actions, royalPrivilegesToSpend }, now, {
@@ -393,7 +393,7 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
     const sub = res.window.submissions[playerId]!;
     // Confirm = spara + lås i ett steg (P5).
     const ok = await ctx.store.saveSubmission(campaignId, round, playerId, { ...sub, locked: true, updatedAt: now });
-    if (!ok) return { ok: false, errors: ['Ronden är stängd för inlämning'] };
+    if (!ok) return { ok: false, errors: ['The round is closed for submissions'] };
     return { ok: true };
   },
 
@@ -403,13 +403,13 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
     const m = await requireMember(ctx, campaignId);
     const game = await loadGame(ctx, campaignId);
     const playerId = requirePlayer(m, game.state);
-    if (round !== game.round.round) throw conflict(`Ronden har bytts: aktuell rond är ${game.state.round}`);
+    if (round !== game.round.round) throw conflict(`The round has changed: the current round is ${game.state.round}`);
     const now = ctx.now();
-    if (game.round.status !== 'open' || now >= game.round.deadline) throw conflict('Ronden är stängd för inlämning');
+    if (game.round.status !== 'open' || now >= game.round.deadline) throw conflict('The round is closed for submissions');
     const sub = (await ctx.store.listSubmissions(campaignId, round))[playerId];
     if (sub && sub.locked) {
       const ok = await ctx.store.saveSubmission(campaignId, round, playerId, { ...sub, locked: false, updatedAt: now });
-      if (!ok) throw conflict('Ronden är stängd för inlämning');
+      if (!ok) throw conflict('The round is closed for submissions');
     }
     return { ok: true };
   },
@@ -418,14 +418,14 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
     const user = await requireAdmin(ctx);
     const name = str(req.name, 'name').trim();
     const base = req.demo ? DEMO_INPUT : req.input;
-    if (!base) throw bad('Ange demo: true eller input');
+    if (!base) throw bad('Provide demo: true or input');
     const campaignId = ctx.newId();
     const input: CreateGameInput = { ...base, campaignId, seed: ctx.randomSeed() };
     let state: GameState;
     try {
       state = startGame(createGameState(input, content(ctx)));
     } catch (e) {
-      throw bad(`Ogiltig kampanj: ${(e as Error).message}`);
+      throw bad(`Invalid campaign: ${(e as Error).message}`);
     }
     await ctx.store.createCampaign({
       campaignId,
@@ -441,15 +441,15 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
   async gm_assign(req, ctx) {
     const campaignId = str(req.campaignId, 'campaignId');
     await requireGm(ctx, campaignId);
-    const role: CampaignRole = req.role === 'gm' ? 'gm' : req.role === 'player' ? 'player' : (() => { throw bad('role måste vara gm eller player'); })();
+    const role: CampaignRole = req.role === 'gm' ? 'gm' : req.role === 'player' ? 'player' : (() => { throw bad('role must be gm or player'); })();
     const userId = await ctx.store.userIdByEmail(str(req.email, 'email'));
-    if (!userId) throw notFound('Ingen användare med den e-postadressen');
+    if (!userId) throw notFound('No user with that email address');
     const playerId = req.playerId ?? null;
     if (playerId !== null) {
       const game = await loadGame(ctx, campaignId);
-      if (!game.state.players[playerId as PlayerId]) throw bad(`Okänd spelare ${playerId}`);
+      if (!game.state.players[playerId as PlayerId]) throw bad(`Unknown player ${playerId}`);
     } else if (role === 'player') {
-      throw bad('En spelare måste ha playerId');
+      throw bad('A player must have a playerId');
     }
     await ctx.store.assignMember({ campaignId, userId, role, playerId, displayName: req.displayName ?? null });
     return { ok: true };
@@ -483,10 +483,10 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
     const game = await loadGame(ctx, campaignId);
     const round = game.round.round;
     if (game.round.status !== 'open' || game.state.phase !== 'submission') {
-      throw conflict(`Rond ${round} är inte öppen (${game.round.status})`);
+      throw conflict(`Round ${round} is not open (${game.round.status})`);
     }
     // Stäng först: från och med nu nekas inlämning atomiskt i databasen (P8).
-    if (!(await ctx.store.closeRound(campaignId, round))) throw conflict(`Rond ${round} löses redan`);
+    if (!(await ctx.store.closeRound(campaignId, round))) throw conflict(`Round ${round} is already being resolved`);
     try {
       const stored = await ctx.store.listSubmissions(campaignId, round);
       const window: RoundWindow = { ...windowOf(game), submissions: stored as Record<PlayerId, Submission> };
@@ -503,7 +503,7 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
           resolution: result.resolution,
           next: null,
         });
-        if (!ok) throw conflict('Kunde inte spara den pausade upplösningen');
+        if (!ok) throw conflict('Could not save the paused resolution');
         return { status: 'suspended', round, interrupts: result.interrupts.length };
       }
       const next =
@@ -520,13 +520,13 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
         resolution: null,
         next,
       });
-      if (!ok) throw conflict('Spelet ändrades under upplösningen');
+      if (!ok) throw conflict('The game changed during resolution');
       return { status: 'resolved', round, nextRound: next?.round ?? null, events: result.resolution.events.length };
     } catch (e) {
       // Inget sparades: öppna ronden igen så att GM kan försöka på nytt.
       await ctx.store.reopenRound(campaignId, round);
       if (e instanceof ApiError) throw e;
-      throw new ApiError(500, 'internal', `Upplösningen misslyckades: ${(e as Error).message}`);
+      throw new ApiError(500, 'internal', `Resolution failed: ${(e as Error).message}`);
     }
   },
 
@@ -536,7 +536,7 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
     const game = await loadGame(ctx, campaignId);
     const round = req.round === undefined ? game.state.round - 1 : int(req.round, 'round', 1);
     const events = await ctx.store.roundEvents(campaignId, round);
-    if (!events) throw notFound(`Rond ${round} är inte löst`);
+    if (!events) throw notFound(`Round ${round} is not resolved`);
     return { round, events };
   },
 
@@ -544,7 +544,7 @@ const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
     await requireAdmin(ctx);
     const email = str(req.email, 'email').trim();
     const password = str(req.password, 'password');
-    if (password.length < 8) throw bad('Lösenordet måste ha minst 8 tecken');
+    if (password.length < 8) throw bad('The password must have at least 8 characters');
     const userId = await ctx.auth.createUser(email, password, req.displayName);
     return { userId };
   },
@@ -556,7 +556,7 @@ export async function handle<K extends ApiRequest['op']>(
   ctx: ServerContext,
 ): Promise<ApiResponses[K]> {
   if (typeof req !== 'object' || req === null || typeof req.op !== 'string' || !(req.op in handlers)) {
-    throw bad('Okänd operation');
+    throw bad('Unknown operation');
   }
   const h = handlers[req.op] as Handler<K>;
   return h(req, ctx);

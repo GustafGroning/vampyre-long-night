@@ -41,7 +41,7 @@ export class MemoryStore implements Store, AuthAdmin {
   }
 
   async createUser(email: string, password: string): Promise<string> {
-    if (this.userIdByEmailSync(email)) throw new Error('E-postadressen finns redan');
+    if (this.userIdByEmailSync(email)) throw new Error('The email address already exists');
     return this.addUser(email, { password });
   }
 
@@ -140,8 +140,8 @@ export class MemoryStore implements Store, AuthAdmin {
       return true;
     }
     if (c.version !== a.expectedVersion) return false;
-    if (r.status !== 'closed' && r.status !== 'suspended') throw new Error(`rond ${a.round} är inte stängd`);
-    if (!a.state) throw new Error('state saknas');
+    if (r.status !== 'closed' && r.status !== 'suspended') throw new Error(`round ${a.round} is not closed`);
+    if (!a.state) throw new Error('state is missing');
     c.state = copy(a.state);
     c.version += 1;
     r.status = 'resolved';
@@ -181,7 +181,7 @@ export class MemoryStore implements Store, AuthAdmin {
     displayName: string | null;
   }): Promise<void> {
     const c = this.campaign(a.campaignId);
-    if (!c) throw new Error('okänd kampanj');
+    if (!c) throw new Error('unknown campaign');
     if (a.playerId) for (const [uid, m] of c.members) if (uid !== a.userId && m.playerId === a.playerId) m.playerId = null;
     const prev = c.members.get(a.userId);
     c.members.set(a.userId, { role: a.role, playerId: a.playerId, displayName: a.displayName ?? prev?.displayName ?? null });

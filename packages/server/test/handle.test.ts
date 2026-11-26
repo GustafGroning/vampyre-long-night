@@ -170,7 +170,7 @@ describe('inlämning', () => {
     await rejects(p({ op: 'submit', campaignId, round: 2, actions: [], royalPrivilegesToSpend: 0 }), 409);
     tick(49 * HOUR);
     const res = await p({ op: 'submit', campaignId, round: 1, actions: [bleed], royalPrivilegesToSpend: 0 });
-    expect(res).toEqual({ ok: false, errors: ['Deadline har passerat'] });
+    expect(res).toEqual({ ok: false, errors: ['The deadline has passed'] });
   });
 
   it('spelaren kan bara lämna in för sin egen spelare', async () => {
@@ -275,7 +275,7 @@ describe('HTTP', () => {
     expect(await ok.json()).toEqual({ round: 1, phase: 'submission', windowStatus: 'open' });
     const anon = await call({ op: 'status', campaignId: t.campaignId });
     expect(anon.status).toBe(401);
-    expect(await anon.json()).toEqual({ error: { code: 'unauthenticated', message: 'Du är inte inloggad' } });
+    expect(await anon.json()).toEqual({ error: { code: 'unauthenticated', message: 'You are not signed in' } });
     expect((await call({ op: 'nope' }, 'prince-token')).status).toBe(400);
     expect((await handleHttp(new Request('http://x/game', { method: 'OPTIONS' }), deps)).headers.get('Access-Control-Allow-Origin')).toBe('*');
   });

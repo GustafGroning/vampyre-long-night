@@ -74,15 +74,15 @@ function describeUpgrade(opt: StartingUpgrade, content: Content): string {
     case 'stat':
       return `+1 ${opt.stats.map((s) => STAT_NAMES[s] ?? s).join('/')}`;
     case 'minion':
-      return `En LV${opt.level} minion (${opt.types.map((t) => content.minionTypes[t].name).join('/')})`;
+      return `One LV${opt.level} minion (${opt.types.map((t) => content.minionTypes[t].name).join('/')})`;
     case 'blood':
       return `+${opt.amount} Blood`;
     case 'city_blood_flow':
-      return `Staden: +${opt.amount} Blood flow`;
+      return `City: +${opt.amount} Blood flow`;
     case 'city_intercept':
-      return `Staden: +${opt.amount} Intercept`;
+      return `City: +${opt.amount} Intercept`;
     case 'city_special':
-      return `Staden får en special (${opt.specials.map((k) => STARTING_CITY_SPECIALS[k]?.name ?? k).join('/')})`;
+      return `The city gets a special (${opt.specials.map((k) => STARTING_CITY_SPECIALS[k]?.name ?? k).join('/')})`;
   }
 }
 
@@ -104,7 +104,7 @@ function Issues({ issues, prefix }: { issues: readonly CreationIssue[]; prefix: 
   const mine = issues.filter((i) => i.path === prefix || i.path.startsWith(`${prefix}.`) || i.path.startsWith(`${prefix}[`));
   if (mine.length === 0) return null;
   return (
-    <ul className="build-issues" aria-label={`Fel: ${prefix}`}>
+    <ul className="build-issues" aria-label={`Errors: ${prefix}`}>
       {mine.map((i, n) => (
         <li key={n}>{i.message}</li>
       ))}
@@ -164,7 +164,7 @@ export function CharacterBuilder({
   return (
     <form
       className="character-builder"
-      aria-label="Bygg vampyr"
+      aria-label="Build vampire"
       onSubmit={async (e) => {
         e.preventDefault();
         if (issues.length > 0) return;
@@ -176,19 +176,19 @@ export function CharacterBuilder({
       }}
     >
       <fieldset>
-        <legend>Vampyren</legend>
+        <legend>The vampire</legend>
         <label>
-          Namn
+          Name
           <input value={build.name} onChange={(e) => set({ name: e.target.value })} />
         </label>
         <Issues issues={issues} prefix="name" />
         <label>
-          Koncept
+          Concept
           <textarea value={build.concept} onChange={(e) => set({ concept: e.target.value })} />
         </label>
         <Issues issues={issues} prefix="concept" />
         <label>
-          Klan
+          Clan
           <select value={build.clan} onChange={(e) => set({ clan: e.target.value as CharacterBuild['clan'] })}>
             {CLANS.map((c) => (
               <option key={c} value={c}>
@@ -199,7 +199,7 @@ export function CharacterBuilder({
         </label>
         <Issues issues={issues} prefix="clan" />
         <label>
-          Titel
+          Title
           <select
             value={build.title}
             onChange={(e) => {
@@ -217,7 +217,7 @@ export function CharacterBuilder({
         <Issues issues={issues} prefix="title" />
         {build.title === 'archbishop' && (
           <label>
-            Förklädnad
+            Disguise
             <select
               value={build.disguise ?? ''}
               onChange={(e) => setPackage('archbishop', e.target.value as CharacterBuild['disguise'])}
@@ -236,12 +236,12 @@ export function CharacterBuilder({
       {pkg && (
         <>
           <p>
-            Startpaket: {pkg.blood} Blood, {pkg.vp} VP, {pkg.royalPrivileges} Royal Privileges, {pkg.randomArtifacts}{' '}
-            artefakter{pkg.startsWithCity ? ', en stad' : ''}.
+            Starting package: {pkg.blood} Blood, {pkg.vp} VP, {pkg.royalPrivileges} Royal Privileges, {pkg.randomArtifacts}{' '}
+            artifacts{pkg.startsWithCity ? ', a city' : ''}.
           </p>
 
           <fieldset>
-            <legend>Minions (välj ett paket)</legend>
+            <legend>Minions (choose a package)</legend>
             {pkg.minionOptions.map((slots, i) => (
               <label key={i}>
                 <input
@@ -269,7 +269,7 @@ export function CharacterBuilder({
                   <span>Minion {i + 1} (LV{slot.level})</span>
                   {slot.types.length > 1 ? (
                     <select
-                      aria-label={`Minion ${i + 1} typ`}
+                      aria-label={`Minion ${i + 1} type`}
                       value={pick.type}
                       onChange={(e) => setPick({ ...pick, type: e.target.value as MinionPick['type'] })}
                     >
@@ -283,8 +283,8 @@ export function CharacterBuilder({
                     <span> {content.minionTypes[slot.types[0]!].name} </span>
                   )}
                   <input
-                    aria-label={`Minion ${i + 1} namn`}
-                    placeholder="Namn"
+                    aria-label={`Minion ${i + 1} name`}
+                    placeholder="Name"
                     value={pick.name}
                     onChange={(e) => setPick({ ...pick, name: e.target.value })}
                   />
@@ -295,7 +295,7 @@ export function CharacterBuilder({
           </fieldset>
 
           <fieldset>
-            <legend>Startuppgraderingar (välj {upgradeCount})</legend>
+            <legend>Starting upgrades (choose {upgradeCount})</legend>
             {pkg.upgradeOptions.map((opt, option) => {
               const choice = build.startingUpgrades.find((u) => u.option === option) ?? null;
               const index = build.startingUpgrades.findIndex((u) => u.option === option);
@@ -338,7 +338,7 @@ export function CharacterBuilder({
                   {choice?.kind === 'minion' && opt.kind === 'minion' && (
                     <>
                       <select
-                        aria-label="Extra minion typ"
+                        aria-label="Extra minion type"
                         value={choice.minion.type}
                         onChange={(e) =>
                           setUpgrade(option, { ...choice, minion: { ...choice.minion, type: e.target.value as MinionPick['type'] } })
@@ -351,8 +351,8 @@ export function CharacterBuilder({
                         ))}
                       </select>
                       <input
-                        aria-label="Extra minion namn"
-                        placeholder="Namn"
+                        aria-label="Extra minion name"
+                        placeholder="Name"
                         value={choice.minion.name}
                         onChange={(e) => setUpgrade(option, { ...choice, minion: { ...choice.minion, name: e.target.value } })}
                       />
@@ -360,7 +360,7 @@ export function CharacterBuilder({
                   )}
                   {choice?.kind === 'city_special' && opt.kind === 'city_special' && (
                     <select
-                      aria-label="Stadens special"
+                      aria-label="City special"
                       value={choice.special}
                       onChange={(e) => setUpgrade(option, { ...choice, special: e.target.value })}
                     >
@@ -379,7 +379,7 @@ export function CharacterBuilder({
           </fieldset>
 
           <fieldset>
-            <legend>Bemästrade discipliner (välj {pkg.masteredDisciplines})</legend>
+            <legend>Mastered disciplines (choose {pkg.masteredDisciplines})</legend>
             {owned.map((d) => (
               <label key={d}>
                 <input
@@ -401,12 +401,12 @@ export function CharacterBuilder({
 
           <fieldset>
             <legend>
-              EXP: {expSpent} av {pkg.startingExp} spenderat
+              EXP: {expSpent} of {pkg.startingExp} spent
             </legend>
             {build.expPurchases.map((p, i) => (
               <div key={i} className="exp-purchase">
                 <select
-                  aria-label={`EXP-köp ${i + 1}`}
+                  aria-label={`EXP purchase ${i + 1}`}
                   value={p.upgrade}
                   onChange={(e) => setPurchase(i, defaultPurchase(e.target.value as ExpPurchase['upgrade']))}
                 >
@@ -418,7 +418,7 @@ export function CharacterBuilder({
                 </select>
                 {(p.upgrade === 'extra_discipline' || p.upgrade === 'mastered_discipline') && (
                   <select
-                    aria-label={`EXP-köp ${i + 1} disciplin`}
+                    aria-label={`EXP purchase ${i + 1} discipline`}
                     value={p.discipline}
                     onChange={(e) => setPurchase(i, { ...p, discipline: e.target.value as Discipline })}
                   >
@@ -430,7 +430,7 @@ export function CharacterBuilder({
                   </select>
                 )}
                 <button type="button" onClick={() => setPurchase(i, null)}>
-                  Ta bort
+                  Remove
                 </button>
                 <Issues issues={issues} prefix={`expPurchases[${i}]`} />
               </div>
@@ -439,20 +439,20 @@ export function CharacterBuilder({
               type="button"
               onClick={() => set({ expPurchases: [...build.expPurchases, defaultPurchase('unseen')] })}
             >
-              + EXP-köp
+              + EXP purchase
             </button>
             <Issues issues={issues.filter((i) => i.path === 'expPurchases')} prefix="expPurchases" />
           </fieldset>
         </>
       )}
 
-      {issues.length > 0 && <p role="status">{issues.length} saker kvar att rätta innan vampyren kan sparas.</p>}
+      {issues.length > 0 && <p role="status">{issues.length} things left to fix before the vampire can be saved.</p>}
       {serverError && <p role="alert">{serverError}</p>}
       <button type="submit" disabled={busy || issues.length > 0}>
-        Spara vampyren
+        Save vampire
       </button>
       <button type="button" onClick={onCancel}>
-        Avbryt
+        Cancel
       </button>
     </form>
   );

@@ -77,7 +77,7 @@ export function updateCharacter(
   options: CharacterRulesOptions = {},
 ): BacklogResult<object> {
   const current = backlog.characters[id];
-  if (current === undefined) return { ok: false, issues: [{ path: 'characterId', message: `okänd karaktär ${id}` }] };
+  if (current === undefined) return { ok: false, issues: [{ path: 'characterId', message: `unknown character ${id}` }] };
   const issues = validateCharacterBuild(build, content, options);
   if (issues.length > 0) return { ok: false, issues };
   return {
@@ -92,7 +92,7 @@ export function updateCharacter(
 /** Tar bort en karaktär ur backloggen. Kampanjer som använder den behåller sin kopia. */
 export function removeCharacter(backlog: CharacterBacklog, id: CharacterId): BacklogResult<object> {
   if (backlog.characters[id] === undefined) {
-    return { ok: false, issues: [{ path: 'characterId', message: `okänd karaktär ${id}` }] };
+    return { ok: false, issues: [{ path: 'characterId', message: `unknown character ${id}` }] };
   }
   const characters = { ...backlog.characters };
   delete characters[id];
