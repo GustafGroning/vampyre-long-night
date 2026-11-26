@@ -9,6 +9,7 @@
  * demospelare: innerCircle@dev, prince@dev, baron@dev, hiddenArchbishop@dev, untitled@dev.
  *
  * Extra endpoints, bara här: POST /dev/login {email, password} → {token, user},
+ * POST /dev/signup {email, password} → {token, user} (som självregistrering i Supabase),
  * POST /dev/resolve → löser aktuell rond som GM.
  */
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
@@ -68,6 +69,15 @@ createServer(async (req, res) => {
       const user = id ? store.users.get(id) : undefined;
       if (!user || user.password !== password) return send(res, json(401, { error: 'Fel e-post eller lösenord' }));
       return send(res, json(200, { token: tokenFor(user.id), user: { id: user.id, email: user.email } }));
+    }
+    if (path === '/dev/signup') {
+      const { email, password } = (await request.json()) as { email?: string; password?: string };
+      if (!email?.includes('@') || !password || password.length < 8) {
+        return send(res, json(400, { error: 'ange e-post och ett lösenord på minst 8 tecken' }));
+      }
+      const id = await store.createUser(email.trim(), password).catch(() => null);
+      if (!id) return send(res, json(400, { error: 'e-postadressen finns redan' }));
+      return send(res, json(200, { token: tokenFor(id), user: { id, email: email.trim() } }));
     }
     if (path === '/dev/resolve') {
       return send(res, json(200, await handle({ op: 'gm_resolve', campaignId }, ctx(gmId))));

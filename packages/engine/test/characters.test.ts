@@ -291,6 +291,13 @@ describe('validateCharacterBuild', () => {
   it('kräver ett namn', () => {
     expect(messages({ ...PRINCE, name: '   ' })).toEqual(['name: namnet får inte vara tomt']);
   });
+
+  it('ett fel i namnet döljer inte resten av felen', () => {
+    expect(messages({ ...PRINCE, name: '', expPurchases: [] })).toEqual([
+      'name: namnet får inte vara tomt',
+      'expPurchases: all start-EXP måste spenderas: titeln ger 4, köpen kostar 0',
+    ]);
+  });
 });
 
 describe('deriveCharacter', () => {

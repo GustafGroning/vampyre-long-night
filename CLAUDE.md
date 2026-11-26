@@ -16,7 +16,7 @@ Repot är nystartat och innehåller än så länge bara dokumentation. Ingen kod
 | `docs/rules/SPEC.md` | Fullständig spec (regler som krav, plattformsbeslut, öppna beslut i Part C). Stack-oberoende. |
 | `docs/engine/` | Research och beslut för spelmotorn. `001_motorbeslut.md` = provisoriska beslut som blockerade motorn. |
 | `docs/backend/supabase-current-setup.md` | Kartläggning av befintliga Supabase-projektet (schema, RLS, funktioner, edge function) och vad som kan återanvändas mot motorn. |
-| `docs/backend/server-plan.md` | Spelservern och inloggningen (`packages/server`, `supabase/`). Beslut P1–P15 i `docs/decisions/server.md`. |
+| `docs/backend/server-plan.md` | Spelservern och inloggningen (`packages/server`, `supabase/`). Beslut P1–P20 i `docs/decisions/server.md`; vampyrer på kontot och startsidan i `docs/ui/character-backlog-plan.md`. |
 | `docs/ui/` | Planer för spelarens gränssnitt (`packages/web`, React + Vite + TS). |
 | `docs/playtest-logs/` | Riktiga spelarloggar (stats, rondresultat, action-listor). Bra exempel på hur spelet faktiskt spelas. |
 | `docs/prototype/research/` | Research från prototypen: regler vs implementation, DB-schema, resolve-round-motor, actionreferens. |

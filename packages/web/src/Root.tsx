@@ -1,28 +1,35 @@
 /**
- * Spelläget: inloggning → kampanj → huvudskärmen från servern.
+ * Spelläget: inloggning (eller nytt konto) → startsida → kampanj.
+ * Startsidan visar kampanjerna man hör till och kontots vampyrer (P18).
  * Ingen design här heller; bara flödet.
  */
 import { useCallback, useEffect, useState } from 'react';
 import type { CampaignSummary } from '@vampyre/server/api';
 import { App } from './App';
+import { CharacterList } from './characters/CharacterList';
 import { ApiClientError, type ApiClient } from './server/apiClient';
 import type { AuthClient, AuthUser } from './server/auth';
 import { loadServerScreen, type LoadedScreen } from './server/serverPort';
 import { useRoundWatcher } from './server/useRoundWatcher';
 
-const LAST_CAMPAIGN = 'vampyre-last-campaign';
+/**
+ * Öppen kampanj i den här fliken. sessionStorage: en omladdning stannar i
+ * kampanjen, men en ny inloggning eller flik börjar på startsidan.
+ */
+const OPEN_CAMPAIGN = 'vampyre-open-campaign';
 
-function remembered(): string | null {
+function openedCampaign(): string | null {
   try {
-    return localStorage.getItem(LAST_CAMPAIGN);
+    return sessionStorage.getItem(OPEN_CAMPAIGN);
   } catch {
     return null;
   }
 }
 
-function remember(id: string): void {
+function rememberOpen(id: string | null): void {
   try {
-    localStorage.setItem(LAST_CAMPAIGN, id);
+    if (id) sessionStorage.setItem(OPEN_CAMPAIGN, id);
+    else sessionStorage.removeItem(OPEN_CAMPAIGN);
   } catch {
     // Bara en bekvämlighet.
   }
@@ -30,24 +37,38 @@ function remember(id: string): void {
 
 const message = (e: unknown) => (e instanceof Error ? e.message : 'Något gick fel');
 
+/** Supabase kräver minst 6 tecken; vi kräver 8 som admin_create_user. */
+export const PASSWORD_MIN = 8;
+
+export const NO_EMAIL_NOTICE =
+  'E-postservern är inte igång, så kom ihåg ditt lösenord. Du kan inte återställa det!';
+
 export function LoginForm({ auth }: { auth: AuthClient }) {
+  const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [repeat, setRepeat] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const signup = mode === 'signup';
   return (
     <form
       className="login"
-      aria-label="Logga in"
+      aria-label={signup ? 'Skapa konto' : 'Logga in'}
       onSubmit={async (e) => {
         e.preventDefault();
+        if (signup) {
+          if (password.length < PASSWORD_MIN) return setError(`Lösenordet måste ha minst ${PASSWORD_MIN} tecken`);
+          if (password !== repeat) return setError('Lösenorden är inte lika');
+        }
         setBusy(true);
-        const res = await auth.signIn(email, password);
+        const res = signup ? await auth.signUp(email, password) : await auth.signIn(email, password);
         setBusy(false);
         setError(res.error);
       }}
     >
       <h1>Vampyre: The Long Night</h1>
+      {signup && <p role="note">{NO_EMAIL_NOTICE}</p>}
       <label>
         E-post
         <input type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -56,15 +77,36 @@ export function LoginForm({ auth }: { auth: AuthClient }) {
         Lösenord
         <input
           type="password"
-          autoComplete="current-password"
+          autoComplete={signup ? 'new-password' : 'current-password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
       </label>
+      {signup && (
+        <label>
+          Lösenord igen
+          <input
+            type="password"
+            autoComplete="new-password"
+            value={repeat}
+            onChange={(e) => setRepeat(e.target.value)}
+            required
+          />
+        </label>
+      )}
       {error && <p role="alert">{error}</p>}
       <button type="submit" disabled={busy}>
-        Logga in
+        {signup ? 'Skapa konto' : 'Logga in'}
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setMode(signup ? 'login' : 'signup');
+          setError(null);
+        }}
+      >
+        {signup ? 'Jag har redan ett konto' : 'Create account'}
       </button>
     </form>
   );
@@ -72,34 +114,69 @@ export function LoginForm({ auth }: { auth: AuthClient }) {
 
 function AccountBar({
   user,
-  campaigns,
-  campaignId,
-  onPick,
+  onHome,
   onSignOut,
 }: {
   user: AuthUser;
-  campaigns: CampaignSummary[];
-  campaignId: string | null;
-  onPick: (id: string) => void;
+  /** Satt när man är i en kampanj. */
+  onHome: (() => void) | null;
   onSignOut: () => void;
 }) {
-  const playable = campaigns.filter((c) => c.playerId);
   return (
     <div className="account-bar">
       <span>{user.email}</span>
-      {playable.length > 1 && (
-        <select aria-label="Kampanj" value={campaignId ?? ''} onChange={(e) => onPick(e.target.value)}>
-          {playable.map((c) => (
-            <option key={c.campaignId} value={c.campaignId}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+      {onHome && (
+        <button type="button" onClick={onHome}>
+          Startsida
+        </button>
       )}
       <button type="button" onClick={onSignOut}>
         Logga ut
       </button>
     </div>
+  );
+}
+
+/** Startsidan: kampanjer man hör till (bara admin skapar kampanjer) och kontots vampyrer. */
+function HomeScreen({
+  api,
+  campaigns,
+  error,
+  onOpen,
+}: {
+  api: ApiClient;
+  campaigns: CampaignSummary[] | null;
+  error: string | null;
+  onOpen: (id: string) => void;
+}) {
+  return (
+    <main className="home">
+      <section aria-label="Mina kampanjer">
+        <h2>Mina kampanjer</h2>
+        {error && <p role="alert">{error}</p>}
+        {!campaigns && !error && <p>Laddar…</p>}
+        {campaigns && campaigns.length === 0 && (
+          <p>Du är inte med i någon kampanj än. Kampanjer skapas av admin, som lägger till dig.</p>
+        )}
+        {campaigns && campaigns.length > 0 && (
+          <ul className="campaign-list">
+            {campaigns.map((c) => (
+              <li key={c.campaignId}>
+                <strong>{c.name}</strong>{' '}
+                {c.playerId ? (
+                  <button type="button" onClick={() => onOpen(c.campaignId)} aria-label={`Öppna ${c.name}`}>
+                    Öppna
+                  </button>
+                ) : (
+                  <span>{c.role === 'gm' ? 'GM (ingen spelare att visa)' : 'Ingen spelare kopplad än'}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+      <CharacterList api={api} />
+    </main>
   );
 }
 
@@ -175,9 +252,9 @@ export function Root({ auth, api }: { auth: AuthClient; api: ApiClient }) {
       .call({ op: 'campaigns' })
       .then((list) => {
         setCampaigns(list);
-        const playable = list.filter((c) => c.playerId);
-        const last = remembered();
-        setCampaignId(playable.find((c) => c.campaignId === last)?.campaignId ?? playable[0]?.campaignId ?? null);
+        // Bara efter omladdning i samma flik; annars börjar man på startsidan.
+        const open = openedCampaign();
+        setCampaignId(list.find((c) => c.campaignId === open && c.playerId)?.campaignId ?? null);
       })
       .catch((e: unknown) => {
         if (e instanceof ApiClientError && e.status === 401) void auth.signOut();
@@ -185,24 +262,32 @@ export function Root({ auth, api }: { auth: AuthClient; api: ApiClient }) {
       });
   }, [api, auth, user]);
 
+  const open = (id: string | null) => {
+    rememberOpen(id);
+    setCampaignId(id);
+  };
+
   if (user === undefined) return <p>Laddar…</p>;
   if (user === null) return <LoginForm auth={auth} />;
 
   const bar = (
     <AccountBar
       user={user}
-      campaigns={campaigns ?? []}
-      campaignId={campaignId}
-      onPick={(id) => {
-        remember(id);
-        setCampaignId(id);
+      onHome={campaignId ? () => open(null) : null}
+      onSignOut={() => {
+        rememberOpen(null);
+        void auth.signOut();
       }}
-      onSignOut={() => void auth.signOut()}
     />
   );
-  if (error) return (<>{bar}<p role="alert">{error}</p></>);
-  if (!campaigns) return (<>{bar}<p>Laddar…</p></>);
-  if (!campaignId) return (<>{bar}<p>Du har ingen spelare i någon kampanj än. Be GM att koppla ditt konto.</p></>);
+  if (!campaignId) {
+    return (
+      <>
+        {bar}
+        <HomeScreen api={api} campaigns={campaigns} error={error} onOpen={open} />
+      </>
+    );
+  }
   return (
     <>
       {bar}

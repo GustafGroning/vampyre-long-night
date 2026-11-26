@@ -3,9 +3,9 @@
  * För tester och lokal utveckling. Allt kopieras in och ut som JSON, så att
  * anropare aldrig delar referenser med lagringen (som i en riktig databas).
  */
-import type { GameState, RoundEvent, RoundResolution, Submission } from '@vampyre/engine';
+import type { CharacterBacklog, GameState, RoundEvent, RoundResolution, Submission } from '@vampyre/engine';
 import type { CampaignRole, CampaignSummary } from './api.js';
-import type { AuthAdmin, CommitArgs, LoadedGame, Membership, Store, StoredRound } from './store.js';
+import type { AuthAdmin, CommitArgs, LoadedGame, Membership, Store, StoredBacklog, StoredRound } from './store.js';
 
 const copy = <T>(v: T): T => JSON.parse(JSON.stringify(v)) as T;
 
@@ -31,6 +31,7 @@ export interface MemoryUser {
 export class MemoryStore implements Store, AuthAdmin {
   readonly campaigns = new Map<string, Campaign>();
   readonly users = new Map<string, MemoryUser>();
+  readonly backlogs = new Map<string, StoredBacklog>();
   private seq = 0;
 
   addUser(email: string, opts: { platformAdmin?: boolean; password?: string; id?: string } = {}): string {
@@ -184,5 +185,22 @@ export class MemoryStore implements Store, AuthAdmin {
     if (a.playerId) for (const [uid, m] of c.members) if (uid !== a.userId && m.playerId === a.playerId) m.playerId = null;
     const prev = c.members.get(a.userId);
     c.members.set(a.userId, { role: a.role, playerId: a.playerId, displayName: a.displayName ?? prev?.displayName ?? null });
+  }
+
+  async getBacklog(userId: string): Promise<StoredBacklog | null> {
+    const b = this.backlogs.get(userId);
+    return b ? copy(b) : null;
+  }
+
+  async saveBacklog(userId: string, backlog: CharacterBacklog, expectedRevision: number): Promise<boolean> {
+    const cur = this.backlogs.get(userId);
+    if (expectedRevision === 0) {
+      if (cur) return false;
+      this.backlogs.set(userId, { backlog: copy(backlog), revision: 1 });
+      return true;
+    }
+    if (cur?.revision !== expectedRevision) return false;
+    this.backlogs.set(userId, { backlog: copy(backlog), revision: cur.revision + 1 });
+    return true;
   }
 }

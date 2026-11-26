@@ -2,7 +2,7 @@
  * Lagringen bakom spelservern. Varje metod är en atomisk operation; i Supabase
  * motsvarar de RPC-funktionerna i `supabase/migrations/20261121170000_game_server.sql`.
  */
-import type { GameState, RoundEvent, RoundResolution, Submission } from '@vampyre/engine';
+import type { CharacterBacklog, GameState, RoundEvent, RoundResolution, Submission } from '@vampyre/engine';
 import type { CampaignRole, CampaignSummary, RoundStatus } from './api.js';
 
 export interface Membership {
@@ -39,6 +39,12 @@ export interface CommitArgs {
   next: { round: number; seed: string; deadline: number } | null;
 }
 
+/** Spelarens backlog med revision för optimistisk låsning (P16). */
+export interface StoredBacklog {
+  backlog: CharacterBacklog;
+  revision: number;
+}
+
 export interface Store {
   userCampaigns(userId: string): Promise<CampaignSummary[]>;
   membership(campaignId: string, userId: string): Promise<Membership | null>;
@@ -73,6 +79,10 @@ export interface Store {
     playerId: string | null;
     displayName: string | null;
   }): Promise<void>;
+  /** Spelarens vampyrer utan kampanj, eller null om hon inte sparat någon än. */
+  getBacklog(userId: string): Promise<StoredBacklog | null>;
+  /** 0 = skapa. false = någon annan sparade emellan (eller den fanns redan). */
+  saveBacklog(userId: string, backlog: CharacterBacklog, expectedRevision: number): Promise<boolean>;
 }
 
 /** Skapar användarkonton (Supabase Auth admin-API). */

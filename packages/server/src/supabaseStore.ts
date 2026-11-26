@@ -1,11 +1,11 @@
 /**
  * Store mot Supabase: varje metod är ett anrop till en RPC-funktion i
- * `supabase/migrations/20261121170000_game_server.sql`, med service role-nyckeln.
+ * `supabase/migrations/` (game_server, character_backlogs), med service role-nyckeln.
  * Bara `fetch`, inga beroenden, så samma kod körs i Deno (edge function) och Node.
  */
-import type { GameState, RoundEvent, Submission } from '@vampyre/engine';
+import type { CharacterBacklog, GameState, RoundEvent, Submission } from '@vampyre/engine';
 import type { CampaignRole, CampaignSummary } from './api.js';
-import type { AuthAdmin, CommitArgs, LoadedGame, Membership, Store } from './store.js';
+import type { AuthAdmin, CommitArgs, LoadedGame, Membership, Store, StoredBacklog } from './store.js';
 
 export interface SupabaseConfig {
   url: string;
@@ -139,6 +139,14 @@ export class SupabaseStore implements Store, AuthAdmin {
       _player: a.playerId,
       _display_name: a.displayName,
     });
+  }
+
+  getBacklog(userId: string): Promise<StoredBacklog | null> {
+    return this.rpc('game_backlog_get', { _user: userId });
+  }
+
+  saveBacklog(userId: string, backlog: CharacterBacklog, expectedRevision: number): Promise<boolean> {
+    return this.rpc('game_backlog_save', { _user: userId, _backlog: backlog, _expected_revision: expectedRevision });
   }
 
   /** Supabase Auth admin-API. `email_confirm` = inget mejl behövs (P3). */
