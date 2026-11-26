@@ -46,6 +46,13 @@ select pg_temp.check((public.game_load(:'cid') -> 'round' ->> 'round') = '2'
 select pg_temp.check(public.game_round_events_get(:'cid', 1) = '[{"seq":1}]', 'round_events_get');
 select pg_temp.check(public.game_round_events_get(:'cid', 2) is null, 'round_events_get olöst');
 select pg_temp.check(public.game_assigned_players(:'cid') = '["player-2"]', 'assigned_players');
+-- Backlog: skapa, versionskoll, läsa
+select pg_temp.check(public.game_backlog_get('00000000-0000-0000-0000-00000000000b') is null, 'backlog saknas');
+select pg_temp.check(public.game_backlog_save('00000000-0000-0000-0000-00000000000b', '{"nextId":1}', 0), 'backlog skapa');
+select pg_temp.check(not public.game_backlog_save('00000000-0000-0000-0000-00000000000b', '{"nextId":9}', 0), 'backlog dubbel skapa');
+select pg_temp.check(not public.game_backlog_save('00000000-0000-0000-0000-00000000000b', '{"nextId":9}', 5), 'backlog fel revision');
+select pg_temp.check(public.game_backlog_save('00000000-0000-0000-0000-00000000000b', '{"nextId":2}', 1), 'backlog uppdatera');
+select pg_temp.check(public.game_backlog_get('00000000-0000-0000-0000-00000000000b') = '{"backlog":{"nextId":2},"revision":2}', 'backlog läsa');
 reset role;
 
 -- Spelare och anon kommer inte åt speltabellerna eller funktionerna
@@ -57,6 +64,10 @@ do $$ begin
   begin perform * from public.game_rounds; raise exception 'LÄCKA: game_rounds (seed)';
   exception when insufficient_privilege then null; end;
   begin perform * from public.game_submissions; raise exception 'LÄCKA: game_submissions';
+  exception when insufficient_privilege then null; end;
+  begin perform * from public.character_backlogs; raise exception 'LÄCKA: character_backlogs';
+  exception when insufficient_privilege then null; end;
+  begin perform public.game_backlog_get('00000000-0000-0000-0000-00000000000b'); raise exception 'LÄCKA: game_backlog_get';
   exception when insufficient_privilege then null; end;
   begin perform public.game_load((select id from public.campaigns limit 1)); raise exception 'LÄCKA: game_load';
   exception when insufficient_privilege then null; end;

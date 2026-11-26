@@ -57,6 +57,11 @@ function fakeAuth(user: AuthUser | null): AuthClient & { set(u: AuthUser | null)
       ls.forEach((l) => l(current));
       return { error: null };
     },
+    signUp: async (email) => {
+      current = { id: 'new', email };
+      ls.forEach((l) => l(current));
+      return { error: null };
+    },
     signOut: async () => {
       current = null;
       ls.forEach((l) => l(null));
@@ -151,6 +156,8 @@ describe('Root', () => {
     await user.clear(screen.getByLabelText('E-post'));
     await user.type(screen.getByLabelText('E-post'), 'prince@test');
     await user.click(screen.getByRole('button', { name: 'Logga in' }));
+    // Startsidan först, inte direkt in i kampanjen.
+    await user.click(await screen.findByRole('button', { name: 'Öppna Test' }));
     expect(await screen.findByText('Actions rond 1')).toBeTruthy();
     expect(screen.getByText('Prince Edmund Hale')).toBeTruthy();
 
@@ -176,13 +183,84 @@ describe('Root', () => {
     await waitFor(() => expect(screen.queryAllByTestId('draft-row')).toHaveLength(0));
     expect(screen.getByRole('button', { name: 'Confirm actions' })).toBeTruthy();
 
+    await user.click(screen.getByRole('button', { name: 'Startsida' }));
+    expect(await screen.findByRole('region', { name: 'Mina vampyrer' })).toBeTruthy();
+
     await user.click(screen.getByRole('button', { name: 'Logga ut' }));
     expect(await screen.findByRole('button', { name: 'Logga in' })).toBeTruthy();
+
+    // Ny inloggning börjar på startsidan, även om kampanjen var öppen förut.
+    await user.type(screen.getByLabelText('E-post'), 'prince@test');
+    await user.type(screen.getByLabelText('Lösenord'), 'x');
+    await user.click(screen.getByRole('button', { name: 'Logga in' }));
+    expect(await screen.findByRole('button', { name: 'Öppna Test' })).toBeTruthy();
   });
 
-  it('användare utan spelare får besked, inte en tom skärm', async () => {
+  it('GM utan spelare ser kampanjen på startsidan men kan inte öppna en spelarvy', async () => {
     const w = await world();
     render(<Root auth={fakeAuth({ id: 'gm', email: 'gm@test' })} api={w.apiFor(w.users.gm)} />);
-    expect(await screen.findByText(/Du har ingen spelare i någon kampanj/)).toBeTruthy();
+    expect(await screen.findByText('GM (ingen spelare att visa)')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Öppna Test' })).toBeNull();
+  });
+
+  it('nytt konto: varning om lösenord, sedan startsidan utan kampanjer', async () => {
+    const w = await world();
+    const stranger = w.store.addUser('ny@test');
+    const user = userEvent.setup();
+    render(<Root auth={fakeAuth(null)} api={w.apiFor(stranger)} />);
+    await user.click(await screen.findByRole('button', { name: 'Create account' }));
+    expect(screen.getByRole('note').textContent).toMatch(/kan inte återställa/);
+    await user.type(screen.getByLabelText('E-post'), 'ny@test');
+    await user.type(screen.getByLabelText('Lösenord'), 'hemligt12');
+    await user.type(screen.getByLabelText('Lösenord igen'), 'annat123');
+    await user.click(screen.getByRole('button', { name: 'Skapa konto' }));
+    expect((await screen.findByRole('alert')).textContent).toBe('Lösenorden är inte lika');
+    await user.clear(screen.getByLabelText('Lösenord igen'));
+    await user.type(screen.getByLabelText('Lösenord igen'), 'hemligt12');
+    await user.click(screen.getByRole('button', { name: 'Skapa konto' }));
+    expect(await screen.findByText(/Du är inte med i någon kampanj än/)).toBeTruthy();
+    expect(await screen.findByText('Du har inga vampyrer än.')).toBeTruthy();
+  });
+
+  it('bygger, sparar, ändrar och tar bort en vampyr', async () => {
+    const w = await world();
+    const stranger = w.store.addUser('ny@test');
+    const user = userEvent.setup();
+    render(<Root auth={fakeAuth({ id: stranger, email: 'ny@test' })} api={w.apiFor(stranger)} />);
+    await user.click(await screen.findByRole('button', { name: '+ Ny vampyr' }));
+
+    const save = () => screen.getByRole('button', { name: 'Spara vampyren' }) as HTMLButtonElement;
+    expect(save().disabled).toBe(true);
+    expect(within(screen.getByRole('list', { name: 'Fel: name' })).getByText('namnet får inte vara tomt')).toBeTruthy();
+
+    // Prince Victor (Nosferatu) från motorns tester.
+    await user.type(screen.getByLabelText('Namn'), 'Prince Victor');
+    await user.selectOptions(screen.getByLabelText('Klan'), 'nosferatu');
+    await user.selectOptions(screen.getByLabelText('Titel'), 'prince');
+    await user.click(screen.getAllByRole('radio')[0]!);
+    // Paket 0 = en LV1 Primogen; en enda typ, så ingen typväljare.
+    expect(screen.queryByLabelText('Minion 1 typ')).toBeNull();
+    await user.type(screen.getByLabelText('Minion 1 namn'), 'The Elder');
+    await user.click(screen.getByRole('checkbox', { name: 'Staden: +25 Blood flow' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Staden: +2 Intercept' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Obfuscate' }));
+    await user.click(screen.getByRole('button', { name: '+ EXP-köp' }));
+    await user.click(screen.getByRole('button', { name: '+ EXP-köp' }));
+    expect(screen.getByText('EXP: 4 av 4 spenderat')).toBeTruthy();
+    expect(save().disabled).toBe(false);
+    await user.click(save());
+
+    expect(await screen.findByText('Prince Victor')).toBeTruthy();
+    expect((await w.store.getBacklog(stranger))!.backlog.characters['character-1' as never]).toBeTruthy();
+
+    await user.click(screen.getByRole('button', { name: 'Ändra' }));
+    await user.clear(screen.getByLabelText('Namn'));
+    await user.type(screen.getByLabelText('Namn'), 'Victor II');
+    await user.click(screen.getByRole('button', { name: 'Spara vampyren' }));
+    expect(await screen.findByText('Victor II')).toBeTruthy();
+
+    await user.click(screen.getByRole('button', { name: 'Ta bort Victor II' }));
+    await user.click(screen.getByRole('button', { name: 'Ja, ta bort Victor II' }));
+    expect(await screen.findByText('Du har inga vampyrer än.')).toBeTruthy();
   });
 });

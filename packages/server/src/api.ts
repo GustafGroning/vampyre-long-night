@@ -5,7 +5,15 @@
  * Alla anrop är `POST /functions/v1/game` med `{ op, ... }` och användarens JWT.
  * Svar: 200 med operationens svar, eller 4xx/5xx med `{ error: { code, message } }`.
  */
-import type { CreateGameInput, PlayerView, RoundEvent, SubmittedAction } from '@vampyre/engine';
+import type {
+  CharacterBuild,
+  CharacterSheet,
+  CreateGameInput,
+  CreationIssue,
+  PlayerView,
+  RoundEvent,
+  SubmittedAction,
+} from '@vampyre/engine';
 
 export type CampaignRole = 'gm' | 'player';
 export type RoundStatus = 'open' | 'closed' | 'resolved' | 'suspended';
@@ -68,8 +76,23 @@ export type GmResolveResponse =
   | { status: 'resolved'; round: number; nextRound: number | null; events: number }
   | { status: 'suspended'; round: number; interrupts: number };
 
+/** Spelarens vampyrer utan kampanj (P16–P17), i skapandeordning. */
+export interface CharactersResponse {
+  characters: CharacterSheet[];
+}
+
+/** Ogiltigt bygge sparas inte; `issues` är motorns fel med `path` (validateCharacterBuild). */
+export type CharacterSaveResponse =
+  | ({ ok: true; characterId: string } & CharactersResponse)
+  | { ok: false; issues: CreationIssue[] };
+
 export type ApiRequest =
   | { op: 'campaigns' }
+  /** Ägaren är alltid den inloggade (P17). */
+  | { op: 'characters' }
+  /** Utan characterId = ny vampyr. */
+  | { op: 'character_save'; characterId?: string; build: CharacterBuild }
+  | { op: 'character_delete'; characterId: string }
   | { op: 'screen'; campaignId: string }
   | { op: 'status'; campaignId: string }
   | {
@@ -107,6 +130,9 @@ export type ApiOp = ApiRequest['op'];
 
 export interface ApiResponses {
   campaigns: CampaignSummary[];
+  characters: CharactersResponse;
+  character_save: CharacterSaveResponse;
+  character_delete: CharactersResponse;
   screen: ScreenResponse;
   status: StatusResponse;
   submit: SubmitResponse;

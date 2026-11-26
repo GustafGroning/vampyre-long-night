@@ -118,7 +118,9 @@ function analyse(
   }
 
   // --- Klan, titel och förklädnad -------------------------------------------
-  // Utan giltig klan eller titel går resten inte att kontrollera.
+  // Utan giltig klan eller titel går resten inte att kontrollera. Fel i namnet
+  // ska inte dölja resten (UI:t visar alla fel medan spelaren bygger).
+  const before = issues.length;
   if (!CLANS.includes(build.clan)) add('clan', `okänd klan "${build.clan}"`);
   if (!TITLES.includes(build.title)) add('title', `okänd titel "${build.title}"`);
   else if (!allowedTitles.includes(build.title)) add('title', `titeln ${build.title} går inte att välja`);
@@ -128,7 +130,7 @@ function analyse(
   } else if (build.disguise !== null) {
     add('disguise', 'bara en Archbishop har förklädnad');
   }
-  if (issues.length > 0) return { ok: false, issues };
+  if (issues.length > before) return { ok: false, issues };
 
   const pkg = startingPackageFor(content, build.title, build.disguise);
   if (pkg === null) {

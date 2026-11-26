@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEMO_PLAYERS, type SubmittedAction } from '@vampyre/engine';
+import { DEMO_PLAYERS, type CharacterBuild, type SubmittedAction } from '@vampyre/engine';
 import { ApiError, MemoryStore, handle, handleHttp, type ApiRequest, type ApiResponses, type ServerContext } from '../src/index.js';
 
 const HOUR = 3_600_000;
@@ -300,5 +300,101 @@ describe('HTTP', () => {
     expect(res.status).toBe(500);
     expect(await res.text()).not.toContain('hemlig');
     expect(logged).toHaveLength(1);
+  });
+});
+
+describe('vampyrer på kontot (P16–P17)', () => {
+  const PRINCE_BUILD: CharacterBuild = {
+    name: 'Prince Victor',
+    concept: '',
+    clan: 'nosferatu',
+    title: 'prince',
+    disguise: null,
+    minions: { packageIndex: 0, picks: [{ type: 'primogen', name: 'The Elder' }] },
+    masteredDisciplines: ['obfuscate'],
+    startingUpgrades: [
+      { option: 2, kind: 'city_blood_flow' },
+      { option: 3, kind: 'city_intercept' },
+    ],
+    expPurchases: [{ upgrade: 'unseen' }, { upgrade: 'unseen' }],
+  };
+
+  it('en spelare utan kampanj skapar, ändrar och tar bort sina vampyrer', async () => {
+    const { as, users } = setup();
+    const me = as(users.stranger);
+    expect(await me({ op: 'campaigns' })).toEqual([]);
+    expect(await me({ op: 'characters' })).toEqual({ characters: [] });
+
+    const created = await me({ op: 'character_save', build: PRINCE_BUILD });
+    expect(created).toMatchObject({ ok: true, characterId: 'character-1' });
+    const renamed = await me({ op: 'character_save', characterId: 'character-1', build: { ...PRINCE_BUILD, name: 'Victor II' } });
+    expect(renamed).toMatchObject({ ok: true, characterId: 'character-1' });
+    const second = await me({ op: 'character_save', build: { ...PRINCE_BUILD, name: 'Andra' } });
+    expect(second).toMatchObject({ ok: true, characterId: 'character-2' });
+
+    const list = await me({ op: 'characters' });
+    expect(list.characters.map((c) => [c.id, c.build.name, c.version])).toEqual([
+      ['character-1', 'Victor II', 2],
+      ['character-2', 'Andra', 1],
+    ]);
+
+    expect((await me({ op: 'character_delete', characterId: 'character-1' })).characters.map((c) => c.id)).toEqual(['character-2']);
+    await rejects(me({ op: 'character_delete', characterId: 'character-1' }), 404);
+  });
+
+  it('ett ogiltigt bygge sparas inte och ger motorns fel med path', async () => {
+    const { as, users, store } = setup();
+    const me = as(users.stranger);
+    const res = await me({ op: 'character_save', build: { ...PRINCE_BUILD, name: ' ', expPurchases: [] } });
+    expect(res.ok).toBe(false);
+    if (res.ok) return;
+    expect(res.issues.map((i) => i.path)).toEqual(expect.arrayContaining(['name', 'expPurchases']));
+    expect(await store.getBacklog(users.stranger)).toBeNull();
+  });
+
+  it('varje konto ser bara sina egna vampyrer', async () => {
+    const { as, users } = setup();
+    await as(users.prince)({ op: 'character_save', build: PRINCE_BUILD });
+    expect(await as(users.baron)({ op: 'characters' })).toEqual({ characters: [] });
+    await rejects(as(users.baron)({ op: 'character_save', characterId: 'character-1', build: PRINCE_BUILD }), 404);
+    await rejects(as(users.baron)({ op: 'character_delete', characterId: 'character-1' }), 404);
+    await rejects(as(null)({ op: 'characters' }), 401);
+  });
+
+  it('felaktig form avvisas med 400 innan motorn ser bygget', async () => {
+    const { as, users } = setup();
+    const me = as(users.stranger);
+    const save = (build: unknown) => me({ op: 'character_save', build: build as CharacterBuild });
+    await rejects(save(null), 400);
+    await rejects(save({ ...PRINCE_BUILD, minions: null }), 400);
+    await rejects(save({ ...PRINCE_BUILD, masteredDisciplines: 'obfuscate' }), 400);
+    await rejects(save({ ...PRINCE_BUILD, expPurchases: [{ upgrade: '__proto__' }] }), 400);
+    await rejects(save({ ...PRINCE_BUILD, startingUpgrades: [{ option: 0, kind: 'constructor' }] }), 400);
+    // Okända fält följer inte med in i lagringen.
+    const ok = await save({ ...PRINCE_BUILD, ownerId: 'någon annan', extra: 1 });
+    expect(ok.ok).toBe(true);
+    const saved = (await me({ op: 'characters' })).characters[0]!.build as unknown as Record<string, unknown>;
+    expect(saved.ownerId).toBeUndefined();
+    expect(saved.extra).toBeUndefined();
+  });
+
+  it('en sparning från en annan flik emellan skrivs inte över', async () => {
+    const { as, users, store } = setup();
+    const me = as(users.stranger);
+    await me({ op: 'character_save', build: PRINCE_BUILD });
+    // Simulera en samtidig sparning: första försöket att spara får fel revision.
+    const real = store.saveBacklog.bind(store);
+    let first = true;
+    store.saveBacklog = async (u, b, rev) => {
+      if (first) {
+        first = false;
+        const cur = (await store.getBacklog(u))!;
+        await real(u, { ...cur.backlog }, cur.revision);
+      }
+      return real(u, b, rev);
+    };
+    const res = await me({ op: 'character_save', build: { ...PRINCE_BUILD, name: 'Andra' } });
+    expect(res).toMatchObject({ ok: true, characterId: 'character-2' });
+    expect((await store.getBacklog(users.stranger))!.revision).toBe(3);
   });
 });

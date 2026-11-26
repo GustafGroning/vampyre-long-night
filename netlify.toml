@@ -1,0 +1,18 @@
+# Netlify bygger spelarens gränssnitt (packages/web) från repots rot, så att
+# npm-workspaces (@vampyre/engine, @vampyre/server) installeras med rotens lockfile.
+#
+# Spelläget kräver miljövariablerna VITE_SUPABASE_URL och VITE_SUPABASE_ANON_KEY
+# (Netlify: Site configuration → Environment variables). Saknas de byggs demoläget.
+[build]
+  base = ""
+  command = "npm run build -w @vampyre/web"
+  publish = "packages/web/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# En sidas app: alla sökvägar ska ladda index.html.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

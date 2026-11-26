@@ -37,7 +37,17 @@ function root(): ReactNode {
     }
   }
   const key = params.get('player');
-  return <App port={createDemoPort(isDemoPlayerKey(key) ? key : 'prince')} />;
+  const app = <App port={createDemoPort(isDemoPlayerKey(key) ? key : 'prince')} />;
+  if (params.has('demo')) return app;
+  // Ingen server konfigurerad: säg det, så att ett bygge utan miljövariabler inte ser ut som spelet.
+  return (
+    <>
+      <p className="mode-notice" role="status">
+        Demoläge: ingen server är konfigurerad (VITE_SUPABASE_URL och VITE_SUPABASE_ANON_KEY saknas i bygget).
+      </p>
+      {app}
+    </>
+  );
 }
 
 createRoot(document.getElementById('app')!).render(<StrictMode>{root()}</StrictMode>);

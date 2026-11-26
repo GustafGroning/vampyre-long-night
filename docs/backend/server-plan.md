@@ -4,7 +4,7 @@ Datum: 2026-11-21. Underlag: gapanalysen `/mnt/project-files/ui/huvudskarm-featu
 
 Mål: spelarens huvudskärm (`packages/web`) laddar sin `PlayerView` från servern, lämnar in där, ser sin inlämnade lista efter omladdning och hämtar ny vy när ronden har lösts. Inloggning avgör vilken spelare man är. Bara logik, ingen design.
 
-Beslut med id **P1–P15** står i `docs/decisions/server.md`. De är provisoriska tills Gustaf har granskat dem.
+Beslut med id **P1–P20** (P16–P20: `docs/ui/character-backlog-plan.md`) står i `docs/decisions/server.md`. De är provisoriska tills Gustaf har granskat dem.
 
 ## Arkitektur
 

@@ -1,6 +1,7 @@
 /**
- * Inloggning (P3): e-post + lösenord via Supabase Auth. Konton skapas av en
- * plattformsadmin (`admin_create_user`), så ingen registrering eller mejl behövs.
+ * Inloggning: e-post + lösenord via Supabase Auth. Spelare skapar konto själva
+ * (P20); e-postbekräftelse är avstängd i Supabase eftersom ingen SMTP finns,
+ * så glömda lösenord kan inte återställas. Admin kan fortfarande skapa konton.
  *
  * `AuthClient` är ett gränssnitt så att den lokala utvecklingsservern
  * (`npm run dev:server -w @vampyre/server`) kan användas utan Supabase.
@@ -16,6 +17,8 @@ export interface AuthClient {
   currentUser(): Promise<AuthUser | null>;
   accessToken(): Promise<string | null>;
   signIn(email: string, password: string): Promise<{ error: string | null }>;
+  /** Skapar kontot och loggar in. */
+  signUp(email: string, password: string): Promise<{ error: string | null }>;
   signOut(): Promise<void>;
   /** Anropas när användaren loggar in eller ut (även i en annan flik). Returnerar avregistrering. */
   onChange(cb: (user: AuthUser | null) => void): () => void;
@@ -37,6 +40,15 @@ export function createSupabaseAuth(url: string, anonKey: string): AuthClient {
     async signIn(email, password) {
       const { error } = await sb.auth.signInWithPassword({ email: email.trim(), password });
       return { error: error ? 'Fel e-post eller lösenord' : null };
+    },
+    async signUp(email, password) {
+      const { data, error } = await sb.auth.signUp({ email: email.trim(), password });
+      if (error) return { error: `Kunde inte skapa kontot: ${error.message}` };
+      // Utan session kräver Supabase e-postbekräftelse, som inte fungerar utan SMTP.
+      if (!data.session) {
+        return { error: 'Kontot skapades men kräver e-postbekräftelse, som inte är påslagen. Säg till admin.' };
+      }
+      return { error: null };
     },
     async signOut() {
       await sb.auth.signOut();
@@ -73,6 +85,12 @@ export function createDevAuth(baseUrl: string): AuthClient {
     for (const l of listeners) l(v?.user ?? null);
   };
   let memory = read();
+  const post = (path: string, body: unknown) =>
+    fetch(`${baseUrl}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }).catch(() => null);
   return {
     async currentUser() {
       return memory?.user ?? null;
@@ -81,12 +99,18 @@ export function createDevAuth(baseUrl: string): AuthClient {
       return memory?.token ?? null;
     },
     async signIn(email, password) {
-      const res = await fetch(`${baseUrl}/dev/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      }).catch(() => null);
+      const res = await post('/dev/login', { email, password });
       if (!res?.ok) return { error: 'Fel e-post eller lösenord' };
+      memory = (await res.json()) as { token: string; user: AuthUser };
+      write(memory);
+      return { error: null };
+    },
+    async signUp(email, password) {
+      const res = await post('/dev/signup', { email, password });
+      if (!res?.ok) {
+        const body = (await res?.json().catch(() => null)) as { error?: string } | null;
+        return { error: `Kunde inte skapa kontot: ${body?.error ?? 'okänt fel'}` };
+      }
       memory = (await res.json()) as { token: string; user: AuthUser };
       write(memory);
       return { error: null };

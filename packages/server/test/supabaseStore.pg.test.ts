@@ -94,9 +94,35 @@ describe.skipIf(!PG_URL)('SupabaseStore mot Postgres', () => {
       expect(s2.view.events.length).toBeGreaterThan(0);
       expect((await gm({ op: 'gm_events', campaignId })).events.length).toBeGreaterThan(0);
 
+      // Vampyrer på kontot (P16): skapa, ändra, ta bort mot riktiga RPC:er.
+      const build = {
+        name: 'Prince Victor',
+        concept: '',
+        clan: 'nosferatu',
+        title: 'prince',
+        disguise: null,
+        minions: { packageIndex: 0, picks: [{ type: 'primogen', name: 'The Elder' }] },
+        masteredDisciplines: ['obfuscate'],
+        startingUpgrades: [
+          { option: 2, kind: 'city_blood_flow' },
+          { option: 3, kind: 'city_intercept' },
+        ],
+        expPurchases: [{ upgrade: 'unseen' }, { upgrade: 'unseen' }],
+      } as const;
+      expect(await prince({ op: 'characters' })).toEqual({ characters: [] });
+      expect(await prince({ op: 'character_save', build })).toMatchObject({ ok: true, characterId: 'character-1' });
+      expect(await prince({ op: 'character_save', characterId: 'character-1', build: { ...build, name: 'Victor II' } })).toMatchObject({ ok: true });
+      expect(await prince({ op: 'character_save', build })).toMatchObject({ ok: true, characterId: 'character-2' });
+      expect((await prince({ op: 'character_delete', characterId: 'character-2' })).characters.map((c) => [c.id, c.build.name, c.version])).toEqual([
+        ['character-1', 'Victor II', 2],
+      ]);
+      expect(await store.getBacklog(ids.prince)).toMatchObject({ revision: 4 });
+      expect(await gm({ op: 'characters' })).toEqual({ characters: [] });
+
       // Spelaren kan inte läsa speltabellerna direkt.
       await db.query('set role authenticated');
       await expect(db.query('select * from public.game_rounds')).rejects.toThrow(/permission denied/);
+      await expect(db.query('select * from public.character_backlogs')).rejects.toThrow(/permission denied/);
       await db.query('reset role');
     } finally {
       await db.end();

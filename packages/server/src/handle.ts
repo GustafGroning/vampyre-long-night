@@ -10,7 +10,12 @@
 import {
   DEFAULT_CONTENT,
   DEMO_INPUT,
+  addCharacter,
   buildPlayerView,
+  emptyBacklog,
+  listCharacters,
+  removeCharacter,
+  updateCharacter,
   closeRound as closeWindow,
   createGameState,
   expectedPlayers,
@@ -18,8 +23,14 @@ import {
   sortedIds,
   startGame,
   submitActions,
+  type CharacterBacklog,
+  type CharacterBuild,
+  type CharacterId,
   type Content,
   type CreateGameInput,
+  type ExpPurchase,
+  type MinionPick,
+  type StartingUpgradeChoice,
   type GameState,
   type Json,
   type PlayerId,
@@ -32,6 +43,7 @@ import type {
   ApiRequest,
   ApiResponses,
   CampaignRole,
+  CharacterSaveResponse,
   SavedSubmission,
 } from './api.js';
 import type { AuthAdmin, LoadedGame, Membership, Store } from './store.js';
@@ -120,6 +132,90 @@ export function parseActions(v: unknown): SubmittedAction[] {
   });
 }
 
+const obj = (v: unknown, name: string): Record<string, unknown> => {
+  if (typeof v !== 'object' || v === null || Array.isArray(v)) throw bad(`${name} måste vara ett objekt`);
+  return v as Record<string, unknown>;
+};
+
+/** Text som får vara tom; motorn kontrollerar längd och innehåll. Taket skyddar bara lagringen. */
+function text(v: unknown, name: string, max = 5000): string {
+  if (typeof v !== 'string') throw bad(`${name} måste vara text`);
+  if (v.length > max) throw bad(`${name} är för lång`);
+  return v;
+}
+
+function num(v: unknown, name: string): number {
+  if (typeof v !== 'number' || !Number.isFinite(v)) throw bad(`${name} måste vara ett tal`);
+  return v;
+}
+
+function list(v: unknown, name: string, max: number): unknown[] {
+  if (!Array.isArray(v)) throw bad(`${name} måste vara en lista`);
+  if (v.length > max) throw bad(`${name} har för många val`);
+  return v;
+}
+
+const UPGRADE_KINDS = ['extra_discipline', 'stat', 'minion', 'blood', 'city_blood_flow', 'city_intercept', 'city_special'];
+const EXP_UPGRADES = ['extra_discipline', 'mastered_discipline', 'greater_strength', 'unseen', 'eyes_of_the_night', 'my_treasure'];
+
+function minionPick(v: unknown, name: string): MinionPick {
+  const m = obj(v, name);
+  return { type: text(m.type, `${name}.type`, 40) as MinionPick['type'], name: text(m.name, `${name}.name`, 200) };
+}
+
+/**
+ * Formen på ett bygge: bara kända fält, rätt JSON-typer och kända diskriminanter.
+ * Reglerna (klaner, titlar, poäng) kontrollerar motorn (validateCharacterBuild).
+ */
+export function parseBuild(v: unknown): CharacterBuild {
+  const b = obj(v, 'build');
+  const minions = obj(b.minions, 'build.minions');
+  const disguise = b.disguise === null || b.disguise === undefined ? null : text(b.disguise, 'build.disguise', 40);
+  return {
+    name: text(b.name, 'build.name', 200),
+    concept: text(b.concept ?? '', 'build.concept'),
+    clan: text(b.clan, 'build.clan', 40) as CharacterBuild['clan'],
+    title: text(b.title, 'build.title', 40) as CharacterBuild['title'],
+    disguise: disguise as CharacterBuild['disguise'],
+    minions: {
+      packageIndex: num(minions.packageIndex, 'build.minions.packageIndex'),
+      picks: list(minions.picks, 'build.minions.picks', 10).map((p, i) => minionPick(p, `build.minions.picks[${i}]`)),
+    },
+    masteredDisciplines: list(b.masteredDisciplines, 'build.masteredDisciplines', 10).map(
+      (d, i) => text(d, `build.masteredDisciplines[${i}]`, 40) as CharacterBuild['masteredDisciplines'][number],
+    ),
+    startingUpgrades: list(b.startingUpgrades, 'build.startingUpgrades', 4).map((raw, i): StartingUpgradeChoice => {
+      const name = `build.startingUpgrades[${i}]`;
+      const u = obj(raw, name);
+      const option = num(u.option, `${name}.option`);
+      const kind = text(u.kind, `${name}.kind`, 40);
+      if (!UPGRADE_KINDS.includes(kind)) throw bad(`${name}.kind är okänd`);
+      switch (kind) {
+        case 'extra_discipline':
+          return { option, kind, discipline: text(u.discipline, `${name}.discipline`, 40) as never };
+        case 'stat':
+          return { option, kind, stat: text(u.stat, `${name}.stat`, 40) as never };
+        case 'minion':
+          return { option, kind, minion: minionPick(u.minion, `${name}.minion`) };
+        case 'city_special':
+          return { option, kind, special: text(u.special, `${name}.special`, 60) };
+        default:
+          return { option, kind: kind as 'blood' | 'city_blood_flow' | 'city_intercept' };
+      }
+    }),
+    expPurchases: list(b.expPurchases, 'build.expPurchases', 40).map((raw, i): ExpPurchase => {
+      const name = `build.expPurchases[${i}]`;
+      const p = obj(raw, name);
+      const upgrade = text(p.upgrade, `${name}.upgrade`, 40);
+      if (!EXP_UPGRADES.includes(upgrade)) throw bad(`${name}.upgrade är okänd`);
+      if (upgrade === 'extra_discipline' || upgrade === 'mastered_discipline') {
+        return { upgrade, discipline: text(p.discipline, `${name}.discipline`, 40) as never };
+      }
+      return { upgrade: upgrade as 'greater_strength' | 'unseen' | 'eyes_of_the_night' | 'my_treasure' };
+    }),
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Hjälpare
 
@@ -178,6 +274,27 @@ function content(ctx: ServerContext): Content {
   return ctx.content ?? DEFAULT_CONTENT;
 }
 
+/** Högst så många vampyrer per konto (skydd för lagringen, P17). */
+export const MAX_CHARACTERS = 50;
+
+/**
+ * Läs, ändra och spara backloggen. Om någon annan sparade emellan (annan flik)
+ * görs ändringen om på den nya versionen, några gånger (P16).
+ */
+async function changeBacklog<T>(
+  ctx: ServerContext,
+  user: string,
+  change: (b: CharacterBacklog) => { backlog: CharacterBacklog; result: T } | { result: T },
+): Promise<T> {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const stored = await ctx.store.getBacklog(user);
+    const out = change(stored?.backlog ?? emptyBacklog(user));
+    if (!('backlog' in out)) return out.result;
+    if (await ctx.store.saveBacklog(user, out.backlog, stored?.revision ?? 0)) return out.result;
+  }
+  throw conflict('Vampyrerna ändrades samtidigt någon annanstans. Försök igen.');
+}
+
 // ---------------------------------------------------------------------------
 // Operationer
 
@@ -189,6 +306,47 @@ type Handler<K extends ApiRequest['op']> = (
 const handlers: { [K in ApiRequest['op']]: Handler<K> } = {
   async campaigns(_req, ctx) {
     return ctx.store.userCampaigns(requireUser(ctx));
+  },
+
+  async characters(_req, ctx) {
+    const stored = await ctx.store.getBacklog(requireUser(ctx));
+    return { characters: stored ? listCharacters(stored.backlog) : [] };
+  },
+
+  async character_save(req, ctx) {
+    const user = requireUser(ctx);
+    const build = parseBuild(req.build);
+    const id = req.characterId === undefined ? null : (str(req.characterId, 'characterId') as CharacterId);
+    return changeBacklog<CharacterSaveResponse>(ctx, user, (backlog) => {
+      let next: CharacterBacklog;
+      let characterId: CharacterId;
+      if (id === null) {
+        if (Object.keys(backlog.characters).length >= MAX_CHARACTERS) {
+          throw conflict(`Du kan ha högst ${MAX_CHARACTERS} vampyrer`);
+        }
+        const res = addCharacter(backlog, build, content(ctx));
+        if (!res.ok) return { result: { ok: false, issues: [...res.issues] } };
+        next = res.backlog;
+        characterId = res.characterId;
+      } else {
+        if (!backlog.characters[id]) throw notFound('Vampyren finns inte');
+        const res = updateCharacter(backlog, id, build, content(ctx));
+        if (!res.ok) return { result: { ok: false, issues: [...res.issues] } };
+        next = res.backlog;
+        characterId = id;
+      }
+      return { backlog: next, result: { ok: true, characterId, characters: listCharacters(next) } };
+    });
+  },
+
+  async character_delete(req, ctx) {
+    const user = requireUser(ctx);
+    const id = str(req.characterId, 'characterId') as CharacterId;
+    return changeBacklog(ctx, user, (backlog) => {
+      const res = removeCharacter(backlog, id);
+      if (!res.ok) throw notFound('Vampyren finns inte');
+      return { backlog: res.backlog, result: { characters: listCharacters(res.backlog) } };
+    });
   },
 
   async screen(req, ctx) {
