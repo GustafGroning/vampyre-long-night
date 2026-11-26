@@ -111,30 +111,30 @@ function analyse(
 
   // --- Namn och koncept -----------------------------------------------------
   const name = build.name.trim();
-  if (name.length === 0) add('name', 'namnet får inte vara tomt');
-  if (name.length > CHARACTER_NAME_MAX) add('name', `namnet får vara högst ${CHARACTER_NAME_MAX} tecken`);
+  if (name.length === 0) add('name', 'the name must not be empty');
+  if (name.length > CHARACTER_NAME_MAX) add('name', `the name may be at most ${CHARACTER_NAME_MAX} characters`);
   if (build.concept.length > CHARACTER_CONCEPT_MAX) {
-    add('concept', `konceptet får vara högst ${CHARACTER_CONCEPT_MAX} tecken`);
+    add('concept', `the concept may be at most ${CHARACTER_CONCEPT_MAX} characters`);
   }
 
   // --- Klan, titel och förklädnad -------------------------------------------
   // Utan giltig klan eller titel går resten inte att kontrollera. Fel i namnet
   // ska inte dölja resten (UI:t visar alla fel medan spelaren bygger).
   const before = issues.length;
-  if (!CLANS.includes(build.clan)) add('clan', `okänd klan "${build.clan}"`);
-  if (!TITLES.includes(build.title)) add('title', `okänd titel "${build.title}"`);
-  else if (!allowedTitles.includes(build.title)) add('title', `titeln ${build.title} går inte att välja`);
+  if (!CLANS.includes(build.clan)) add('clan', `unknown clan "${build.clan}"`);
+  if (!TITLES.includes(build.title)) add('title', `unknown title "${build.title}"`);
+  else if (!allowedTitles.includes(build.title)) add('title', `the title ${build.title} cannot be chosen`);
   if (build.title === 'archbishop') {
-    if (build.disguise === null) add('disguise', 'en Archbishop måste välja förklädnad (Prince eller Baron)');
-    else if (!DISGUISE_TITLES.includes(build.disguise)) add('disguise', `ogiltig förklädnad "${build.disguise}"`);
+    if (build.disguise === null) add('disguise', 'an Archbishop must choose a disguise (Prince or Baron)');
+    else if (!DISGUISE_TITLES.includes(build.disguise)) add('disguise', `invalid disguise "${build.disguise}"`);
   } else if (build.disguise !== null) {
-    add('disguise', 'bara en Archbishop har förklädnad');
+    add('disguise', 'only an Archbishop has a disguise');
   }
   if (issues.length > before) return { ok: false, issues };
 
   const pkg = startingPackageFor(content, build.title, build.disguise);
   if (pkg === null) {
-    add('title', `titeln ${build.title} saknar startpaket`);
+    add('title', `the title ${build.title} has no starting package`);
     return { ok: false, issues };
   }
   const isTremere = build.clan === 'tremere';
@@ -142,8 +142,8 @@ function analyse(
   // --- Discipliner som karaktären har --------------------------------------
   const owned = new Set<Discipline>(clanDisciplines(content, build.clan));
   const learn = (d: Discipline, path: string): void => {
-    if (!DISCIPLINES.includes(d)) add(path, `okänd disciplin "${d}"`);
-    else if (owned.has(d)) add(path, `har redan ${d}`);
+    if (!DISCIPLINES.includes(d)) add(path, `unknown discipline "${d}"`);
+    else if (owned.has(d)) add(path, `already has ${d}`);
     else owned.add(d);
   };
 
@@ -151,19 +151,19 @@ function analyse(
   const minions: { name: string; type: MinionType; level: MinionLevel }[] = [];
   const checkMinion = (pick: MinionPick, types: readonly MinionType[], level: MinionLevel, path: string): void => {
     const minionName = pick.name.trim();
-    if (minionName.length === 0) add(`${path}.name`, 'minionen måste ha ett namn');
-    if (minionName.length > CHARACTER_NAME_MAX) add(`${path}.name`, `namnet får vara högst ${CHARACTER_NAME_MAX} tecken`);
-    if (!types.includes(pick.type)) add(`${path}.type`, `${pick.type} är inte tillåten här (${types.join('/')})`);
-    if (isTremere && level === 3) add(path, 'Tremere kan inte ha LV3-minions (The broken pyramid)');
+    if (minionName.length === 0) add(`${path}.name`, 'the minion must have a name');
+    if (minionName.length > CHARACTER_NAME_MAX) add(`${path}.name`, `the name may be at most ${CHARACTER_NAME_MAX} characters`);
+    if (!types.includes(pick.type)) add(`${path}.type`, `${pick.type} is not allowed here (${types.join('/')})`);
+    if (isTremere && level === 3) add(path, 'Tremere cannot have LV3 minions (The broken pyramid)');
     minions.push({ name: minionName, type: pick.type, level });
   };
 
   const pkgIndex = build.minions.packageIndex;
   const minionPackage = pkg.minionOptions[pkgIndex];
   if (!Number.isInteger(pkgIndex) || minionPackage === undefined) {
-    add('minions.packageIndex', `minionpaket ${pkgIndex} finns inte (0–${pkg.minionOptions.length - 1})`);
+    add('minions.packageIndex', `minion package ${pkgIndex} does not exist (0–${pkg.minionOptions.length - 1})`);
   } else if (build.minions.picks.length !== minionPackage.length) {
-    add('minions.picks', `paketet har ${minionPackage.length} platser, fick ${build.minions.picks.length} val`);
+    add('minions.picks', `the package has ${minionPackage.length} slots, got ${build.minions.picks.length} choices`);
   } else {
     minionPackage.forEach((slot, i) => {
       const pick = build.minions.picks[i] as MinionPick;
@@ -184,23 +184,23 @@ function analyse(
 
   const upgradeCount = Math.min(2, pkg.upgradeOptions.length);
   if (build.startingUpgrades.length !== upgradeCount) {
-    add('startingUpgrades', `välj exakt ${upgradeCount} startuppgraderingar, fick ${build.startingUpgrades.length}`);
+    add('startingUpgrades', `choose exactly ${upgradeCount} starting upgrades, got ${build.startingUpgrades.length}`);
   }
   const usedOptions = new Set<number>();
   build.startingUpgrades.forEach((choice, i) => {
     const path = `startingUpgrades[${i}]`;
     const opt = pkg.upgradeOptions[choice.option];
     if (!Number.isInteger(choice.option) || opt === undefined) {
-      add(`${path}.option`, `alternativ ${choice.option} finns inte`);
+      add(`${path}.option`, `option ${choice.option} does not exist`);
       return;
     }
     if (usedOptions.has(choice.option)) {
-      add(`${path}.option`, `alternativ ${choice.option} är redan valt`);
+      add(`${path}.option`, `option ${choice.option} is already chosen`);
       return;
     }
     usedOptions.add(choice.option);
     if (opt.kind !== choice.kind) {
-      add(`${path}.kind`, `alternativ ${choice.option} är ${opt.kind}, inte ${choice.kind}`);
+      add(`${path}.kind`, `option ${choice.option} is ${opt.kind}, not ${choice.kind}`);
       return;
     }
     switch (choice.kind) {
@@ -209,7 +209,7 @@ function analyse(
         break;
       case 'stat':
         if (opt.kind === 'stat' && !opt.stats.includes(choice.stat)) {
-          add(`${path}.stat`, `${choice.stat} är inte tillåten (${opt.stats.join('/')})`);
+          add(`${path}.stat`, `${choice.stat} is not allowed (${opt.stats.join('/')})`);
         } else addStat(choice.stat, STAT_SOURCE_CREATION);
         break;
       case 'minion':
@@ -226,7 +226,7 @@ function analyse(
         break;
       case 'city_special':
         if (opt.kind === 'city_special' && !opt.specials.includes(choice.special)) {
-          add(`${path}.special`, `${choice.special} är inte tillåten (${opt.specials.join('/')})`);
+          add(`${path}.special`, `${choice.special} is not allowed (${opt.specials.join('/')})`);
         } else cityUpgrades.push({ kind: 'special', key: choice.special });
         break;
     }
@@ -240,14 +240,14 @@ function analyse(
   // --- Bemästrade discipliner från titeln ----------------------------------
   const mastered = new Set<Discipline>();
   const master = (d: Discipline, path: string): void => {
-    if (!owned.has(d)) add(path, `kan inte bemästra ${d}: karaktären har den inte`);
-    else if (mastered.has(d)) add(path, `${d} är redan bemästrad`);
+    if (!owned.has(d)) add(path, `cannot master ${d}: the character does not have it`);
+    else if (mastered.has(d)) add(path, `${d} is already mastered`);
     else mastered.add(d);
   };
   if (build.masteredDisciplines.length !== pkg.masteredDisciplines) {
     add(
       'masteredDisciplines',
-      `titeln ger ${pkg.masteredDisciplines} bemästrade discipliner, fick ${build.masteredDisciplines.length}`,
+      `the title gives ${pkg.masteredDisciplines} mastered disciplines, got ${build.masteredDisciplines.length}`,
     );
   }
   build.masteredDisciplines.forEach((d, i) => master(d, `masteredDisciplines[${i}]`));
@@ -260,7 +260,7 @@ function analyse(
     const path = `expPurchases[${i}]`;
     const def = content.expUpgrades[p.upgrade];
     if (def === undefined) {
-      add(`${path}.upgrade`, `okänd uppgradering "${String(p.upgrade)}"`);
+      add(`${path}.upgrade`, `unknown upgrade "${String(p.upgrade)}"`);
       return;
     }
     expSpent += def.cost;
@@ -277,16 +277,16 @@ function analyse(
         if (def.stat === null) break;
         const n = (statPurchases.get(p.upgrade) ?? 0) + 1;
         statPurchases.set(p.upgrade, n);
-        if (n > def.stat.maxPurchases) add(path, `${def.name} kan köpas högst ${def.stat.maxPurchases} gånger`);
+        if (n > def.stat.maxPurchases) add(path, `${def.name} can be bought at most ${def.stat.maxPurchases} times`);
         else addStat(def.stat.stat, `exp:${p.upgrade}`);
       }
     }
   });
   if (expSpent !== pkg.startingExp) {
-    add('expPurchases', `all start-EXP måste spenderas: titeln ger ${pkg.startingExp}, köpen kostar ${expSpent}`);
+    add('expPurchases', `all starting EXP must be spent: the title gives ${pkg.startingExp}, the purchases cost ${expSpent}`);
   }
   if (expSpent > content.rules.expLifetimeCap) {
-    add('expPurchases', `högst ${content.rules.expLifetimeCap} EXP per kampanj`);
+    add('expPurchases', `at most ${content.rules.expLifetimeCap} EXP per campaign`);
   }
 
   if (issues.length > 0) return { ok: false, issues };

@@ -96,7 +96,7 @@ describe('menyn: vad spelaren kan välja', () => {
     const baron = listAvailableActions(viewOf(state, P.baron), content, [], {});
     const sail = baron.find((i) => i.actionId === 'sail')!;
     expect(sail.available).toBe(false); // West är ingen hamn
-    expect(sail.reason).toMatch(/Inga giltiga val/);
+    expect(sail.reason).toMatch(/No valid choices/);
   });
 
   it('kostnad, inkomst och Trifle i menyn', () => {

@@ -113,7 +113,7 @@ export function listAvailableActions(
       };
       if (firstOptions && firstOptions.length === 0 && !(first?.multiple && first.multiple.min === 0)) {
         item.available = false;
-        item.reason = `Inga giltiga val för ${first!.label.toLowerCase()} just nu`;
+        item.reason = `No valid choices for ${first!.label.toLowerCase()} right now`;
       }
       out.push(item);
     }

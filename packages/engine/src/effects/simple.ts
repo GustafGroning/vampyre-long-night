@@ -40,11 +40,11 @@ type Recruitable = (typeof RECRUITABLE)[number];
 export const getAMinion = (ctx: ActionContext): ActionOutcome => {
   const type = strArg(ctx, 'type');
   const level = arg(ctx, 'level');
-  if (!RECRUITABLE.includes(type as Recruitable)) return fail('Okänd miniontyp');
-  if (level !== 1 && level !== 2 && level !== 3) return fail('Level måste vara 1–3');
-  if (level === 3 && curse(ctx) === 'the_broken_pyramid') return fail("The broken pyramid: kan inte ha Lvl 3-minions");
+  if (!RECRUITABLE.includes(type as Recruitable)) return fail('Unknown minion type');
+  if (level !== 1 && level !== 2 && level !== 3) return fail('Level must be 1–3');
+  if (level === 3 && curse(ctx) === 'the_broken_pyramid') return fail("The broken pyramid: cannot have Lvl 3 minions");
   const location = ctx.player.location;
-  if (location === null) return fail('Vampyren är inte på kartan');
+  if (location === null) return fail('The vampire is not on the map');
   const id = takeId(ctx.state.counters, 'minion');
   const def = ctx.content.minionTypes[type as Recruitable];
   ctx.state.minions[id] = {
@@ -67,9 +67,9 @@ export const getAMinion = (ctx: ActionContext): ActionOutcome => {
 export const bestowGifts = (ctx: ActionContext): ActionOutcome => {
   const id = strArg(ctx, 'minionId') as MinionId | null;
   const minion = id ? ctx.state.minions[id] : undefined;
-  if (!minion || minion.owner.kind !== 'player' || minion.owner.id !== ctx.player.id) return fail('Minionen är inte din');
+  if (!minion || minion.owner.kind !== 'player' || minion.owner.id !== ctx.player.id) return fail('The minion is not yours');
   const max = curse(ctx) === 'the_broken_pyramid' ? 2 : ctx.content.rules.minionMaxLevel;
-  if (minion.level >= max) return fail(`Minionen har redan högsta level (${max})`);
+  if (minion.level >= max) return fail(`The minion already has the highest level (${max})`);
   minion.level = (minion.level + 1) as MinionLevel;
   ctx.emit('minion_leveled', { minionId: minion.id, level: minion.level });
   return ok();
@@ -83,12 +83,12 @@ export const bestowGifts = (ctx: ActionContext): ActionOutcome => {
 export const awaken = (ctx: ActionContext): ActionOutcome => {
   const targetId = strArg(ctx, 'target') as PlayerId | null;
   const target = targetId ? ctx.state.players[targetId] : undefined;
-  if (!target || target.status === 'burned') return fail('Okänd vampyr');
+  if (!target || target.status === 'burned') return fail('Unknown vampire');
   const self = target.id === ctx.player.id;
   if (!self && (ctx.player.location === null || target.location !== ctx.player.location)) {
-    return fail('Vampyren är inte i samma stad');
+    return fail('The vampire is not in the same city');
   }
-  if (target.status !== 'torpor' || !target.torpor) return fail('Vampyren är inte i torpor');
+  if (target.status !== 'torpor' || !target.torpor) return fail('The vampire is not in torpor');
   const ticks = boon(ctx) === 'healers_and_scholars' ? 2 : 1;
   const progress = target.torpor.progress + ticks;
   const required = target.torpor.required;
@@ -111,7 +111,7 @@ export const awaken = (ctx: ActionContext): ActionOutcome => {
  */
 export const controlTheMasquerade = (ctx: ActionContext): ActionOutcome => {
   const cityId = cityArg(ctx, 'city');
-  if (cityId === null) return fail('Okänd stad');
+  if (cityId === null) return fail('Unknown city');
   const city = ctx.state.cities[cityId]!;
   const max = ctx.content.rules.cityStatMax;
   city.masquerade = Math.min(max, city.masquerade + 1);

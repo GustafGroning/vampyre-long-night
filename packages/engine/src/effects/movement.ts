@@ -51,19 +51,19 @@ export function calmSharedRegions(state: WorkingState, from: CityId, to: CityId)
 
 /** Varför förflyttningen inte går, eller null. */
 export function moveBlocked(state: WorkingState, from: CityId, to: CityId, rule: MoveRule): string | null {
-  if (from === to) return 'Utföraren är redan i staden';
+  if (from === to) return 'The performer is already in the city';
   switch (rule.kind) {
     case 'adjacent':
-      return state.cities[from]!.adjacent.includes(to) ? null : `${to} är inte en grannstad till ${from}`;
+      return state.cities[from]!.adjacent.includes(to) ? null : `${to} is not adjacent to ${from}`;
     case 'within': {
       const d = cityDistance(state, from, to);
-      return d !== null && d <= rule.steps ? null : `${to} är mer än ${rule.steps} steg från ${from}`;
+      return d !== null && d <= rule.steps ? null : `${to} is more than ${rule.steps} steps from ${from}`;
     }
     case 'sail': {
-      if (!state.cities[from]!.isPort) return `${from} är ingen hamn`;
-      if (!state.cities[to]!.isPort) return `${to} är ingen hamn`;
-      if (sharedSeaRegions(state, from, to).length === 0) return `${from} och ${to} delar ingen havsregion`;
-      return calmSharedRegions(state, from, to).length > 0 ? null : 'Storm i havsregionen';
+      if (!state.cities[from]!.isPort) return `${from} is not a port`;
+      if (!state.cities[to]!.isPort) return `${to} is not a port`;
+      if (sharedSeaRegions(state, from, to).length === 0) return `${from} and ${to} share no sea region`;
+      return calmSharedRegions(state, from, to).length > 0 ? null : 'Storm in the sea region';
     }
   }
 }
@@ -75,9 +75,9 @@ export function moveBlocked(state: WorkingState, from: CityId, to: CityId, rule:
 export function moveEffect(rule: MoveRule, key = 'to') {
   return (ctx: ActionContext): ActionOutcome => {
     const to = cityArg(ctx, key);
-    if (to === null) return fail('Okänd stad');
+    if (to === null) return fail('Unknown city');
     const from = performerCity(ctx);
-    if (from === null) return fail('Utföraren finns inte på kartan');
+    if (from === null) return fail('The performer is not on the map');
     const blocked = moveBlocked(ctx.state, from, to, rule);
     if (blocked) return fail(blocked);
     const minion = performerMinion(ctx);

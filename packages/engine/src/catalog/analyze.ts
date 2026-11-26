@@ -141,42 +141,42 @@ export function requirementProblem(
   const me = view.me;
   const fail = (code: ValidationCode, message: string) => ({ code, message });
   if (def.performer === 'vampire') {
-    if (performer.kind !== 'vampire') return fail('vampire_only', `${def.name} kan bara utföras av vampyren`);
+    if (performer.kind !== 'vampire') return fail('vampire_only', `${def.name} can only be performed by the vampire`);
     if (def.titles && !def.titles.some((t) => effectiveTitles(me).includes(t)))
-      return fail('not_eligible', `${def.name} kräver titel ${def.titles.join('/')}`);
+      return fail('not_eligible', `${def.name} requires title ${def.titles.join('/')}`);
     if (def.factions && !def.factions.some((f) => effectiveFactions(me).includes(f)))
-      return fail('not_eligible', `${def.name} kräver sekt ${def.factions.join('/')}`);
+      return fail('not_eligible', `${def.name} requires sect ${def.factions.join('/')}`);
     const req = def.requires;
-    if (req?.onlyInTorpor && me.status !== 'torpor') return fail('not_eligible', `${def.name} kan bara göras i torpor`);
+    if (req?.onlyInTorpor && me.status !== 'torpor') return fail('not_eligible', `${def.name} can only be done in torpor`);
     if (me.status === 'torpor' && !def.allowedInTorpor)
-      return fail('torpor_only_awaken', `I torpor kan vampyren bara göra Awaken (inte ${def.name})`);
-    if (req?.noTitle && me.title !== null) return fail('not_eligible', `${def.name} kräver att man saknar titel`);
+      return fail('torpor_only_awaken', `In torpor the vampire can only do Awaken (not ${def.name})`);
+    if (req?.noTitle && me.title !== null) return fail('not_eligible', `${def.name} requires having no title`);
     if (req?.archbishop === 'hidden' && !(me.title === 'archbishop' && me.disguise))
-      return fail('not_eligible', `${def.name} kräver en dold Archbishop`);
+      return fail('not_eligible', `${def.name} requires a hidden Archbishop`);
     if (req?.archbishop === 'exposed' && !(me.title === 'archbishop' && !me.disguise))
-      return fail('not_eligible', `${def.name} kräver en exponerad Archbishop`);
+      return fail('not_eligible', `${def.name} requires an exposed Archbishop`);
     if (req?.discipline && !hasDisciplineIn(view, req.discipline.key, req.discipline.level))
       return fail(
         'not_eligible',
-        `${def.name} kräver ${req.discipline.level === 'mastered' ? '(M)' : ''}${req.discipline.key}`,
+        `${def.name} requires ${req.discipline.level === 'mastered' ? '(M)' : ''}${req.discipline.key}`,
       );
     if (req?.artifact && !me.artifacts.some((a) => a.holder.kind === 'player' && a.definition === req.artifact))
-      return fail('not_eligible', `${def.name} kräver artefakten ${req.artifact}`);
+      return fail('not_eligible', `${def.name} requires the artifact ${req.artifact}`);
     return null;
   }
-  if (performer.kind !== 'minion') return fail('minion_only', `${def.name} kan bara utföras av en minion`);
+  if (performer.kind !== 'minion') return fail('minion_only', `${def.name} can only be performed by a minion`);
   const minion = me.minions.find((m) => m.id === performer.minionId);
   if (!minion) {
     return view.minions.some((m) => m.id === performer.minionId)
-      ? fail('not_your_minion', `${performer.minionId} tillhör inte spelaren`)
-      : fail('unknown_minion', `Okänd minion ${performer.minionId}`);
+      ? fail('not_your_minion', `${performer.minionId} does not belong to the player`)
+      : fail('unknown_minion', `Unknown minion ${performer.minionId}`);
   }
   if (def.requires?.zombieOnly && minion.origin.kind !== 'vestment_zombie')
-    return fail('wrong_minion_type', `${def.name} kan bara utföras av Vestment of Vileness-zombien`);
+    return fail('wrong_minion_type', `${def.name} can only be performed by the Vestment of Vileness zombie`);
   if (minion.origin.kind === 'vestment_zombie' && !def.zombie)
-    return fail('wrong_minion_type', `Zombien kan bara göra Move och Hunt for Me (gd:402)`);
+    return fail('wrong_minion_type', `The zombie can only do Move and Hunt for Me (gd:402)`);
   if (def.minionTypes && !def.minionTypes.includes(minion.type) && !(def.zombie && minion.origin.kind === 'vestment_zombie'))
-    return fail('wrong_minion_type', `${def.name} kan inte utföras av ${minion.type}`);
+    return fail('wrong_minion_type', `${def.name} cannot be performed by ${minion.type}`);
   return null;
 }
 
@@ -204,29 +204,29 @@ const wordCount = (s: string) => s.trim().split(/\s+/).filter(Boolean).length;
 function valueProblem(spec: ParamSpec, value: Json, ctx: CatalogContext): string | null {
   if (spec.kind === 'number') {
     const r = spec.range?.(ctx) ?? { min: 0, max: Number.MAX_SAFE_INTEGER, step: 1 };
-    if (typeof value !== 'number' || !Number.isInteger(value)) return `${spec.label}: måste vara ett heltal`;
-    if (value < r.min || value > r.max) return `${spec.label}: måste vara ${r.min}–${r.max}`;
-    if ((value - r.min) % r.step !== 0) return `${spec.label}: måste vara i steg om ${r.step}`;
+    if (typeof value !== 'number' || !Number.isInteger(value)) return `${spec.label}: must be an integer`;
+    if (value < r.min || value > r.max) return `${spec.label}: must be ${r.min}–${r.max}`;
+    if ((value - r.min) % r.step !== 0) return `${spec.label}: must be in steps of ${r.step}`;
     return null;
   }
   if (spec.kind === 'text') {
-    if (typeof value !== 'string' || value.trim() === '') return `${spec.label}: tom text`;
+    if (typeof value !== 'string' || value.trim() === '') return `${spec.label}: empty text`;
     if (spec.maxWords !== undefined && wordCount(value) > spec.maxWords)
-      return `${spec.label}: högst ${spec.maxWords} ord`;
+      return `${spec.label}: at most ${spec.maxWords} words`;
     return null;
   }
   const allowed = optionValues(spec.options?.(ctx) ?? []);
   if (spec.multiple) {
-    if (!Array.isArray(value)) return `${spec.label}: förväntade en lista`;
+    if (!Array.isArray(value)) return `${spec.label}: expected a list`;
     const { min, max } = spec.multiple;
     if (value.length < min || value.length > max)
-      return `${spec.label}: välj ${min === max ? min : `${min}–${max}`}`;
-    if (new Set(value.map((v) => JSON.stringify(v))).size !== value.length) return `${spec.label}: samma val två gånger`;
+      return `${spec.label}: choose ${min === max ? min : `${min}–${max}`}`;
+    if (new Set(value.map((v) => JSON.stringify(v))).size !== value.length) return `${spec.label}: the same choice twice`;
     const bad = value.find((v) => (typeof v !== 'string' && typeof v !== 'number') || !allowed.has(v));
-    return bad === undefined ? null : `${spec.label}: ${JSON.stringify(bad)} är inget giltigt val`;
+    return bad === undefined ? null : `${spec.label}: ${JSON.stringify(bad)} is not a valid choice`;
   }
   if ((typeof value !== 'string' && typeof value !== 'number') || !allowed.has(value))
-    return `${spec.label}: ${JSON.stringify(value)} är inget giltigt val`;
+    return `${spec.label}: ${JSON.stringify(value)} is not a valid choice`;
   return null;
 }
 
@@ -358,19 +358,19 @@ export function analyzeDraft(
 
   // --- Lista-nivå: Royal Privileges och Sabbat schemes
   if (!Number.isInteger(draft.royalPrivilegesToSpend) || draft.royalPrivilegesToSpend < 0) {
-    errors.push({ code: 'royal_privileges', message: 'royalPrivilegesToSpend måste vara ett heltal ≥ 0' });
+    errors.push({ code: 'royal_privileges', message: 'royalPrivilegesToSpend must be an integer ≥ 0' });
   } else if (draft.royalPrivilegesToSpend > me.royalPrivileges) {
     errors.push({
       code: 'royal_privileges',
-      message: `Har ${me.royalPrivileges} Royal Privileges, försöker använda ${draft.royalPrivilegesToSpend}`,
+      message: `Has ${me.royalPrivileges} Royal Privileges, trying to use ${draft.royalPrivilegesToSpend}`,
     });
   }
   const scheme = draft.sabbatScheme;
   if (scheme) {
     const problem =
-      me.faction === 'sabbat' ? schemeAllocationProblemFor(sabbatMembersInView(view), scheme.allocation) : 'Bara Sabbat har schemes';
+      me.faction === 'sabbat' ? schemeAllocationProblemFor(sabbatMembersInView(view), scheme.allocation) : 'Only the Sabbat has schemes';
     if (problem) errors.push({ code: 'invalid_params', message: `Sabbat scheme: ${problem}` });
-    else warnings.push({ code: 'invalid_params', message: 'Sabbat scheme gäller bara om alla Sabbat-spelare skickar identiska förslag' });
+    else warnings.push({ code: 'invalid_params', message: 'A Sabbat scheme only applies if all Sabbat players send identical proposals' });
   }
   const schemeActions = opts.schemeActions ?? (me.faction === 'sabbat' ? (scheme?.allocation[me.id] ?? 0) : 0);
   const budget = budgetFrom(
@@ -426,7 +426,7 @@ export function analyzeDraft(
       entry.errors.push(issue);
       errors.push(issue);
     };
-    if (!def) return err('unknown_action', `Okänd aktion ${action.actionId}`);
+    if (!def) return err('unknown_action', `Unknown action ${action.actionId}`);
     const req = requirementProblem(def, view, action.performer);
     if (req) return err(req.code, req.message);
 
@@ -435,11 +435,11 @@ export function analyzeDraft(
     entry.complete = pc.complete;
     entry.nextParam = pc.next;
     if (pc.error) err('invalid_params', pc.error);
-    else if (!pc.complete) err('incomplete', `${def.name}: ${pc.next?.label ?? 'val'} saknas`);
+    else if (!pc.complete) err('incomplete', `${def.name}: ${pc.next?.label ?? 'choice'} is missing`);
 
     if (pc.complete || typeof def.cost === 'number') {
       const cost = actionCost(def, ctx);
-      if (!Number.isInteger(cost) || cost < 0) err('invalid_params', `Ogiltig kostnad ${cost}`);
+      if (!Number.isInteger(cost) || cost < 0) err('invalid_params', `Invalid cost ${cost}`);
       else entry.cost = cost;
     } else if (!def.variableCost) {
       // Ofullständig entry: visa kostnaden om den inte beror på valen (Move: 5/10).
@@ -457,14 +457,14 @@ export function analyzeDraft(
       costs.push([index, entry.cost]);
     }
     if (action.performer.kind === 'vampire') {
-      if (endsTurnAt !== null) err('after_ends_turn', `Inga vampyraktioner efter Hide (entry ${endsTurnAt + 1})`);
+      if (endsTurnAt !== null) err('after_ends_turn', `No vampire actions after Hide (entry ${endsTurnAt + 1})`);
       if (def.endsTurn && endsTurnAt === null) endsTurnAt = index;
       vampireEntries.push(index);
 
       const n = (perAction.get(def.id) ?? 0) + 1;
       perAction.set(def.id, n);
       if (def.maxPerRound !== undefined && n > def.maxPerRound)
-        err('max_per_round', `${def.name} får göras högst ${def.maxPerRound} gång(er) per rond`);
+        err('max_per_round', `${def.name} may be done at most ${def.maxPerRound} time(s) per round`);
 
       if (def.grantsMinionAction && pc.complete) {
         const target = action.params?.minionId as MinionId;
@@ -480,7 +480,7 @@ export function analyzeDraft(
       if (costsSlot) {
         entry.ap = 1;
         slotsUsed += 1;
-        if (slotsUsed > budget.total) err('over_budget', `Listan använder fler än ${budget.total} action points`);
+        if (slotsUsed > budget.total) err('over_budget', `The list uses more than ${budget.total} action points`);
       }
       if (def.forbidsMovement) forbidsMovement.push(index);
     } else {
@@ -488,7 +488,7 @@ export function analyzeDraft(
       const used = (minionUses.get(id) ?? 0) + 1;
       minionUses.set(id, used);
       // Anarch Mission måste stå före minionens extra aktion ("buffs before target", gd:95).
-      if (used > 1 + (minionExtra.get(id) ?? 0)) err('minion_over_budget', `${id} har redan använt sina minionaktioner`);
+      if (used > 1 + (minionExtra.get(id) ?? 0)) err('minion_over_budget', `${id} has already used its minion actions`);
     }
 
     if (def.oncePerRoundPer && pc.complete) {
@@ -496,7 +496,7 @@ export function analyzeDraft(
       const k = `${def.id}\u0000${target}`;
       const n = (perTarget.get(k) ?? 0) + 1;
       perTarget.set(k, n);
-      if (n > 1) err('max_per_target', `${def.name} får bara göras en gång per rond mot samma mål`);
+      if (n > 1) err('max_per_target', `${def.name} may only be done once per round against the same target`);
     }
 
     if (pc.complete) {
@@ -518,19 +518,19 @@ export function analyzeDraft(
   // Exclusive (Go Anarch): måste vara enda vampyraktionen. Flagga sista vampyraktionen.
   const exclusive = vampireEntries.some((i) => registry[draft.actions[i]!.actionId]?.exclusive);
   if (exclusive && vampireEntries.length > 1)
-    flag(vampireEntries[vampireEntries.length - 1]!, 'exclusive_action', 'Go Anarch måste vara rondens enda vampyraktion');
+    flag(vampireEntries[vampireEntries.length - 1]!, 'exclusive_action', 'Go Anarch must be the round\'s only vampire action');
 
   // Bottomless Wealth: ingen förflyttning samma rond. Flagga den senare av de två.
   if (forbidsMovement.length > 0 && movingVampire.length > 0) {
     const last = Math.max(forbidsMovement[0]!, movingVampire[movingVampire.length - 1]!);
-    flag(last, 'movement_forbidden', 'Vampyren kan inte förflytta sig samma rond som Bottomless Wealth of the Camarilla');
+    flag(last, 'movement_forbidden', 'The vampire cannot move in the same round as Bottomless Wealth of the Camarilla');
   }
 
   // Minions som följer med (Expansion, Second Tradition) får inte agera.
   for (const e of entries) {
     const p = e.performer;
     if (p.kind === 'minion' && locked.has(p.minionId) && e.errors.length === 0)
-      flag(e.index, 'minion_locked', `${p.minionId} följer med entry ${locked.get(p.minionId)! + 1} och kan inte agera denna rond`);
+      flag(e.index, 'minion_locked', `${p.minionId} comes along with entry ${locked.get(p.minionId)! + 1} and cannot act this round`);
   }
 
   // Råd (M7): total kostnad ≤ blood. Flagga sista entry med kostnad > 0.
@@ -538,13 +538,13 @@ export function analyzeDraft(
   const upkeep = me.minions.filter((m) => m.acquiredRound < view.round).reduce((s, m) => s + m.upkeep, 0);
   if (totalCost > me.blood) {
     const last = [...costs].reverse().find(([, c]) => c > 0);
-    const message = `Listan kostar ${totalCost} blood, har ${me.blood}`;
+    const message = `The list costs ${totalCost} blood, has ${me.blood}`;
     if (last) flag(last[0], 'unaffordable', message);
     else errors.push({ code: 'unaffordable', message });
   } else if (totalCost + upkeep > me.blood) {
     warnings.push({
       code: 'unaffordable',
-      message: `Kostnad ${totalCost} + upkeep ${upkeep} överstiger ${me.blood} blood; minions kan brännas`,
+      message: `Cost ${totalCost} + upkeep ${upkeep} exceeds ${me.blood} blood; minions may be burned`,
     });
   }
 

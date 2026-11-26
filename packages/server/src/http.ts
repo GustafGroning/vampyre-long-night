@@ -32,13 +32,13 @@ export interface HttpDeps {
 
 export async function handleHttp(request: Request, deps: HttpDeps): Promise<Response> {
   if (request.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS });
-  if (request.method !== 'POST') return json(405, errorBody('bad_request', 'Bara POST'));
+  if (request.method !== 'POST') return json(405, errorBody('bad_request', 'Only POST'));
 
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return json(400, errorBody('bad_request', 'Ogiltig JSON'));
+    return json(400, errorBody('bad_request', 'Invalid JSON'));
   }
 
   const auth = request.headers.get('Authorization') ?? '';
@@ -51,6 +51,6 @@ export async function handleHttp(request: Request, deps: HttpDeps): Promise<Resp
   } catch (e) {
     if (e instanceof ApiError) return json(e.status, errorBody(e.code, e.message));
     deps.logError?.(e);
-    return json(500, errorBody('internal', 'Serverfel'));
+    return json(500, errorBody('internal', 'Server error'));
   }
 }

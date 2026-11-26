@@ -18,7 +18,7 @@ export const BRITISH_ISLES_MAP: MapTemplate = {
   key: 'british_isles',
   name: 'The British Isles',
   provisional: true,
-  notes: 'Rekonstruerad från prototypens plan 001. Startvärden och havsregioner är gissningar.',
+  notes: 'Reconstructed from the prototype\'s plan 001. Starting values and sea regions are guesses.',
   seaRegions: [
     { key: 'north_sea', name: 'North Sea' },
     { key: 'irish_sea', name: 'Irish Sea' },

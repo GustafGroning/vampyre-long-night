@@ -59,7 +59,7 @@ export type LobbyResult =
 const matches = (build: CharacterBuild, a: TitleAssignment): boolean =>
   build.title === a.title && build.disguise === a.disguise;
 
-const label = (a: TitleAssignment): string => (a.disguise === null ? a.title : `${a.title} (som ${a.disguise})`);
+const label = (a: TitleAssignment): string => (a.disguise === null ? a.title : `${a.title} (as ${a.disguise})`);
 
 /**
  * GM ger en spelare en titel. Kan ändras så länge spelaren inte gått med med en
@@ -68,18 +68,18 @@ const label = (a: TitleAssignment): string => (a.disguise === null ? a.title : `
 export function assignTitle(lobby: CampaignLobby, userId: string, assignment: TitleAssignment): LobbyResult {
   const fail = (path: string, message: string): LobbyResult => ({ ok: false, issues: [{ path, message }] });
   if (!lobby.config.allowedTitles.includes(assignment.title)) {
-    return fail('title', `titeln ${assignment.title} används inte i kampanjen`);
+    return fail('title', `the title ${assignment.title} is not used in the campaign`);
   }
   if (assignment.title === 'archbishop') {
     if (assignment.disguise === null || !DISGUISE_TITLES.includes(assignment.disguise)) {
-      return fail('disguise', 'en Archbishop måste få förklädnad (Prince eller Baron)');
+      return fail('disguise', 'an Archbishop must be given a disguise (Prince or Baron)');
     }
   } else if (assignment.disguise !== null) {
-    return fail('disguise', 'bara en Archbishop har förklädnad');
+    return fail('disguise', 'only an Archbishop has a disguise');
   }
   const seat = lobby.seats.find((s) => s.userId === userId);
   if (seat !== undefined && !matches(seat.build, assignment)) {
-    return fail('userId', 'spelaren har redan gått med med en karaktär av en annan titel och måste lämna först');
+    return fail('userId', 'the player has already joined with a character of another title and must leave first');
   }
   return { ok: true, lobby: { ...lobby, assignments: { ...lobby.assignments, [userId]: assignment } } };
 }
@@ -121,14 +121,14 @@ export function joinCampaign(
   const options = { allowedTitles: lobby.config.allowedTitles };
 
   const assignment = lobby.assignments[userId];
-  if (assignment === undefined) return fail('userId', 'spelaren har inte fått någon titel i kampanjen');
-  if (lobby.seats.some((s) => s.userId === userId)) return fail('userId', 'spelaren är redan med i kampanjen');
-  if (lobby.seats.length >= lobby.config.maxPlayers) return fail('lobby', 'kampanjen är full');
+  if (assignment === undefined) return fail('userId', 'the player has not been given a title in the campaign');
+  if (lobby.seats.some((s) => s.userId === userId)) return fail('userId', 'the player is already in the campaign');
+  if (lobby.seats.length >= lobby.config.maxPlayers) return fail('lobby', 'the campaign is full');
 
   let build: CharacterBuild;
   if (request.kind === 'existing') {
     const sheet = backlog.characters[request.characterId];
-    if (sheet === undefined) return fail('characterId', `okänd karaktär ${request.characterId}`);
+    if (sheet === undefined) return fail('characterId', `unknown character ${request.characterId}`);
     build = sheet.build;
   } else {
     build = request.build;
@@ -139,8 +139,8 @@ export function joinCampaign(
     return fail(
       'title',
       request.kind === 'existing'
-        ? `karaktären är ${own}, men du har fått ${label(assignment)} i kampanjen: välj en annan eller skapa en ny`
-        : `karaktären måste vara ${label(assignment)}, inte ${own}`,
+        ? `the character is ${own}, but you have been given ${label(assignment)} in the campaign: choose another or create a new one`
+        : `the character must be ${label(assignment)}, not ${own}`,
     );
   }
 

@@ -139,7 +139,7 @@ describe('validateCharacterBuild', () => {
   });
 
   it('nekar Justicar i V1', () => {
-    expect(messages({ ...PRINCE, title: 'justicar' })).toEqual(['title: titeln justicar går inte att välja']);
+    expect(messages({ ...PRINCE, title: 'justicar' })).toEqual(['title: the title justicar cannot be chosen']);
   });
 
   it('tillåter Justicar om kampanjen uttryckligen tillåter den', () => {
@@ -158,9 +158,9 @@ describe('validateCharacterBuild', () => {
 
   it('kräver förklädnad för Archbishop och bara för Archbishop', () => {
     expect(messages({ ...ARCHBISHOP, disguise: null })).toEqual([
-      'disguise: en Archbishop måste välja förklädnad (Prince eller Baron)',
+      'disguise: an Archbishop must choose a disguise (Prince or Baron)',
     ]);
-    expect(messages({ ...PRINCE, disguise: 'baron' })).toEqual(['disguise: bara en Archbishop har förklädnad']);
+    expect(messages({ ...PRINCE, disguise: 'baron' })).toEqual(['disguise: only an Archbishop has a disguise']);
   });
 
   it('Archbishop använder förklädnadens startpaket', () => {
@@ -172,10 +172,10 @@ describe('validateCharacterBuild', () => {
 
   it('kräver att all start-EXP spenderas, varken mer eller mindre', () => {
     expect(messages({ ...PRINCE, expPurchases: [{ upgrade: 'unseen' }] })).toEqual([
-      'expPurchases: all start-EXP måste spenderas: titeln ger 4, köpen kostar 2',
+      'expPurchases: all starting EXP must be spent: the title gives 4, the purchases cost 2',
     ]);
     expect(messages({ ...PRINCE, expPurchases: [...PRINCE.expPurchases, { upgrade: 'my_treasure' }] })).toEqual([
-      'expPurchases: all start-EXP måste spenderas: titeln ger 4, köpen kostar 5',
+      'expPurchases: all starting EXP must be spent: the title gives 4, the purchases cost 5',
     ]);
   });
 
@@ -191,12 +191,12 @@ describe('validateCharacterBuild', () => {
     expect(messages(build)).toEqual([]);
     expect(
       messages({ ...build, expPurchases: [...build.expPurchases.slice(0, 2), { upgrade: 'greater_strength' }, { upgrade: 'greater_strength' }] }),
-    ).toContain('expPurchases[3]: Greater strength kan köpas högst 3 gånger');
+    ).toContain('expPurchases[3]: Greater strength can be bought at most 3 times');
   });
 
   it('bemästrar bara discipliner karaktären har, och bara en gång', () => {
     expect(messages({ ...PRINCE, masteredDisciplines: ['auspex'] })).toEqual([
-      'masteredDisciplines[0]: kan inte bemästra auspex: karaktären har den inte',
+      'masteredDisciplines[0]: cannot master auspex: the character does not have it',
     ]);
     expect(
       messages({
@@ -207,12 +207,12 @@ describe('validateCharacterBuild', () => {
           { upgrade: 'unseen' },
         ],
       }),
-    ).toEqual(['expPurchases[0].discipline: obfuscate är redan bemästrad']);
+    ).toEqual(['expPurchases[0].discipline: obfuscate is already mastered']);
   });
 
   it('kräver titelns antal bemästrade discipliner', () => {
     expect(messages({ ...INNER_CIRCLE, masteredDisciplines: ['dominate'] })).toEqual([
-      'masteredDisciplines: titeln ger 3 bemästrade discipliner, fick 1',
+      'masteredDisciplines: the title gives 3 mastered disciplines, got 1',
     ]);
   });
 
@@ -233,34 +233,34 @@ describe('validateCharacterBuild', () => {
           { option: 3, kind: 'city_special', special: 'anarch_free_press' },
         ],
       }),
-    ).toContain('startingUpgrades[0].discipline: har redan celerity');
+    ).toContain('startingUpgrades[0].discipline: already has celerity');
   });
 
   it('kräver två olika startuppgraderingar som matchar titelns alternativ', () => {
     expect(messages({ ...PRINCE, startingUpgrades: [PRINCE.startingUpgrades[0]!] })).toEqual([
-      'startingUpgrades: välj exakt 2 startuppgraderingar, fick 1',
+      'startingUpgrades: choose exactly 2 starting upgrades, got 1',
     ]);
     expect(
       messages({ ...PRINCE, startingUpgrades: [PRINCE.startingUpgrades[0]!, PRINCE.startingUpgrades[0]!] }),
-    ).toEqual(['startingUpgrades[1].option: alternativ 2 är redan valt']);
+    ).toEqual(['startingUpgrades[1].option: option 2 is already chosen']);
     expect(
       messages({ ...PRINCE, startingUpgrades: [{ option: 0, kind: 'blood' }, PRINCE.startingUpgrades[1]!] }),
-    ).toEqual(['startingUpgrades[0].kind: alternativ 0 är extra_discipline, inte blood']);
+    ).toEqual(['startingUpgrades[0].kind: option 0 is extra_discipline, not blood']);
     expect(
       messages({ ...PRINCE, startingUpgrades: [{ option: 1, kind: 'stat', stat: 'intercept' }, PRINCE.startingUpgrades[1]!] }),
-    ).toEqual(['startingUpgrades[0].stat: intercept är inte tillåten (stealth/strength)']);
+    ).toEqual(['startingUpgrades[0].stat: intercept is not allowed (stealth/strength)']);
   });
 
   it('kontrollerar minionpaketet: index, antal, typ och namn', () => {
     expect(messages({ ...PRINCE, minions: { packageIndex: 2, picks: [] } })).toEqual([
-      'minions.packageIndex: minionpaket 2 finns inte (0–1)',
+      'minions.packageIndex: minion package 2 does not exist (0–1)',
     ]);
     expect(messages({ ...PRINCE, minions: { packageIndex: 0, picks: [] } })).toEqual([
-      'minions.picks: paketet har 1 platser, fick 0 val',
+      'minions.picks: the package has 1 slots, got 0 choices',
     ]);
     expect(messages({ ...PRINCE, minions: { packageIndex: 0, picks: [{ type: 'ghoul', name: ' ' }] } })).toEqual([
-      'minions.picks[0].name: minionen måste ha ett namn',
-      'minions.picks[0].type: ghoul är inte tillåten här (primogen)',
+      'minions.picks[0].name: the minion must have a name',
+      'minions.picks[0].type: ghoul is not allowed here (primogen)',
     ]);
   });
 
@@ -281,7 +281,7 @@ describe('validateCharacterBuild', () => {
       ],
     };
     expect(messages(tremere)).toEqual([
-      'startingUpgrades[0].minion: Tremere kan inte ha LV3-minions (The broken pyramid)',
+      'startingUpgrades[0].minion: Tremere cannot have LV3 minions (The broken pyramid)',
     ]);
     expect(messages({ ...tremere, clan: 'ventrue', masteredDisciplines: INNER_CIRCLE.masteredDisciplines })).toEqual(
       [],
@@ -289,13 +289,13 @@ describe('validateCharacterBuild', () => {
   });
 
   it('kräver ett namn', () => {
-    expect(messages({ ...PRINCE, name: '   ' })).toEqual(['name: namnet får inte vara tomt']);
+    expect(messages({ ...PRINCE, name: '   ' })).toEqual(['name: the name must not be empty']);
   });
 
   it('ett fel i namnet döljer inte resten av felen', () => {
     expect(messages({ ...PRINCE, name: '', expPurchases: [] })).toEqual([
-      'name: namnet får inte vara tomt',
-      'expPurchases: all start-EXP måste spenderas: titeln ger 4, köpen kostar 0',
+      'name: the name must not be empty',
+      'expPurchases: all starting EXP must be spent: the title gives 4, the purchases cost 0',
     ]);
   });
 });
@@ -385,9 +385,9 @@ describe('assignTitle', () => {
       const r = assignTitle(lobby, 'user-a', { title, disguise });
       return r.ok ? null : r.issues[0]?.message;
     };
-    expect(msg('justicar', null)).toBe('titeln justicar används inte i kampanjen');
-    expect(msg('archbishop', null)).toBe('en Archbishop måste få förklädnad (Prince eller Baron)');
-    expect(msg('prince', 'baron')).toBe('bara en Archbishop har förklädnad');
+    expect(msg('justicar', null)).toBe('the title justicar is not used in the campaign');
+    expect(msg('archbishop', null)).toBe('an Archbishop must be given a disguise (Prince or Baron)');
+    expect(msg('prince', 'baron')).toBe('only an Archbishop has a disguise');
     expect(msg('archbishop', 'prince')).toBeNull();
   });
 
@@ -422,7 +422,7 @@ describe('joinCampaign', () => {
 
     const wrong = joinCampaign(lobby, backlog, { kind: 'existing', characterId: ids[0]! }, content);
     expect(!wrong.ok && wrong.issues[0]?.message).toBe(
-      'karaktären är prince, men du har fått baron i kampanjen: välj en annan eller skapa en ny',
+      'the character is prince, but you have been given baron in the campaign: choose another or create a new one',
     );
     const fresh = joinCampaign(lobby, backlog, { kind: 'new', build: { ...BARON, name: 'Ny baron' } }, content);
     expect(fresh.ok).toBe(true);
@@ -434,7 +434,7 @@ describe('joinCampaign', () => {
     expect(eligibleCharacters(asPrince, backlog)).toEqual([]);
     const r = joinCampaign(asPrince, backlog, { kind: 'existing', characterId: ids[0]! }, content);
     expect(!r.ok && r.issues[0]?.message).toBe(
-      'karaktären är archbishop (som baron), men du har fått archbishop (som prince) i kampanjen: välj en annan eller skapa en ny',
+      'the character is archbishop (as baron), but you have been given archbishop (as prince) in the campaign: choose another or create a new one',
     );
     const asBaron = assign(createLobby('c1'), 'user-a', 'archbishop', 'baron');
     expect(joinCampaign(asBaron, backlog, { kind: 'existing', characterId: ids[0]! }, content).ok).toBe(true);
@@ -443,7 +443,7 @@ describe('joinCampaign', () => {
   it('nekar en ny karaktär med fel titel', () => {
     const lobby = assign(createLobby('c1'), 'user-b', 'baron');
     const r = joinCampaign(lobby, emptyBacklog('user-b'), { kind: 'new', build: PRINCE }, content);
-    expect(!r.ok && r.issues[0]?.message).toBe('karaktären måste vara baron, inte prince');
+    expect(!r.ok && r.issues[0]?.message).toBe('the character must be baron, not prince');
   });
 
   it('går med med en ny karaktär som också sparas i backloggen', () => {
@@ -464,7 +464,7 @@ describe('joinCampaign', () => {
     const { backlog, ids } = backlogWith('user-a', PRINCE);
     let lobby = createLobby('c1', { maxPlayers: 2 });
     const noTitle = joinCampaign(lobby, backlog, { kind: 'existing', characterId: ids[0]! }, content);
-    expect(!noTitle.ok && noTitle.issues[0]?.message).toBe('spelaren har inte fått någon titel i kampanjen');
+    expect(!noTitle.ok && noTitle.issues[0]?.message).toBe('the player has not been given a title in the campaign');
 
     lobby = assign(assign(assign(lobby, 'user-a', 'prince'), 'user-b', 'baron'), 'user-c', 'inner_circle');
     expect(joinCampaign(lobby, backlog, { kind: 'existing', characterId: 'character-9' as CharacterId }, content).ok).toBe(
@@ -474,12 +474,12 @@ describe('joinCampaign', () => {
     const first = joinCampaign(lobby, backlog, { kind: 'existing', characterId: ids[0]! }, content);
     if (!first.ok) throw new Error('join');
     const again = joinCampaign(first.lobby, first.backlog, { kind: 'new', build: PRINCE }, content);
-    expect(!again.ok && again.issues[0]?.message).toBe('spelaren är redan med i kampanjen');
+    expect(!again.ok && again.issues[0]?.message).toBe('the player is already in the campaign');
 
     const second = joinCampaign(first.lobby, emptyBacklog('user-b'), { kind: 'new', build: BARON }, content);
     if (!second.ok) throw new Error('join');
     const third = joinCampaign(second.lobby, emptyBacklog('user-c'), { kind: 'new', build: INNER_CIRCLE }, content);
-    expect(!third.ok && third.issues[0]?.message).toBe('kampanjen är full');
+    expect(!third.ok && third.issues[0]?.message).toBe('the campaign is full');
   });
 
   it('leaveCampaign frigör platsen men behåller karaktären i backloggen', () => {
@@ -579,7 +579,7 @@ describe('buildCampaignInput', () => {
       { lobby: fullLobby(), seed: 's', map: TEST_MAP, placements: PLACEMENTS, artifactKeys: ['ring_of_tremere', 'black_gloves', 'fog_flute'] },
       content,
     );
-    expect(!r.ok && r.issues[0]?.message).toBe('ring_of_tremere kan inte ligga i poolen än: valet av disciplin saknar flöde');
+    expect(!r.ok && r.issues[0]?.message).toBe('ring_of_tremere cannot be in the pool yet: choosing the discipline has no flow');
   });
 
   it('rapporterar när artefaktpoolen inte räcker', () => {
@@ -588,8 +588,8 @@ describe('buildCampaignInput', () => {
       content,
     );
     expect(!r.ok && r.issues.map((i) => `${i.path}: ${i.message}`)).toEqual([
-      'seats[0].artifacts: artefaktpoolen räcker inte till alla startartefakter',
-      'seats[2].artifacts: artefaktpoolen räcker inte till alla startartefakter',
+      'seats[0].artifacts: the artifact pool is not large enough for all starting artifacts',
+      'seats[2].artifacts: the artifact pool is not large enough for all starting artifacts',
     ]);
   });
 
@@ -606,14 +606,14 @@ describe('buildCampaignInput', () => {
     );
     expect(r.ok).toBe(false);
     expect(!r.ok && r.issues.map((i) => i.message)).toEqual([
-      'okänd stad "atlantis"',
-      'north är redan startstad för Prince Victor',
-      'Brother Szlachta saknar startplats',
+      'unknown city "atlantis"',
+      'north is already the starting city of Prince Victor',
+      'Brother Szlachta has no starting location',
     ]);
   });
 
   it('nekar en tom kampanj', () => {
     const r = buildCampaignInput({ lobby: createLobby('c'), seed: 's', map: TEST_MAP, placements: {} }, content);
-    expect(!r.ok && r.issues[0]?.message).toBe('kampanjen har inga spelare');
+    expect(!r.ok && r.issues[0]?.message).toBe('the campaign has no players');
   });
 });

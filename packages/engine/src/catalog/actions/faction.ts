@@ -50,7 +50,7 @@ const COMMON: ActionDefinition[] = [
     params: [
       {
         key: 'recipient',
-        label: 'Mottagare',
+        label: 'Recipient',
         kind: 'player',
         options: (ctx) => [...vampires(ctx), ...ctx.view.npcs.map((n) => ({ value: n.id, label: n.name }))],
       },
@@ -58,7 +58,7 @@ const COMMON: ActionDefinition[] = [
       { key: 'minions', label: 'Minions', kind: 'minion', multiple: { min: 0, max: 99 }, options: (ctx) => ownMinions(ctx) },
       {
         key: 'artifacts',
-        label: 'Artefakter',
+        label: 'Artifacts',
         kind: 'artifact',
         multiple: { min: 0, max: 99 },
         options: ({ view, content }) =>
@@ -67,7 +67,7 @@ const COMMON: ActionDefinition[] = [
     ],
     eligible: (ctx) =>
       numParam(ctx, 'blood') === 0 && listParam(ctx, 'minions').length === 0 && listParam(ctx, 'artifacts').length === 0
-        ? 'Give måste ge något'
+        ? 'Give must give something'
         : null,
   }),
   define({
@@ -78,7 +78,7 @@ const COMMON: ActionDefinition[] = [
     stealth: -3,
     cost: 25,
     params: [
-      cityParam('city', 'Stad du contestar', (ctx) =>
+      cityParam('city', 'City you contest', (ctx) =>
         allCities(ctx, (c) => c.contestants.some((x) => x.playerId === ctx.view.me.id)),
       ),
     ],
@@ -90,7 +90,7 @@ const COMMON: ActionDefinition[] = [
     performer: 'vampire',
     stealth: 0,
     cost: 20,
-    params: [cityParam('city', 'Stad i din domän', domainCities)],
+    params: [cityParam('city', 'City in your domain', domainCities)],
   }),
   define({
     id: 'conquer_new_territory',
@@ -113,7 +113,7 @@ const COMMON: ActionDefinition[] = [
     params: [
       {
         key: 'blood',
-        label: 'Blood (10 per röst)',
+        label: 'Blood (10 per vote)',
         kind: 'number',
         range: ({ view }) => ({ min: 10, max: Math.max(10, view.me.blood - (view.me.blood % 10)), step: 10 }),
       },
@@ -145,7 +145,7 @@ const CAMARILLA: ActionDefinition[] = [
     cost: 10,
     trifle: true,
     factions: ['camarilla'],
-    params: [anyCity('city', 'Stad')],
+    params: [anyCity('city', 'City')],
   }),
   define({
     id: 'claim_credit',
@@ -156,7 +156,7 @@ const CAMARILLA: ActionDefinition[] = [
     cost: ({ view }) => (view.me.title === 'inner_circle' ? 0 : 25),
     factions: ['camarilla'],
     maxPerRound: 1,
-    params: [playerParam('target', 'Prince eller Justicar', { titles: ['prince', 'justicar'] })],
+    params: [playerParam('target', 'Prince or Justicar', { titles: ['prince', 'justicar'] })],
   }),
   define({
     id: 'invite_to_the_camarilla',
@@ -189,10 +189,10 @@ const CAMARILLA: ActionDefinition[] = [
     titles: ['prince'],
     oncePerRoundPer: 'city',
     params: [
-      cityParam('city', 'Stad du kontrollerar', controlledCities),
+      cityParam('city', 'City you control', controlledCities),
       {
         key: 'picks',
-        label: 'Tre förbättringar',
+        label: 'Three improvements',
         kind: 'choice',
         multiple: { min: 3, max: 3 },
         options: () => KINGDOM_PICKS.map(([value, label, cost]) => ({ value, label, hint: `${cost} blood` })),
@@ -208,10 +208,10 @@ const CAMARILLA: ActionDefinition[] = [
     cost: 15,
     titles: ['prince'],
     params: [
-      characterParam('target', 'Vampyr eller minion i din domän'),
+      characterParam('target', 'Vampire or minion in your domain'),
       {
         key: 'harpies',
-        label: 'Harpies som följer med',
+        label: 'Harpies that come along',
         kind: 'minion',
         multiple: { min: 0, max: 99 },
         options: (ctx) => {
@@ -251,20 +251,20 @@ const CAMARILLA: ActionDefinition[] = [
     titles: ['prince'],
     params: (ctx) => {
       const base: ParamSpec[] = [
-        cityParam('city', 'Stad intill en du kontrollerar', (c) => {
+        cityParam('city', 'City adjacent to one you control', (c) => {
           const mine = c.view.cities.filter((x) => x.controllerId === c.view.me.id);
           const near = new Set(mine.flatMap((x) => x.adjacent));
           return allCities(c, (x) => near.has(x.id) && x.controllerId !== c.view.me.id);
         }),
-        choiceParam('mode', 'Hur', [
-          ['pay', 'Betala blood flow × 10 och ta staden'],
-          ['contest', 'Flytta dit och contesta'],
+        choiceParam('mode', 'How', [
+          ['pay', 'Pay blood flow × 10 and take the city'],
+          ['contest', 'Move there and contest'],
         ]),
       ];
       if (strParam(ctx, 'mode') === 'contest')
         base.push({
           key: 'minions',
-          label: 'Minions som följer med',
+          label: 'Minions that come along',
           kind: 'minion',
           multiple: { min: 0, max: 99 },
           options: (c) => ownMinions(c, { inCity: c.positions.vampire }),
@@ -295,7 +295,7 @@ const CAMARILLA: ActionDefinition[] = [
     },
     titles: ['prince'],
     params: [
-      cityParam('city', 'Stad i din domän', domainCities),
+      cityParam('city', 'City in your domain', domainCities),
       { key: 'level', label: 'Level', kind: 'number', range: () => ({ min: 1, max: 3, step: 1 }) },
     ],
   }),
@@ -307,7 +307,7 @@ const CAMARILLA: ActionDefinition[] = [
     stealth: 0,
     cost: 20,
     titles: ['prince'],
-    params: [anyCity('city', 'Stad'), choiceParam('stat', 'Effekt', STABILITY_OR_INTERCEPT)],
+    params: [anyCity('city', 'City'), choiceParam('stat', 'Effect', STABILITY_OR_INTERCEPT)],
   }),
   // --- Justicar
   define({
@@ -318,7 +318,7 @@ const CAMARILLA: ActionDefinition[] = [
     stealth: 0,
     cost: 20,
     titles: ['justicar'],
-    params: [characterParam('target', 'Vampyr eller minion')],
+    params: [characterParam('target', 'Vampire or minion')],
   }),
   define({
     id: 'investigate_the_sabbat',
@@ -328,7 +328,7 @@ const CAMARILLA: ActionDefinition[] = [
     stealth: 1,
     cost: 10,
     titles: ['justicar'],
-    params: [anyCity('city', 'Stad')],
+    params: [anyCity('city', 'City')],
   }),
   define({
     id: 'expose_the_sabbat',
@@ -339,7 +339,7 @@ const CAMARILLA: ActionDefinition[] = [
     cost: 50,
     titles: ['justicar'],
     maxPerRound: 1,
-    params: [playerParam('target', 'Prince eller Baron i samma stad', { titles: ['prince', 'baron'] })],
+    params: [playerParam('target', 'Prince or Baron in the same city', { titles: ['prince', 'baron'] })],
   }),
   // --- Inner Circle
   define({
@@ -364,7 +364,7 @@ const CAMARILLA: ActionDefinition[] = [
     trifle: true,
     titles: ['inner_circle'],
     maxPerRound: 1,
-    params: [playerParam('target', 'Prince eller Justicar', { titles: ['prince', 'justicar'] })],
+    params: [playerParam('target', 'Prince or Justicar', { titles: ['prince', 'justicar'] })],
   }),
   define({
     id: 'fifth_tradition',
@@ -384,7 +384,7 @@ const CAMARILLA: ActionDefinition[] = [
     cost: 0,
     titles: ['inner_circle'],
     oncePerRoundPer: 'target',
-    params: [playerParam('target', 'Camarilla-vampyr', { factions: ['camarilla'] })],
+    params: [playerParam('target', 'Camarilla vampire', { factions: ['camarilla'] })],
   }),
   define({
     id: 'pardon',
@@ -394,7 +394,7 @@ const CAMARILLA: ActionDefinition[] = [
     stealth: 'cant_be_hidden',
     cost: 25,
     titles: ['inner_circle'],
-    params: [playerParam('target', 'Vampyr med blood hunt', { bloodHunt: true, includeSelf: true })],
+    params: [playerParam('target', 'Vampire with a blood hunt', { bloodHunt: true, includeSelf: true })],
   }),
 ];
 
@@ -402,23 +402,23 @@ const CAMARILLA: ActionDefinition[] = [
 // Anarch
 
 const REVOLT_CHOICES = [
-  ['burn_minions', 'D4 mot varje Camarilla- och Sabbat-minion i staden'],
-  ['oust_ruler', 'Kör ut stadens härskare (−D100 blood)'],
-  ['bleed', 'Bleed halva blood flow, staden −10 blood flow'],
-  ['ghouls', 'Få 2 LV1 Ghouls i staden'],
-  ['harpies', 'Få 2 LV1 Harpies i staden'],
-  ['move_and_contest', 'Flytta dit och contesta'],
-  ['take_control', 'Ta kontroll (5 revolt counters)'],
+  ['burn_minions', 'D4 against each Camarilla and Sabbat minion in the city'],
+  ['oust_ruler', 'Drive out the city\'s ruler (−D100 blood)'],
+  ['bleed', 'Bleed half the blood flow, the city −10 blood flow'],
+  ['ghouls', 'Gain 2 LV1 Ghouls in the city'],
+  ['harpies', 'Gain 2 LV1 Harpies in the city'],
+  ['move_and_contest', 'Move there and contest'],
+  ['take_control', 'Take control (5 revolt counters)'],
 ] as const;
 
 const RESISTANCE_CHOICES = [
-  ['anarch_stability', 'Anarch-stad +1 Stability'],
-  ['anarch_intercept', 'Anarch-stad +1 Intercept'],
-  ['anarch_masquerade', 'Anarch-stad +1 Masquerade'],
-  ['gain_blood', 'Egen stad: +50 blood, −1 Masquerade'],
-  ['special_stronghold', 'Egen stad: Anarch Stronghold'],
-  ['special_political_hub', 'Egen stad: Anarch Political Hub'],
-  ['special_free_press', 'Egen stad: Anarch Free Press'],
+  ['anarch_stability', 'Anarch city +1 Stability'],
+  ['anarch_intercept', 'Anarch city +1 Intercept'],
+  ['anarch_masquerade', 'Anarch city +1 Masquerade'],
+  ['gain_blood', 'Own city: +50 blood, −1 Masquerade'],
+  ['special_stronghold', 'Own city: Anarch Stronghold'],
+  ['special_political_hub', 'Own city: Anarch Political Hub'],
+  ['special_free_press', 'Own city: Anarch Free Press'],
 ] as const;
 
 const ANARCH: ActionDefinition[] = [
@@ -431,8 +431,8 @@ const ANARCH: ActionDefinition[] = [
     cost: 10,
     factions: ['anarch'],
     params: [
-      { key: 'minions', label: 'Minions (högst 2)', kind: 'minion', multiple: { min: 1, max: 2 }, options: (ctx) => ownMinions(ctx) },
-      cityParam('to', 'Till stad', (ctx) => {
+      { key: 'minions', label: 'Minions (at most 2)', kind: 'minion', multiple: { min: 1, max: 2 }, options: (ctx) => ownMinions(ctx) },
+      cityParam('to', 'To city', (ctx) => {
         const from = listParam(ctx, 'minions').map((id) => ctx.positions.minions[id as MinionId] ?? null);
         if (from.length === 0) return [];
         const sets = from.map((c) => new Set(citiesAdjacentTo(ctx, c).map((o) => o.value)));
@@ -454,7 +454,7 @@ const ANARCH: ActionDefinition[] = [
     cost: 10,
     trifle: true,
     factions: ['anarch'],
-    params: [anyCity('city', 'Stad')],
+    params: [anyCity('city', 'City')],
   }),
   define({
     id: 'anarch_mission',
@@ -476,7 +476,7 @@ const ANARCH: ActionDefinition[] = [
     cost: 15,
     trifle: true,
     factions: ['anarch'],
-    params: [anyCity('city', 'Stad'), choiceParam('stat', 'Effekt', STABILITY_OR_INTERCEPT)],
+    params: [anyCity('city', 'City'), choiceParam('stat', 'Effect', STABILITY_OR_INTERCEPT)],
   }),
   // --- Baron
   define({
@@ -490,7 +490,7 @@ const ANARCH: ActionDefinition[] = [
     oncePerRoundPer: 'city',
     params: (ctx) => {
       const specs: ParamSpec[] = [
-        cityParam('city', 'Stad med Stability 1 eller lägre', (c) => allCities(c, (x) => x.effective.stability <= 1)),
+        cityParam('city', 'City with Stability 1 or lower', (c) => allCities(c, (x) => x.effective.stability <= 1)),
       ];
       const city = cityById(ctx.view, strParam(ctx, 'city') as CityId);
       if (!city) return specs;
@@ -498,7 +498,7 @@ const ANARCH: ActionDefinition[] = [
       const counters = city.revoltCounters + 1;
       const takeover = ctx.content.rules.revoltCountersForTakeover;
       const list = REVOLT_CHOICES.filter(([k]) => k !== 'take_control' || counters >= takeover);
-      for (let i = 1; i <= counters; i++) specs.push(choiceParam(`choice${i}`, `Val ${i} av ${counters}`, list));
+      for (let i = 1; i <= counters; i++) specs.push(choiceParam(`choice${i}`, `Choice ${i} of ${counters}`, list));
       return specs;
     },
     moves: (ctx) =>
@@ -521,7 +521,7 @@ const ANARCH: ActionDefinition[] = [
       const specs: ParamSpec[] = [
         {
           key: 'minionId',
-          label: 'Minion i din domän som bränns',
+          label: 'Minion in your domain to burn',
           kind: 'minion',
           options: (c) =>
             ownMinions(c).filter((o) => {
@@ -533,10 +533,10 @@ const ANARCH: ActionDefinition[] = [
       const minion = ownMinion(ctx.view, strParam(ctx, 'minionId') as MinionId);
       if (!minion) return specs;
       for (let i = 1; i <= minion.effectiveLevel; i++) {
-        specs.push(choiceParam(`effect${i}`, `Effekt ${i}`, RESISTANCE_CHOICES));
+        specs.push(choiceParam(`effect${i}`, `Effect ${i}`, RESISTANCE_CHOICES));
         const effect = strParam(ctx, `effect${i}`);
         specs.push(
-          cityParam(`city${i}`, `Stad för effekt ${i}`, (c) =>
+          cityParam(`city${i}`, `City for effect ${i}`, (c) =>
             effect?.startsWith('anarch_') ? citiesOfSect(c, 'anarch') : controlledCities(c),
           ),
         );
@@ -563,8 +563,8 @@ const SABBAT: ActionDefinition[] = [
     cost: 15,
     factions: ['sabbat'],
     params: [
-      anyCity('city', 'Stad'),
-      choiceParam('stat', 'Effekt', [
+      anyCity('city', 'City'),
+      choiceParam('stat', 'Effect', [
         ['masquerade', '−1 Masquerade'],
         ['intercept', '−1 Intercept'],
       ]),
@@ -580,7 +580,7 @@ const SABBAT: ActionDefinition[] = [
     cost: 25,
     titles: ['archbishop'],
     params: [
-      cityParam('city', 'Stad', (ctx) => {
+      cityParam('city', 'City', (ctx) => {
         const bases = ctx.view.sabbat?.bases ?? {};
         const sect = ctx.view.me.disguise?.faction ?? null;
         return allCities(
@@ -598,7 +598,7 @@ const SABBAT: ActionDefinition[] = [
     stealth: 2,
     cost: 10,
     titles: ['archbishop'],
-    params: [cityParam('city', 'Stad med Sabbat-bas', (ctx) => sabbatBaseCities(ctx))],
+    params: [cityParam('city', 'City with a Sabbat base', (ctx) => sabbatBaseCities(ctx))],
   }),
   define({
     id: 'spreading_the_truth_of_cain',
@@ -612,7 +612,7 @@ const SABBAT: ActionDefinition[] = [
     params: [
       {
         key: 'cities',
-        label: 'Upp till 3 städer med Sabbat-bas',
+        label: 'Up to 3 cities with a Sabbat base',
         kind: 'city',
         multiple: { min: 1, max: 3 },
         options: (ctx) => sabbatBaseCities(ctx),
@@ -628,7 +628,7 @@ const SABBAT: ActionDefinition[] = [
     cost: 50,
     titles: ['archbishop'],
     maxPerRound: 1,
-    params: [cityParam('city', 'Stad med LV3-bas', (ctx) => sabbatBaseCities(ctx, 3))],
+    params: [cityParam('city', 'City with a LV3 base', (ctx) => sabbatBaseCities(ctx, 3))],
   }),
   define({
     id: 'esbat',
@@ -640,8 +640,8 @@ const SABBAT: ActionDefinition[] = [
     titles: ['archbishop'],
     maxPerRound: 1,
     params: [
-      cityParam('city', 'Stad med Sabbat-bas', (ctx) => sabbatBaseCities(ctx)),
-      choiceParam('reward', 'Belöning', [
+      cityParam('city', 'City with a Sabbat base', (ctx) => sabbatBaseCities(ctx)),
+      choiceParam('reward', 'Reward', [
         ['blood', 'Blood'],
         ['vp', '1 VP per 20 blood'],
       ]),
@@ -669,7 +669,7 @@ const SABBAT: ActionDefinition[] = [
     requires: { archbishop: 'exposed' },
     // En stad med Sabbat-bas räknas som granne för Sabbat-aktioner (gd:1108).
     params: [
-      cityParam('city', 'Grannstad', (ctx) => {
+      cityParam('city', 'Adjacent city', (ctx) => {
         const near = new Set([...citiesAdjacentTo(ctx, here(ctx)), ...sabbatBaseCities(ctx)].map((o) => o.value));
         near.delete(here(ctx) ?? '');
         return allCities(ctx, (c) => near.has(c.id));

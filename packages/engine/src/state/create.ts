@@ -48,20 +48,20 @@ export function validateMapTemplate(map: MapTemplate): string[] {
   const errors: string[] = [];
   const keys = new Set<string>();
   const seas = new Set(map.seaRegions.map((r) => r.key));
-  if (seas.size !== map.seaRegions.length) errors.push('dubblerade havsregioner');
+  if (seas.size !== map.seaRegions.length) errors.push('duplicate sea regions');
   for (const c of map.cities) {
-    if (!CITY_KEY.test(c.key)) errors.push(`ogiltig stadsnyckel "${c.key}"`);
-    if (keys.has(c.key)) errors.push(`dubblerad stad ${c.key}`);
+    if (!CITY_KEY.test(c.key)) errors.push(`invalid city key "${c.key}"`);
+    if (keys.has(c.key)) errors.push(`duplicate city ${c.key}`);
     keys.add(c.key);
-    if (c.isPort !== c.seaRegions.length > 0) errors.push(`${c.key}: hamn ⇔ minst en havsregion`);
-    for (const r of c.seaRegions) if (!seas.has(r)) errors.push(`${c.key}: okänd havsregion ${r}`);
+    if (c.isPort !== c.seaRegions.length > 0) errors.push(`${c.key}: port ⇔ at least one sea region`);
+    for (const r of c.seaRegions) if (!seas.has(r)) errors.push(`${c.key}: unknown sea region ${r}`);
   }
   const pairs = new Set<string>();
   for (const [a, b] of map.adjacencies) {
-    if (!keys.has(a) || !keys.has(b)) errors.push(`grannpar ${a}–${b}: okänd stad`);
-    if (a === b) errors.push(`grannpar ${a}–${b}: samma stad`);
+    if (!keys.has(a) || !keys.has(b)) errors.push(`adjacent pair ${a}–${b}: unknown city`);
+    if (a === b) errors.push(`adjacent pair ${a}–${b}: same city`);
     const id = [a, b].sort().join('|');
-    if (pairs.has(id)) errors.push(`grannpar ${a}–${b} förekommer två gånger`);
+    if (pairs.has(id)) errors.push(`adjacent pair ${a}–${b} occurs twice`);
     pairs.add(id);
   }
   return errors;
@@ -73,7 +73,7 @@ export function instantiateMap(map: MapTemplate): {
   seaRegions: Record<SeaRegionId, SeaRegion>;
 } {
   const errors = validateMapTemplate(map);
-  if (errors.length > 0) throw new Error(`Ogiltig karta ${map.key}:\n  ${errors.join('\n  ')}`);
+  if (errors.length > 0) throw new Error(`Invalid map ${map.key}:\n  ${errors.join('\n  ')}`);
 
   const neighbours = new Map<string, Set<string>>(map.cities.map((c) => [c.key, new Set<string>()]));
   for (const [a, b] of map.adjacencies) {
@@ -195,7 +195,7 @@ export function createGameState(input: CreateGameInput, content: Content): GameS
 
   const city = (key: string, who: string): CityId => {
     const id = toCityId(key);
-    if (!(id in cities)) throw new Error(`${who}: okänd stad "${key}"`);
+    if (!(id in cities)) throw new Error(`${who}: unknown city "${key}"`);
     return id;
   };
 
@@ -211,7 +211,7 @@ export function createGameState(input: CreateGameInput, content: Content): GameS
 
   for (const s of input.players) {
     const id = takeId(counters, 'player');
-    const who = `spelare ${s.name}`;
+    const who = `player ${s.name}`;
     const location = city(s.location, who);
 
     const modifiers: StatModifier[] = (s.statBonuses ?? []).map((b) => ({
@@ -255,21 +255,21 @@ export function createGameState(input: CreateGameInput, content: Content): GameS
     for (const key of s.controls ?? []) {
       const cid = city(key, who);
       const c = cities[cid] as unknown as Mutable<City>;
-      if (c.controllerId !== null) throw new Error(`${who}: ${key} kontrolleras redan av ${c.controllerId}`);
+      if (c.controllerId !== null) throw new Error(`${who}: ${key} is already controlled by ${c.controllerId}`);
       c.controllerId = id;
     }
 
     const upgrades = s.startingCityUpgrades ?? [];
     if (upgrades.length > 0) {
       const home = s.controls?.[0];
-      if (home === undefined) throw new Error(`${who}: stadsuppgraderingar kräver en kontrollerad stad`);
+      if (home === undefined) throw new Error(`${who}: city upgrades require a controlled city`);
       const c = cities[city(home, who)] as unknown as Mutable<City>;
       for (const u of upgrades) {
         if (u.kind === 'blood_flow') c.bloodFlow += u.amount;
         else if (u.kind === 'intercept') c.intercept += u.amount;
         else {
           const def = STARTING_CITY_SPECIALS[u.key];
-          if (def === undefined) throw new Error(`${who}: okänd startspecial "${u.key}"`);
+          if (def === undefined) throw new Error(`${who}: unknown starting special "${u.key}"`);
           c.specials.push({
             id: takeId(counters, 'feature'),
             key: u.key,

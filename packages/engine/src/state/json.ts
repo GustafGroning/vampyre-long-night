@@ -35,7 +35,7 @@ export function findNonJson(value: unknown, path = '$'): string | null {
     case 'boolean':
       return null;
     case 'number':
-      return Number.isFinite(value) ? null : `${path}: ${value} är inte ett ändligt tal`;
+      return Number.isFinite(value) ? null : `${path}: ${value} is not a finite number`;
     case 'object': {
       if (Array.isArray(value)) {
         for (let i = 0; i < value.length; i++) {
@@ -46,7 +46,7 @@ export function findNonJson(value: unknown, path = '$'): string | null {
       }
       const proto = Object.getPrototypeOf(value) as unknown;
       if (proto !== Object.prototype && proto !== null) {
-        return `${path}: ${Object.prototype.toString.call(value)} är inte ett vanligt objekt`;
+        return `${path}: ${Object.prototype.toString.call(value)} is not a plain object`;
       }
       for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
         const r = findNonJson(v, `${path}.${k}`);
@@ -55,7 +55,7 @@ export function findNonJson(value: unknown, path = '$'): string | null {
       return null;
     }
     default:
-      return `${path}: ${typeof value} är inte JSON`;
+      return `${path}: ${typeof value} is not JSON`;
   }
 }
 

@@ -30,7 +30,7 @@ const bleedPenalty = (ctx: ActionContext): number =>
  */
 const bleed = (ctx: ActionContext): ActionOutcome => {
   const city = performerCity(ctx);
-  if (city === null) return fail('Vampyren är inte i någon stad');
+  if (city === null) return fail('The vampire is not in any city');
   const inDomain = domainCityIds(state(ctx), ctx.content, ctx.player.id).includes(city);
   const { dice, total } = rollSum(ctx, inDomain ? 2 : 1, 10);
   bleedCity(ctx, city, total * 5, { penalty: bleedPenalty(ctx), dice });
@@ -40,7 +40,7 @@ const bleed = (ctx: ActionContext): ActionOutcome => {
 /** Bleed the Enemy (gd:236): ghoulen bleedar sin stad för X D10 × 2, X = level. */
 const bleedTheEnemy = (ctx: ActionContext): ActionOutcome => {
   const minion = performerMinion(ctx);
-  if (!minion) return fail('Minionen finns inte');
+  if (!minion) return fail('The minion does not exist');
   const level = minionEffectiveLevel(state(ctx), ctx.content, minion.id);
   const { dice, total } = rollSum(ctx, level, 10);
   bleedCity(ctx, minion.location, total * 2, { dice });
@@ -50,7 +50,7 @@ const bleedTheEnemy = (ctx: ActionContext): ActionOutcome => {
 /** Aaron's Feeding Razor (gd:385): bleeda staden man är i för 2D10 × 2. */
 const aaronsFeedingRazor = (ctx: ActionContext): ActionOutcome => {
   const city = performerCity(ctx);
-  if (city === null) return fail('Vampyren är inte i någon stad');
+  if (city === null) return fail('The vampire is not in any city');
   const { dice, total } = rollSum(ctx, 2, 10);
   bleedCity(ctx, city, total * 2, { dice });
   return ok();

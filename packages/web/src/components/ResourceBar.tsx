@@ -3,14 +3,14 @@ import type { Resources } from '../screen/model';
 const ITEMS: { key: keyof Resources; label: string; icon: string }[] = [
   { key: 'blood', label: 'Blood', icon: '🩸' },
   { key: 'vp', label: 'Victory Points', icon: '✦' },
-  { key: 'artifacts', label: 'Artefakter', icon: '🏺' },
+  { key: 'artifacts', label: 'Artifacts', icon: '🏺' },
   { key: 'minions', label: 'Minions', icon: '👥' },
-  { key: 'votes', label: 'Röster i Vampiric Society', icon: '🗳' },
+  { key: 'votes', label: 'Votes in the Vampiric Society', icon: '🗳' },
 ];
 
 export function ResourceBar({ resources }: { resources: Resources }) {
   return (
-    <ul className="resource-bar" aria-label="Resurser">
+    <ul className="resource-bar" aria-label="Resources">
       {ITEMS.map((it) => (
         <li key={it.key} className="resource" title={it.label}>
           <span className="resource-icon" aria-hidden>

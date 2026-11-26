@@ -45,10 +45,10 @@ export function analyzeSubmission(
   const player = state.players[submission.playerId];
   const empty = { budget: null, slotsUsed: 0, totalCost: 0, entryCosts: {}, draft: null, warnings: [] };
   if (!player) {
-    return { ok: false, errors: [{ code: 'unknown_player', message: `Okänd spelare ${submission.playerId}` }], ...empty };
+    return { ok: false, errors: [{ code: 'unknown_player', message: `Unknown player ${submission.playerId}` }], ...empty };
   }
   if (player.status === 'burned') {
-    return { ok: false, errors: [{ code: 'player_burned', message: 'Vampyren är bränd' }], ...empty };
+    return { ok: false, errors: [{ code: 'player_burned', message: 'The vampire is burned' }], ...empty };
   }
   const view = buildPlayerView(state, opts.content, player.id);
   const draft = analyzeDraft(view, opts.content, submission, {

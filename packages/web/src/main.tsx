@@ -43,7 +43,7 @@ function root(): ReactNode {
   return (
     <>
       <p className="mode-notice" role="status">
-        Demoläge: ingen server är konfigurerad (VITE_SUPABASE_URL och VITE_SUPABASE_ANON_KEY saknas i bygget).
+        Demo mode: no server is configured (VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are missing from the build).
       </p>
       {app}
     </>

@@ -41,13 +41,13 @@ export function RegionModal({ city, onClose }: { city: MapCity; onClose: () => v
       <section className="region-dialog" role="dialog" aria-modal="true" aria-labelledby="region-dialog-title" aria-describedby="region-dialog-description" ref={dialogRef}>
         <div className="region-dialog-header">
           <div>
-            <span className="region-dialog-kicker">Regioninformation</span>
+            <span className="region-dialog-kicker">Region information</span>
             <h2 id="region-dialog-title">{city.name}</h2>
           </div>
-          <button className="region-dialog-close" ref={closeRef} type="button" aria-label="Stäng regioninformation" onClick={onClose}>×</button>
+          <button className="region-dialog-close" ref={closeRef} type="button" aria-label="Close region information" onClick={onClose}>×</button>
         </div>
         <p id="region-dialog-description">{PLACEHOLDER_DESCRIPTION}</p>
-        <h3>Regionstatus</h3>
+        <h3>Region status</h3>
         <ul className="region-status-list">
           {PLACEHOLDER_STATUSES.map(status => <li key={status}>{status}</li>)}
         </ul>

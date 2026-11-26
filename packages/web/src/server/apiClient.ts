@@ -32,7 +32,7 @@ export function createApiClient(opts: ApiClientOptions): ApiClient {
   return {
     async call(req) {
       const token = await opts.accessToken();
-      if (!token) throw new ApiClientError(401, 'unauthenticated', 'Du är inte inloggad');
+      if (!token) throw new ApiClientError(401, 'unauthenticated', 'You are not signed in');
       let res: Response;
       try {
         res = await doFetch(opts.endpoint, {
@@ -45,12 +45,12 @@ export function createApiClient(opts: ApiClientOptions): ApiClient {
           body: JSON.stringify(req),
         });
       } catch {
-        throw new ApiClientError(0, 'network', 'Kunde inte nå servern');
+        throw new ApiClientError(0, 'network', 'Could not reach the server');
       }
       const body = (await res.json().catch(() => null)) as unknown;
       if (!res.ok) {
         const err = (body as ApiErrorBody | null)?.error;
-        throw new ApiClientError(res.status, err?.code ?? 'internal', err?.message ?? `Serverfel (${res.status})`);
+        throw new ApiClientError(res.status, err?.code ?? 'internal', err?.message ?? `Server error (${res.status})`);
       }
       return body as never;
     },

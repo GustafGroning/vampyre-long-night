@@ -75,7 +75,7 @@ export function titleLabel(view: PlayerView, content: Content): string | null {
   const name = content.titles[me.title].name;
   const domain = me.domain[0] ? view.cities.find((c) => c.id === me.domain[0])?.name : undefined;
   const ofDomain = (me.title === 'prince' || me.title === 'baron') && domain ? ` of ${domain}` : '';
-  const disguise = me.disguise ? ` (som ${content.titles[me.disguise.title].name})` : '';
+  const disguise = me.disguise ? ` (as ${content.titles[me.disguise.title].name})` : '';
   return `${name}${ofDomain}${disguise}`;
 }
 
@@ -100,10 +100,10 @@ export function royalPrivilegeInfo(
 /** Varningar när spelaren spenderar Royal Privileges som inte ger något. */
 export function royalPrivilegeWarnings(rp: RoyalPrivilegeInfo): string[] {
   if (rp.spending > rp.maxUseful) {
-    return [`Bara ${rp.maxUseful} av ${rp.spending} Royal Privileges ger en extra action den här ronden, men alla förbrukas`];
+    return [`Only ${rp.maxUseful} of ${rp.spending} Royal Privileges give an extra action this round, but all are spent`];
   }
   if (rp.spending > rp.needed) {
-    return [`Du spenderar ${rp.spending} Royal Privileges men listan behöver ${rp.needed}`];
+    return [`You are spending ${rp.spending} Royal Privileges but the list needs ${rp.needed}`];
   }
   return [];
 }
@@ -113,7 +113,7 @@ function labelFor(step: TargetStep, value: Json): string {
   if (step.kind === 'number') return String(value);
   if (step.kind === 'text') return `”${String(value)}”`;
   if (Array.isArray(value)) {
-    return step.options.filter((o) => value.includes(o.value)).map((o) => o.label).join(' + ') || 'inga';
+    return step.options.filter((o) => value.includes(o.value)).map((o) => o.label).join(' + ') || 'none';
   }
   return step.options.find((o) => o.value === value)?.label ?? String(value);
 }
@@ -154,7 +154,7 @@ export function restoreDraft(
 export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
   const { view, content } = opts;
   const registry = opts.registry ?? ACTION_CATALOG;
-  const cityName = (id: string | null | undefined) => (id ? (view.cities.find((c) => c.id === id)?.name ?? id) : 'okänd plats');
+  const cityName = (id: string | null | undefined) => (id ? (view.cities.find((c) => c.id === id)?.name ?? id) : 'unknown location');
   const minionName = (id: string) => view.me.minions.find((m) => m.id === id)?.name ?? id;
   const performerName = (p: PerformerRef) => (p.kind === 'vampire' ? view.me.name : minionName(p.minionId));
 
@@ -166,7 +166,7 @@ export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
     const pos = projectPositions(view, content, list.map(toSubmitted), registry, i);
     const here = a.performer.kind === 'vampire' ? pos.vampire : (pos.minions[a.performer.minionId as MinionId] ?? null);
     const labels = Object.values(a.paramLabels);
-    if (def?.moves && labels.length === 1) return `${name} från ${cityName(here)} till ${labels[0]}`;
+    if (def?.moves && labels.length === 1) return `${name} from ${cityName(here)} to ${labels[0]}`;
     if (labels.length > 0) return `${name}: ${labels.join(', ')}`;
     return here ? `${name} i ${cityName(here)}` : name;
   };
@@ -227,7 +227,7 @@ export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
         cost: it.cost,
         costVaries: it.costVaries,
         income: it.income,
-        ...(it.available ? {} : { disabledReason: it.reason ?? 'Går inte nu' }),
+        ...(it.available ? {} : { disabledReason: it.reason ?? 'Not available now' }),
       }));
     },
     nextStep(before, actionId, performer, params) {

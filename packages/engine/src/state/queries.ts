@@ -33,25 +33,25 @@ import type {
 
 export function getPlayer(state: GameState, id: PlayerId): Player {
   const p = state.players[id];
-  if (!p) throw new Error(`Okänd spelare ${id}`);
+  if (!p) throw new Error(`Unknown player ${id}`);
   return p;
 }
 
 export function getMinion(state: GameState, id: MinionId): Minion {
   const m = state.minions[id];
-  if (!m) throw new Error(`Okänd minion ${id}`);
+  if (!m) throw new Error(`Unknown minion ${id}`);
   return m;
 }
 
 export function getCity(state: GameState, id: CityId): City {
   const c = state.cities[id];
-  if (!c) throw new Error(`Okänd stad ${id}`);
+  if (!c) throw new Error(`Unknown city ${id}`);
   return c;
 }
 
 export function getArtifact(state: GameState, id: ArtifactId): Artifact {
   const a = state.artifacts[id];
-  if (!a) throw new Error(`Okänd artefakt ${id}`);
+  if (!a) throw new Error(`Unknown artifact ${id}`);
   return a;
 }
 

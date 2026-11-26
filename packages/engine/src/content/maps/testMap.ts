@@ -14,7 +14,7 @@ export const TEST_MAP: MapTemplate = {
   key: 'test_map',
   name: 'Testkarta',
   provisional: false,
-  notes: 'Syntetisk karta för tester. Inte avsedd för spel.',
+  notes: 'Synthetic map for tests. Not intended for play.',
   seaRegions: [
     { key: 'north_sea', name: 'North Sea' },
     { key: 'west_sea', name: 'West Sea' },

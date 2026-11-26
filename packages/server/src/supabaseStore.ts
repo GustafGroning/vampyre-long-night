@@ -162,7 +162,7 @@ export class SupabaseStore implements Store, AuthAdmin {
       }),
     });
     const body = (await res.json().catch(() => ({}))) as { id?: string; msg?: string; message?: string };
-    if (!res.ok || !body.id) throw new SupabaseError(res.status, body.msg ?? body.message ?? 'Kunde inte skapa användaren');
+    if (!res.ok || !body.id) throw new SupabaseError(res.status, body.msg ?? body.message ?? 'Could not create the user');
     return body.id;
   }
 

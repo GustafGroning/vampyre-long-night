@@ -123,7 +123,7 @@ export type ActionRegistry = Readonly<Record<ActionId, ActionDefinition>>;
 export function createRegistry(defs: ActionDefinition[]): ActionRegistry {
   const out: Record<ActionId, ActionDefinition> = {};
   for (const d of defs) {
-    if (out[d.id]) throw new Error(`Dubbel aktionsdefinition: ${d.id}`);
+    if (out[d.id]) throw new Error(`Duplicate action definition: ${d.id}`);
     out[d.id] = d;
   }
   return out;
@@ -287,8 +287,8 @@ export const SKELETON_ACTIONS: ActionRegistry = createRegistry([
     grantsMinionAction: true,
     eligible: ({ view, action }) => {
       const id = minionIdParam(action);
-      if (!id) return 'Anarch Mission kräver params.minionId';
-      return view.me.minions.some((m) => m.id === id) ? null : 'Anarch Mission måste namnge en egen minion';
+      if (!id) return 'Anarch Mission requires params.minionId';
+      return view.me.minions.some((m) => m.id === id) ? null : 'Anarch Mission must name one of your own minions';
     },
     resolve: stubResolve,
   },

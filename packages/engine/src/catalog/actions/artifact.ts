@@ -27,16 +27,16 @@ const EXTRA: Partial<
     }
   >
 > = {
-  giants_blood: { params: [playerParam('target', 'Vampyr i torpor', { includeSelf: true })] },
-  whispers_in_a_bottle: { params: [playerParam('target', 'Vampyr')] },
-  bag_of_gifts: { params: [playerParam('target', 'Vampyr')] },
-  fog_flute: { params: [cityParam('city', 'Stad', (ctx) => allCities(ctx))] },
-  the_evil_eye: { params: [playerParam('target', 'Vampyr')] },
-  brujahs_book: { params: [cityParam('city', 'Stad', (ctx) => allCities(ctx))] },
+  giants_blood: { params: [playerParam('target', 'Vampire in torpor', { includeSelf: true })] },
+  whispers_in_a_bottle: { params: [playerParam('target', 'Vampire')] },
+  bag_of_gifts: { params: [playerParam('target', 'Vampire')] },
+  fog_flute: { params: [cityParam('city', 'City', (ctx) => allCities(ctx))] },
+  the_evil_eye: { params: [playerParam('target', 'Vampire')] },
+  brujahs_book: { params: [cityParam('city', 'City', (ctx) => allCities(ctx))] },
   scepter_of_ventrue: {
     params: [
-      { key: 'minionId', label: 'Egen minion', kind: 'minion', options: (ctx) => ownMinions(ctx) },
-      cityParam('to', 'Till stad', (ctx) => allCities(ctx)),
+      { key: 'minionId', label: 'Own minion', kind: 'minion', options: (ctx) => ownMinions(ctx) },
+      cityParam('to', 'To city', (ctx) => allCities(ctx)),
     ],
     moves: (ctx) => {
       const id = strParam(ctx, 'minionId');
@@ -44,11 +44,11 @@ const EXTRA: Partial<
     },
   },
   ravnos_boots: {
-    params: [cityParam('to', 'Grannstad', (ctx) => citiesAdjacentTo(ctx, here(ctx)))],
+    params: [cityParam('to', 'Adjacent city', (ctx) => citiesAdjacentTo(ctx, here(ctx)))],
     moves: movesTo(),
   },
   the_demeter: {
-    params: [cityParam('to', 'Hamn', (ctx) => allCities(ctx, (c) => c.isPort && c.id !== here(ctx)))],
+    params: [cityParam('to', 'Port', (ctx) => allCities(ctx, (c) => c.isPort && c.id !== here(ctx)))],
     moves: movesTo(),
   },
   diamond_of_toreador: { income: 25 },

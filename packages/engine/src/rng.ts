@@ -70,7 +70,7 @@ function cyrb128(input: string): [number, number, number, number] {
 
 function assertIntegerArg(name: string, value: number): void {
   if (!Number.isSafeInteger(value)) {
-    throw new RangeError(`${name} måste vara ett heltal, fick ${value}`);
+    throw new RangeError(`${name} must be an integer, got ${value}`);
   }
 }
 
@@ -95,7 +95,7 @@ function makeRng(initial: readonly [number, number, number, number]): Rng {
     assertIntegerArg('max', max);
     if (max < min) throw new RangeError(`int(${min}, ${max}): max < min`);
     const range = max - min + 1;
-    if (range > UINT32) throw new RangeError(`int(${min}, ${max}): intervallet är större än 2^32`);
+    if (range > UINT32) throw new RangeError(`int(${min}, ${max}): the range is larger than 2^32`);
     // Rejection sampling: kasta värden i den ofullständiga sista "hinken".
     const limit = UINT32 - (UINT32 % range);
     let x = nextUint32();
@@ -105,13 +105,13 @@ function makeRng(initial: readonly [number, number, number, number]): Rng {
 
   function die(sides: number): number {
     assertIntegerArg('sides', sides);
-    if (sides < 1) throw new RangeError(`die(${sides}): måste ha minst 1 sida`);
+    if (sides < 1) throw new RangeError(`die(${sides}): must have at least 1 side`);
     return int(1, sides);
   }
 
   function roll(count: number, sides: number): number[] {
     assertIntegerArg('count', count);
-    if (count < 0) throw new RangeError(`roll(${count}, ${sides}): negativt antal`);
+    if (count < 0) throw new RangeError(`roll(${count}, ${sides}): negative count`);
     const out: number[] = [];
     for (let i = 0; i < count; i++) out.push(die(sides));
     return out;
@@ -119,7 +119,7 @@ function makeRng(initial: readonly [number, number, number, number]): Rng {
 
   function chance(probability: number): boolean {
     if (!(probability >= 0 && probability <= 1)) {
-      throw new RangeError(`chance(${probability}): sannolikheten måste vara 0..1`);
+      throw new RangeError(`chance(${probability}): the probability must be 0..1`);
     }
     if (probability === 0) return false;
     if (probability === 1) return true;
@@ -128,7 +128,7 @@ function makeRng(initial: readonly [number, number, number, number]): Rng {
   }
 
   function pick<T>(items: readonly T[]): T {
-    if (items.length === 0) throw new RangeError('pick: tom array');
+    if (items.length === 0) throw new RangeError('pick: empty array');
     return items[int(0, items.length - 1)] as T;
   }
 
@@ -163,11 +163,11 @@ export function createRng(seed: string): Rng {
 /** Återskapar en RNG från ett sparat tillstånd; fortsätter exakt där den slutade. */
 export function restoreRng(state: RngState): Rng {
   if (state.algorithm !== 'sfc32') {
-    throw new Error(`restoreRng: okänd algoritm ${String(state.algorithm)}`);
+    throw new Error(`restoreRng: unknown algorithm ${String(state.algorithm)}`);
   }
   for (const v of state.s) {
     if (!Number.isInteger(v) || v < 0 || v >= UINT32) {
-      throw new RangeError(`restoreRng: ogiltigt tillstånd ${JSON.stringify(state.s)}`);
+      throw new RangeError(`restoreRng: invalid state ${JSON.stringify(state.s)}`);
     }
   }
   return makeRng(state.s);

@@ -67,7 +67,7 @@ describe('region map integration', () => {
     expect(dialog.textContent).toContain('Lorem ipsum');
     for (let i = 1; i <= 3; i++) expect(dialog.textContent).toContain(`Status ${i}`);
     expect(screen.getByTestId('territory-east').getAttribute('data-selected')).toBe('true');
-    await user.click(screen.getByRole('button', { name: 'Stäng regioninformation' }));
+    await user.click(screen.getByRole('button', { name: 'Close region information' }));
     expect(screen.queryByRole('dialog')).toBeNull();
     expect(screen.getByTestId('territory-east').getAttribute('data-selected')).toBe('false');
     expect(screen.getByTestId('territory-east').getAttribute('data-hovered')).toBe('false');
