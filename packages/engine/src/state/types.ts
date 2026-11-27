@@ -269,6 +269,32 @@ export interface Artifact {
   readonly boundDiscipline: Discipline | null;
 }
 
+/**
+ * Var en spelare garanterat vet att en artefakt finns (S24). En spelare vet inget
+ * om andras artefakter förrän en aktion avslöjar det ("Possession", 2.0): att man
+ * ser en artefaktaktion, Look for Artifacts, Keep an Eye on Them, (M) Auspex.
+ * `npc` och `pool` kan aldrig vara känd bärare.
+ */
+export type KnownArtifactHolder =
+  | { readonly kind: 'player'; readonly id: PlayerId }
+  | { readonly kind: 'minion'; readonly id: MinionId }
+  | { readonly kind: 'city'; readonly id: CityId };
+
+export interface ArtifactKnowledge {
+  /** Bäraren när det lärdes. Kunskapen gäller bara så länge bäraren är densamma (V20). */
+  readonly holder: KnownArtifactHolder;
+  /** Ronden då det lärdes. */
+  readonly round: number;
+  /** Aktions-id som gav kunskapen, t.ex. `look_for_artifacts` eller `artifact_fog_flute` (sedd). */
+  readonly source: string;
+}
+
+/** Spelarnas kunskap om dolda fakta som annars inte går att härleda ur state (S24). */
+export interface KnowledgeState {
+  /** Per spelare och artefakt. Saknas = vet inget. */
+  readonly artifacts: Readonly<Record<PlayerId, Readonly<Record<ArtifactId, ArtifactKnowledge>>>>;
+}
+
 // ---------------------------------------------------------------------------
 // Städer och karta
 // ---------------------------------------------------------------------------
@@ -484,6 +510,8 @@ export interface GameState {
   readonly missions: Readonly<Record<MissionId, Mission>>;
   readonly debates: Readonly<Record<DebateId, Debate>>;
   readonly effects: Readonly<Record<EffectId, OngoingEffect>>;
+  /** Vad varje spelare vet om andras dolda saker (S24). Ingår aldrig i någon annans vy. */
+  readonly knowledge: KnowledgeState;
 
   readonly flags: {
     /** Första masquerade violation i en Camarilla-stad ger ingen blood hunt (gd:915). Gäller kampanjen. */

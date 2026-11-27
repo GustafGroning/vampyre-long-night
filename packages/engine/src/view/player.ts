@@ -24,7 +24,8 @@ import type {
   SeaRegionId,
   MinionId,
 } from '../state/ids.js';
-import { cloneJson, sortedValues } from '../state/json.js';
+import { cloneJson, compareIds, sortedValues } from '../state/json.js';
+import { knownArtifactHolder } from '../state/knowledge.js';
 import {
   apparentFaction,
   apparentTitle,
@@ -105,6 +106,28 @@ export interface OwnArtifactView {
   boundDiscipline: Discipline | null;
   /** Vem av spelaren och dess minions som bär den. */
   holder: { kind: 'player' } | { kind: 'minion'; id: MinionId };
+}
+
+/** Vem som har en artefakt, så som spelaren garanterat vet det (V20). */
+export type KnownArtifactHolderView =
+  | { kind: 'self' }
+  | { kind: 'own_minion'; minionId: MinionId }
+  | { kind: 'player'; playerId: PlayerId }
+  /** `ownerId` = null om minionen inte är spelarägd. */
+  | { kind: 'minion'; minionId: MinionId; ownerId: PlayerId | null }
+  | { kind: 'city'; cityId: CityId };
+
+/** En artefakt vars bärare spelaren vet: egen ägo eller giltig kunskap (V20). */
+export interface KnownArtifactView {
+  id: ArtifactId;
+  definition: Artifact['definition'];
+  /** Bara för egna artefakter (Ring of Tremeres val är dolt för andra). */
+  boundDiscipline: Discipline | null;
+  holder: KnownArtifactHolderView;
+  /** `own` för egen ägo, annars aktions-id som gav kunskapen. */
+  source: string;
+  /** Ronden då det lärdes; null för egen ägo. */
+  learnedRound: number | null;
 }
 
 export interface OwnMinionView {
@@ -293,6 +316,11 @@ export interface PlayerView {
   npcs: { id: NpcId; name: string }[];
   /** Alla spelarägda minions, utan position (gd:403). */
   minions: PublicMinionView[];
+  /**
+   * Artefakter vars bärare spelaren garanterat vet (V20): egna, och andras som
+   * spelaren lärt sig och som inte bytt bärare sedan dess. Övriga är okända.
+   */
+  knownArtifacts: KnownArtifactView[];
   cities: CityView[];
   seaRegions: SeaRegionView[];
   debates: DebateView[];
@@ -345,6 +373,7 @@ export function buildPlayerView(
         ? [{ id: m.id, name: m.name, ownerId: m.owner.id, type: m.type, level: m.level }]
         : [],
     ),
+    knownArtifacts: knownArtifactsView(state, viewerId, me),
     cities: sortedValues(state.cities).map((c) => cityView(state, content, c)),
     seaRegions: sortedValues(state.seaRegions).map((s) => ({
       id: s.id,
@@ -380,6 +409,41 @@ export function buildPlayerView(
     },
     events: events.filter((e) => eventVisibleTo(e, viewerId)).map(eventView),
   };
+}
+
+function knownArtifactsView(state: GameState, viewerId: PlayerId, me: SelfView): KnownArtifactView[] {
+  const own: KnownArtifactView[] = me.artifacts.map((a) => ({
+    id: a.id,
+    definition: a.definition,
+    boundDiscipline: a.boundDiscipline,
+    holder: a.holder.kind === 'player' ? { kind: 'self' } : { kind: 'own_minion', minionId: a.holder.id },
+    source: 'own',
+    learnedRound: null,
+  }));
+  const ownIds = new Set(own.map((a) => a.id));
+  const learned = state.knowledge?.artifacts[viewerId] ?? {};
+  const others = (Object.keys(learned) as ArtifactId[]).sort(compareIds).flatMap((id): KnownArtifactView[] => {
+    if (ownIds.has(id)) return [];
+    const k = knownArtifactHolder(state, viewerId, id);
+    const a = state.artifacts[id];
+    if (!k || !a) return [];
+    let holder: KnownArtifactHolderView;
+    switch (k.holder.kind) {
+      case 'player':
+        holder = { kind: 'player', playerId: k.holder.id };
+        break;
+      case 'minion': {
+        const m = state.minions[k.holder.id];
+        holder = { kind: 'minion', minionId: k.holder.id, ownerId: m?.owner.kind === 'player' ? m.owner.id : null };
+        break;
+      }
+      case 'city':
+        holder = { kind: 'city', cityId: k.holder.id };
+        break;
+    }
+    return [{ id, definition: a.definition, boundDiscipline: null, holder, source: k.source, learnedRound: k.round }];
+  });
+  return [...own, ...others].sort((x, y) => compareIds(x.id, y.id));
 }
 
 function publicPlayer(p: Player, viewerIsSabbat: boolean): PublicPlayerView {

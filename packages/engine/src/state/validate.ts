@@ -8,7 +8,7 @@
 import type { Content } from '../content/index.js';
 import { ARTIFACT_KEYS, requiresBoundDiscipline } from '../content/artifacts.js';
 import { CLANS, DISCIPLINES, FACTIONS, MINION_LEVELS, MINION_TYPES, ROUND_PHASES, TITLES, VAMPIRE_STATUSES } from './enums.js';
-import { GENERATED_ID_KINDS, type GeneratedIdKind } from './ids.js';
+import { GENERATED_ID_KINDS, type ArtifactId, type GeneratedIdKind, type PlayerId } from './ids.js';
 import { compareIds, findNonJson, sortedIds } from './json.js';
 import type { GameState } from './types.js';
 import { STATE_SCHEMA_VERSION } from './types.js';
@@ -181,6 +181,22 @@ export function validateState(state: GameState, content: Content): StateIssue[] 
         break;
       case 'pool':
         break;
+    }
+  }
+
+  // Kunskap (S24). Artefakt-id får peka på en bränd artefakt (den visas inte, V20).
+  const knowledge = state.knowledge?.artifacts ?? {};
+  for (const pid of Object.keys(knowledge).sort()) {
+    if (!playerExists(pid)) add(`knowledge.artifacts.${pid}`, `unknown player ${pid}`);
+    const known = knowledge[pid as PlayerId] ?? {};
+    for (const aid of Object.keys(known).sort()) {
+      const k = known[aid as ArtifactId];
+      const at = `knowledge.artifacts.${pid}.${aid}`;
+      if (!k) continue;
+      if (k.holder.kind !== 'player' && k.holder.kind !== 'minion' && k.holder.kind !== 'city') {
+        add(at, `holder kind ${(k.holder as { kind: string }).kind} cannot be known`);
+      }
+      if (!isNonNegInt(k.round)) add(at, `round ${k.round} is not a round`);
     }
   }
 

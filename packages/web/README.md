@@ -27,5 +27,6 @@ npm run typecheck -w @vampyre/web
 | `src/server/` | Spelläget: API-klient, inloggning (`auth.ts`), serverporten och `useRoundWatcher` (ny rond). |
 | `src/Root.tsx` | Inloggning → kampanj → huvudskärmen från servern. |
 | `src/screen/mapModel.ts` | Skalar `PlayerView.map` (bara garanterad information) till kartans rityta. |
+| `src/screen/artifactsModel.ts` | Artifacts-fliken: regelbokens artefakter ur `Content` och kända bärare ur `PlayerView.knownArtifacts` (V20). |
 | `src/screen/draft.ts` | Rena operationer på actionlistan. |
-| `src/components/` | Resursrad, karta, flikmeny, vampyrpanel, actionpanel. |
+| `src/components/` | Resursrad, karta, flikmeny, vampyrpanel, actionpanel, Artifacts-fliken (`ArtifactsTab.tsx`). |

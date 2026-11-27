@@ -154,6 +154,11 @@ Regelboksreferenser anges som `gd:NNN` (radnummer i `docs/rules/game_design.txt`
 ### S23. Skelett som byggs ut senare
 **Beslut:** `Combat`, `Mission`, `Debate` och `OngoingEffect` finns som typer så att state kan hålla dem, men formen är preliminär och ägs av de trådar som bygger respektive mekanik (combat i steg 3, missions C10, debatter C9). Problems och specials är `CityFeature { key, name, data }` tills problemtabellen (C3, C4) finns.
 
+### S24. Kunskap om andras artefakter (`GameState.knowledge`, 2026-11-27)
+**Beslut:** `GameState.knowledge.artifacts[playerId][artifactId] = { holder, round, source }`. Det är det enda stället där motorn sparar vad en spelare *vet* om något dolt, eftersom det inte går att räkna fram ur state och events (kunskapen ska överleva flera ronder, medan kartan bara läser förra rondens events). `holder` är spelare, minion eller stad; NPC och pool kan inte bli kända. `source` är aktions-id:t som gav kunskapen. Skrivs bara via `learnArtifactHolder`/`learnArtifactsOf` (`src/state/knowledge.ts`). Validering: spelaren finns, holder-typen är tillåten; artefakt-id:t får peka på en bränd artefakt.
+**Regel (2.0, Possession):** "Other vampires don't know what's in your possession unless they use the actions to uncover it. Or you make actions that reveal it."
+**Bakåtkompatibilitet:** fältet är nytt utan att `schemaVersion` höjs. Läsare tål att det saknas (sparade kampanjer från före 2026-11-27), och `learnArtifactHolder` skapar det.
+
 ---
 
 ## Sidofynd

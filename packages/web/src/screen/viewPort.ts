@@ -19,6 +19,7 @@ import {
   type PlayerView,
   type SubmittedAction,
 } from '@vampyre/engine';
+import { buildArtifactEntries } from './artifactsModel';
 import { buildMapModel } from './mapModel';
 import type {
   ConfirmResult,
@@ -211,6 +212,7 @@ export function createViewPort(opts: ViewPortOptions): PlayerScreenPort {
         resources: { ...view.resources },
         vampire: { name: view.me.name, titleLabel: titleLabel(view, content), stats: { ...view.me.stats } },
         map: buildMapModel(view.map),
+        artifacts: buildArtifactEntries(view, content, registry),
       };
     },
     actionChoices(draft) {

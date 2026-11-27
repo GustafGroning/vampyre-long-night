@@ -5,3 +5,4 @@ export * from './types.js';
 export * from './queries.js';
 export * from './validate.js';
 export * from './create.js';
+export * from './knowledge.js';
