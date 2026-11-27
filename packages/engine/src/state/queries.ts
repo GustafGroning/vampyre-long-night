@@ -349,6 +349,14 @@ export function minionsOwnedBy(state: GameState, playerId: PlayerId): Minion[] {
     .filter((m) => m.owner.kind === 'player' && m.owner.id === playerId);
 }
 
+/**
+ * Minionen gjorde Hide and Spy förra ronden och får inte agera denna rond
+ * (Long Night 2.0, E27). Känns igen på modifiern som går ut efter denna rond.
+ */
+export function minionIsResting(minion: { readonly modifiers: readonly StatModifier[] }, round: number): boolean {
+  return minion.modifiers.some((m) => m.source === 'action:hide_and_spy' && m.expiresAfterRound === round);
+}
+
 /** Upkeep per rond (gd:249–358). Vestment-zombien har ingen upkeep (gd:402). */
 export function minionUpkeep(content: Content, minion: Minion): number {
   if (minion.origin.kind === 'vestment_zombie') return 0;

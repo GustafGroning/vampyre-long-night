@@ -25,6 +25,8 @@ export interface ObservedAction {
    * stannar i startstaden. Destinationens controller ser då *var* utföraren är (V16).
    */
   destination?: CityId | null;
+  /** Extra stealth för just den här aktionen (Partner in Crime, E26). */
+  stealthBonus?: number;
 }
 
 /**
@@ -54,7 +56,7 @@ export function totalStealth(state: GameState, content: Content, action: Observe
     action.performer.kind === 'vampire'
       ? playerStat(state, content, action.playerId, 'stealth')
       : minionStat(state, content, action.performer.minionId, 'stealth');
-  return own + action.stealth;
+  return own + action.stealth + (action.stealthBonus ?? 0);
 }
 
 /**

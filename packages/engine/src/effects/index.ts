@@ -14,6 +14,19 @@ import type { GameState } from '../state/types.js';
 import { addIncome, bleedCity, rollSum } from './blood.js';
 import { moveEffect } from './movement.js';
 import { awaken, bestowGifts, controlTheMasquerade, getAMinion, statBuff } from './simple.js';
+import {
+  buildOnTheMastersKingdom,
+  followThem,
+  ghoulSabotage,
+  hideAndSpy,
+  keepAnEyeOnThem,
+  moveTheMaster,
+  partnerInCrime,
+  recruitAPrimogen,
+  sabbatInterrogations,
+  suicideMission,
+  theMastersWill,
+} from './minions.js';
 import { fail, ok, performerCity, performerMinion } from './util.js';
 
 export type Effect = Pick<ActionDefinition, 'resolve'> & Partial<Pick<ActionDefinition, 'resume'>>;
@@ -82,6 +95,18 @@ const BASE_EFFECTS: Record<string, Effect> = {
   // Minions och torpor
   get_a_minion: { resolve: getAMinion },
   bestow_gifts: { resolve: bestowGifts },
+  recruit_a_primogen: { resolve: recruitAPrimogen },
+  // Minionaktioner (E22–E31)
+  ghoul_sabotage: { resolve: ghoulSabotage },
+  partner_in_crime: { resolve: partnerInCrime },
+  move_the_master: { resolve: moveTheMaster },
+  suicide_mission: { resolve: suicideMission },
+  hide_and_spy: { resolve: hideAndSpy },
+  keep_an_eye_on_them: { resolve: keepAnEyeOnThem },
+  build_on_the_masters_kingdom: { resolve: buildOnTheMastersKingdom },
+  follow_them: { resolve: followThem },
+  sabbat_interrogations: { resolve: sabbatInterrogations },
+  the_masters_will: { resolve: theMastersWill },
   awaken: { resolve: awaken },
   // Städer
   control_the_masquerade: { resolve: controlTheMasquerade },
@@ -117,3 +142,5 @@ export function withEffects(defs: readonly ActionDefinition[]): ActionDefinition
 
 export { addIncome, bleedCity } from './blood.js';
 export { moveEffect, moveBlocked, cityDistance } from './movement.js';
+export { huntRoll, type HuntParty, type HuntResult } from './hunt.js';
+export { archonLoyaltyPhase, minionAllegiancePhase, partnerInCrimeBonus, HIDE_AND_SPY_SOURCE } from './minions.js';

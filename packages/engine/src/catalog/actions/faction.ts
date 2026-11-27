@@ -4,6 +4,7 @@
 import type { ActionDefinition } from '../../round/actions.js';
 import type { CityId, MinionId, PlayerId } from '../../state/ids.js';
 import type { ParamSpec } from '../types.js';
+import { recruitCost } from '../recruit.js';
 import { define, movesTo } from '../define.js';
 import {
   allCities,
@@ -289,11 +290,16 @@ const CAMARILLA: ActionDefinition[] = [
     category: 'faction',
     performer: 'vampire',
     stealth: 0,
-    cost: ({ content, action }) => {
+    cost: ({ content, action, view }) => {
       const l = action.params?.level;
-      return typeof l === 'number' ? (content.minionTypes.primogen.recruitCost[l - 1] ?? 0) : 0;
+      return typeof l === 'number' ? recruitCost(content, view.me.clan, 'primogen', l) : 0;
     },
     titles: ['prince'],
+    // The broken pyramid (Tremere-curse): inga Lvl 3-minions.
+    eligible: ({ view, content, action }) =>
+      action.params?.level === 3 && content.clans[view.me.clan].curse.key === 'the_broken_pyramid'
+        ? 'The broken pyramid: cannot have Lvl 3 minions'
+        : null,
     params: [
       cityParam('city', 'Stad i din domän', domainCities),
       { key: 'level', label: 'Level', kind: 'number', range: () => ({ min: 1, max: 3, step: 1 }) },

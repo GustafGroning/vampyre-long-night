@@ -3,6 +3,7 @@
  */
 import { ARTIFACT_KEYS } from '../../content/artifacts.js';
 import type { ActionDefinition } from '../../round/actions.js';
+import { recruitCost } from '../recruit.js';
 import { define, movesTo } from '../define.js';
 import {
   characterParam,
@@ -95,11 +96,11 @@ export const PERSONAL_ACTIONS: ActionDefinition[] = [
     category: 'personal',
     performer: 'vampire',
     stealth: 0,
-    cost: ({ content, action }) => {
+    cost: ({ content, action, view }) => {
       const type = action.params?.type;
       const level = action.params?.level;
       if ((type !== 'ghoul' && type !== 'harpy' && type !== 'eye') || typeof level !== 'number') return 0;
-      return content.minionTypes[type].recruitCost[level - 1] ?? 0;
+      return recruitCost(content, view.me.clan, type, level);
     },
     params: [
       {

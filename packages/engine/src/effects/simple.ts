@@ -6,9 +6,9 @@
 import type { ActionContext, ActionOutcome } from '../round/actions.js';
 import type { MinionLevel, Stat } from '../state/enums.js';
 import type { MinionId, PlayerId } from '../state/ids.js';
-import { takeId } from '../state/ids.js';
 import { cityStat } from '../state/queries.js';
 import type { GameState } from '../state/types.js';
+import { createMinion } from './minions.js';
 import { arg, cityArg, fail, ok, strArg } from './util.js';
 
 const curse = (ctx: ActionContext): string => ctx.content.clans[ctx.player.clan].curse.key;
@@ -45,21 +45,7 @@ export const getAMinion = (ctx: ActionContext): ActionOutcome => {
   if (level === 3 && curse(ctx) === 'the_broken_pyramid') return fail("The broken pyramid: kan inte ha Lvl 3-minions");
   const location = ctx.player.location;
   if (location === null) return fail('Vampyren är inte på kartan');
-  const id = takeId(ctx.state.counters, 'minion');
-  const def = ctx.content.minionTypes[type as Recruitable];
-  ctx.state.minions[id] = {
-    id,
-    name: `${def.name} ${id.slice('minion-'.length)}`,
-    owner: { kind: 'player', id: ctx.player.id },
-    type: type as Recruitable,
-    level: level as MinionLevel,
-    location,
-    modifiers: [],
-    loyaltyCounters: def.startingLoyalty,
-    acquiredRound: ctx.state.round,
-    origin: { kind: 'standard' },
-  };
-  ctx.emit('minion_recruited', { minionId: id, type: type as string, level, at: location });
+  createMinion(ctx, type as Recruitable, level as MinionLevel, location);
   return ok();
 };
 

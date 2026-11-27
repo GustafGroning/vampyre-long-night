@@ -81,6 +81,8 @@ export type ValidationCode =
   | 'movement_forbidden'
   /** Minionen följer med en annan aktion och får inte agera (Expansion, Second Tradition). */
   | 'minion_locked'
+  /** Minionen gjorde Hide and Spy förra ronden och får inte agera (E27). */
+  | 'minion_resting'
   /** Samma mål två gånger där regeln säger en gång per mål och rond. */
   | 'max_per_target';
 

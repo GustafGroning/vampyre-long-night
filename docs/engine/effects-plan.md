@@ -24,6 +24,8 @@
 | 6 | Resten av sekt- och titelaktionerna (Sabbat, Anarch, Justicar, Inner Circle) och artefakterna. | |
 | 7 | Klanernas boons och curses, fas 4b och 4d (masquerade-kollaps), start-of-round-effekter (2a–2c). | |
 
+Minionernas aktioner och traits (allt utom strid) byggdes som en egen PR 2026-11-27: [`minions-plan.md`](minions-plan.md), E22–E33.
+
 Ordningen kan ändras om ett senare steg blockerar ett tidigare. Sidofynd går till `BACKLOG.md`, designfrågor under "Olösta designerfrågor".
 
 ## Steg 1 i detalj

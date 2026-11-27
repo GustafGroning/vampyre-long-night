@@ -10,6 +10,7 @@ import type { ActionContext, ActionOutcome } from '../round/actions.js';
 import type { CityId } from '../state/ids.js';
 import type { WorkingState } from '../round/deps.js';
 import { sharedSeaRegions } from '../state/queries.js';
+import { triggerFollowers } from './follow.js';
 import { cityArg, fail, ok, performerCity, performerJson, performerMinion } from './util.js';
 
 export type MoveRule =
@@ -84,6 +85,7 @@ export function moveEffect(rule: MoveRule, key = 'to') {
     if (minion) minion.location = to;
     else ctx.player.location = to;
     ctx.emit('moved', { performer: performerJson(ctx), from, to });
+    triggerFollowers(ctx, minion ? { kind: 'minion', id: minion.id } : { kind: 'player', id: ctx.player.id }, to);
     return ok();
   };
 }
