@@ -87,6 +87,19 @@ function plant(): { state: GameState; events: RoundEvent[]; canaries: Canary[] }
   add('artifact-201', []);
   for (const a of Object.values(s.artifacts)) if (a.holder.kind === 'pool') add(a.id, []);
 
+  // Kunskap om andras artefakter (S24, V20): bara den som lärt sig.
+  s.artifacts['artifact-202' as ArtifactId] = { id: 'artifact-202' as ArtifactId, definition: 'the_evil_eye', holder: { kind: 'player', id: P.baron }, boundDiscipline: null };
+  add('artifact-202', [P.baron, P.prince]);
+  s.knowledge.artifacts[P.prince] = {
+    ['artifact-202' as ArtifactId]: { holder: { kind: 'player', id: P.baron }, round: 1, source: 'CANARY_knowsrc' },
+  };
+  add('CANARY_knowsrc', [P.prince]);
+  // Inaktuell kunskap (bäraren har bytts): syns inte ens för den som lärde sig.
+  s.knowledge.artifacts[P.bishop] = {
+    ['artifact-201' as ArtifactId]: { holder: { kind: 'player', id: P.inner }, round: 1, source: 'CANARY_stalesrc' },
+  };
+  add('CANARY_stalesrc', []);
+
   // Minionens loyalty och modifiers: bara ägaren.
   const archon = Object.values(s.minions).find((m) => m.type === 'archon')!;
   archon.loyaltyCounters = 915001;

@@ -18,8 +18,8 @@
 |---|---|---|
 | 1 | Ramverk (`src/effects/`), Move, Sail, minionernas Move/Sail, Archon Movement, Bleed, Bleed the Enemy, Aaron's Feeding Razor, inkomstfaserna 5a–5c, Bottomless Wealth, Diamond of Toreador, (M)Presence delegerar. Monstrous och Picky eater. | ✅ PR #10 |
 | 2 | Enkla effekter utan hunt roll: stat-buffar (Watchful Eyes, In the Shadows, Blood for Blood, Potence, Fortitude …), Get a Minion, Bestow Gifts, Grow in Power, Give, Awaken, Summon the Storm, stadsstats (Sabotage-varianterna, Control the Masquerade, Build my Kingdom, Build on the Master's Kingdom), Reward Loyalty, Buy Votes. | Del 1 (PR #11): Watchful Eyes, In the Shadows, Blood for Blood, Hide, Get a Minion, Bestow Gifts, Awaken, Control the Masquerade (E14–E21). Resten nästa PR. |
-| 3 | Hunt roll och strid (M11): Attack!, Archon Attack, Diablerie, Steal an Artifact, Look for Artifacts, Bodyguard, Guard the Master, torpor och brända minions. Pausläget finns redan. | |
-| 4 | Stealth per entry (Obfuscate, Partner in Crime, (M)Oblivion) in i observationen, och informationsaktioner (Auspex, Search, Keep an Eye on Them, Sabbat Interrogations) med en modell för "känd information" (BACKLOG). | |
+| 3 | Hunt roll och strid (M11): Attack!, Archon Attack, Diablerie, Steal an Artifact, Look for Artifacts (anropar `learnArtifactsOf`, S24), Bodyguard, Guard the Master, torpor och brända minions. Pausläget finns redan. | |
+| 4 | Stealth per entry (Obfuscate, Partner in Crime, (M)Oblivion) in i observationen, och informationsaktioner (Auspex, Search, Keep an Eye on Them, Sabbat Interrogations) med en modell för "känd information" (BACKLOG). Artefaktkunskapen finns redan (`src/state/knowledge.ts`, S24/V20). | |
 | 5 | Territorium: contest och contest-kostnad, Fight for Control (fas 4a), Conquer New Territory, Expansion, Second Tradition, Anarch Revolt, Go Anarch, Invite to the Camarilla, VP för tagna städer, Claim Credit, blood för förlorad stad. | |
 | 6 | Resten av sekt- och titelaktionerna (Sabbat, Anarch, Justicar, Inner Circle) och artefakterna. | |
 | 7 | Klanernas boons och curses, fas 4b och 4d (masquerade-kollaps), start-of-round-effekter (2a–2c). | |

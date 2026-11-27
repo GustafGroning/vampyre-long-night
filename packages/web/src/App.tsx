@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ActionPanel } from './components/ActionPanel';
+import { ArtifactsTab } from './components/ArtifactsTab';
 import { GameMap } from './components/GameMap';
 import { ResourceBar } from './components/ResourceBar';
 import { TABS, TabMenu, type TabId } from './components/TabMenu';
@@ -19,6 +20,8 @@ export function App({ port }: { port: PlayerScreenPort }) {
       <main className="main-area">
         {tab === 'map' ? (
           <GameMap map={data.map} round={data.round} />
+        ) : tab === 'artifacts' ? (
+          <ArtifactsTab artifacts={data.artifacts} />
         ) : (
           <div className="placeholder">
             <h2>{tabLabel}</h2>

@@ -13,7 +13,7 @@ npm run typecheck    # tsc --noEmit
 
 | Mapp | Innehåll |
 |---|---|
-| `src/state/` | `GameState`-typer, id:n, härledda värden (`queries.ts`), invarianter (`validate.ts`), skapande av kampanj (`create.ts`), JSON-hjälpare |
+| `src/state/` | `GameState`-typer, id:n, härledda värden (`queries.ts`), invarianter (`validate.ts`), skapande av kampanj (`create.ts`), spelarnas kunskap om andras artefakter (`knowledge.ts`, S24), JSON-hjälpare |
 | `src/content/` | Referensdata: klaner, discipliner, titlar, minion-typer, artefakter, regelkonstanter, kartmallar |
 | `src/rng.ts` | Seedad RNG (sfc32), serialiserbar, med delströmmar |
 | `src/round/` | Rondens skelett: inlämning, budget, `resolveRound` |

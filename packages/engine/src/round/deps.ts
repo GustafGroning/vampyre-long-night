@@ -9,7 +9,8 @@ export type { Rng } from '../rng.js';
 export { createRng, deriveSeed } from '../rng.js';
 export { baseActionBudget, minionUpkeep } from '../state/queries.js';
 export { actionOrigin, observerGroups, observersOfAction } from '../view/audience.js';
-export { cloneJson, compareIds, sortedIds } from '../state/json.js';
+export { cloneJson, compareIds, sortedIds, sortedValues } from '../state/json.js';
+export { learnArtifactHolder } from '../state/knowledge.js';
 
 import type { GameState, Mutable } from '../state/types.js';
 import type { MinionId } from '../state/ids.js';

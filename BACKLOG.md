@@ -38,7 +38,7 @@ Frågor som bara lead game designern kan svara på. Designern är inte tillgäng
 - [ ] **Världseffekter i vyn:** `OngoingEffect` utan ägare (debattutfall m.m.) syns inte för spelare. Behöver ett publik-fält på effekten (V13).
 - [ ] **Torpor publikt eller dolt?** Provisoriskt dolt (V4). Bekräfta mot hur Discord-spelet gjorde.
 - [ ] **Vy av en pausad strid:** `RoundResolution` under `awaitingCombat` har ingen spelarvy. Byggs med combat.
-- [ ] **Avslöjande aktioner:** Investigate, Search, Auspex m.fl. ska kunna göra dolda fält synliga för en spelare. Behöver en modell för "känd information" per spelare när aktionerna byggs.
+- [ ] **Avslöjande aktioner:** Investigate, Search, Auspex m.fl. ska kunna göra dolda fält synliga för en spelare. För artefakter finns modellen nu (S24, V20); för blood, VP och actions (Keep an Eye on Them, Auspex) behövs samma sak när aktionerna byggs.
 - [ ] **Kartan och strider/mål:** den som ser X attackera Y i A, eller är part i en strid, får inte Y/motståndaren på kartan än (V17). Bestäm när strid och Attack byggs. — hittad under: kartvyn (V15–V19)
 - [ ] **Debatterna heter fortfarande Ivory Tower** i koden (V9, `content/titles.ts`) och ska byggas om till Vampiric Society där alla sekter röstar. Röstfrågorna står under "Olösta designerfrågor". — hittad under: kartvyn (V18)
 - [x] **Move/Sail behöver `destination` och `targets`** (V16). Löst i katalogen: `targets` läses från valen och `destination` härleds från `moves` (K21). — hittad under: kartvyn
@@ -75,7 +75,15 @@ Beslut i `docs/decisions/effects.md`, kod i `packages/engine/src/effects/`.
 - [ ] **Unresolved: controller i torpor (E10).** Får man stadens blood flow i torpor? Provisoriskt ja. — `payCityIncome` i `src/effects/income.ts`
 - [ ] **Unresolved: Hide och Rule of Three (E15).** Hide säger +5 stealth men Rule of Three max +3 per källa. Gustaf 2026-11-19: behåll +5 tills vidare, men fråga designern om det var avsikten. Rule of Three gäller actions enligt gd:532 (Protean-exemplet). — `hide` i `src/effects/index.ts`
 
+### Olösta designfrågor från Artifacts-fliken (väntar på lead game designer)
+Plan i `docs/ui/artifacts-tab-plan.md`, beslut S24 och V20–V21.
+- [ ] **Unresolved: "in possession of" och minions.** Ger Look for Artifacts och Keep an Eye on Them även artefakter som målets minions bär? Provisoriskt nej, bara vampyrens egna. — `learnArtifactsOf` i `packages/engine/src/state/knowledge.ts`
+- [ ] **Unresolved: (M) Auspex "learn the location of up to 5 artifacts".** Bara staden, eller också vem som bär den? Provisoriskt bäraren (spelare, minion, eller staden om den ligger där). — `learnArtifactHolder`, används när (M) Auspex byggs (effektsteg 4)
+- [ ] **Unresolved: avslöjar en sedd artefaktaktion vilken artefakt det är?** Provisoriskt ja: den som ser aktionen ser artefaktens namn och vet att utföraren har den (V21).
+- [ ] **Unresolved: Vestment of Vileness.** Zombien syns i player stats ("Players will still see the minion"). Ska andra därmed veta vem som har Vestment? Provisoriskt nej, ägaren visas som Unknown.
+
 ## Effekter (hittat under `docs/engine/effects-plan.md`)
+- [ ] **Informationsaktioner ska skriva artefaktkunskap:** Look for Artifacts (vid lyckad hunt roll) och Keep an Eye on Them (frågan om artefakter) ska anropa `learnArtifactsOf`, (M) Auspex "locate" ska anropa `learnArtifactHolder` för varje namngiven artefakt (S24). Effekterna är stubbar tills hunt roll finns (steg 3–4). — hittad under: Artifacts-fliken
 - [ ] **Blood för förlorad stad:** "If you lose control of a city you will gain the city's full blood flow at the start of the next round" (gd:521–522). Byggs när något kan byta controller (steg 5).
 - [ ] **Summon the Storm** ska ge storm *från nästa rond*. `SeaRegion.storm` har bara `untilEndOfRound`, så en storm som sätts under ronden blockerar Sail redan samma rond. Behöver en startrond (eller en OngoingEffect som sätter stormen i fas 2). Byggs med Summon the Storm (steg 2).
 - [ ] **Brujah m.fl. klan-curses som rör blood** (Decadence −5, Ventrue wealth +10, Gangrel/Tzimisce-förluster) dras inte än. Byggs i steg 7; Picky eater och Monstrous är redan med eftersom de hör till Bleed och Move.
@@ -83,6 +91,7 @@ Beslut i `docs/decisions/effects.md`, kod i `packages/engine/src/effects/`.
 - [ ] **Nosferatus boon (Always listening)** ska ge +1 intercept när de gör Obfuscate, Hide eller In the Shadows (gd:803). Byggs med klanreglerna (steg 7).
 
 ## Spelarens gränssnitt (hittat under Royal Privileges i UI)
+- [ ] **Bild på vampyren i Artifacts-fliken** (Trello-kortet): visar namnet tills det finns porträtt. — hittad under: Artifacts-fliken
 - [ ] **Royal Privileges förbrukas även när de inte ger en action.** Motorn (`royalPrivilegesSpent`) drar det begärda antalet även om ett tak (torpor, Invite to the Camarilla) gör att de inte ger någon action. UI:t stoppar plus-knappen vid `maxUseful` och varnar, men motorn borde kanske klampa mot taket. Logikfråga till Gustaf.
 - [ ] **Inlämnade Royal Privileges vid omladdning.** När serverporten returnerar en inlämnad lista måste den också returnera `royalPrivilegesToSpend`, annars visar panelen 0. Hör till serverkopplingen.
 

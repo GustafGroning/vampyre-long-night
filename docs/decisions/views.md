@@ -100,5 +100,13 @@ Senaste observationen per subjekt gäller. Egen vampyr och egna minions syns all
 ## V19. `sighted`-event för informationsaktioner
 Aktioner som avslöjar var någon är (Search, Bowl of Convergence, S.H.R.E.K NET) skapar `sighted` med `{ subject, at }` och mottagaren som publik. `subject` är `{ kind: 'vampire', playerId }` eller `{ kind: 'minion', minionId, ownerId }`. Kartan läser det på samma sätt som `action_observed`.
 
+## V20. Kända artefakter (`PlayerView.knownArtifacts`, 2026-11-27)
+`knownArtifacts` listar egna artefakter (`self`, `own_minion`, källa `own`) och andras som spelaren lärt sig (S24), **bara om bäraren är densamma som när det lärdes**. Byter artefakten bärare (stöld, Give, Diablerie, bränd minion) försvinner den ur listan och blir Unknown; ingen "last known" (samma princip som V17). Kommer den tillbaka till samma bärare är kunskapen sann igen och visas. Brända artefakter försvinner. Andras `boundDiscipline` (Ring of Tremeres val) visas aldrig. Statisk data (namn, text, kostnad) skickas inte i vyn; klienten har `Content`.
+**Kända läckor (accepterade):** att en känd artefakt blir Unknown säger att den bytt bärare, precis som en pjäs som försvinner från kartan (V17).
+**Läck-test:** kanarier för kunskapens källa och för inaktuell kunskap i `test/view/leak.test.ts`.
+
+## V21. En sedd artefaktaktion avslöjar bäraren
+Den som får `action_observed` för en artefaktaktion (`artifact_*`) lär sig att utföraren har artefakten ("Or you make actions that reveal it"). Görs i `observeAction` (`round/resolve.ts`) med samma publik som eventet. Undetectable-aktioner har ingen publik och avslöjar inget; Can't be hidden (Diamond of Toreador) avslöjar för alla. Har utföraren flera exemplar av samma artefakt räknas det med lägst id.
+
 ## Demo
 `createDemoGame()` och `createDemoRound()` ger en giltig kampanj på testkartan, med fem spelare (Inner Circle, Prince, Baron, dold Archbishop, utan titel) för gränssnittet. Justicars är utelämnade eftersom rollen inte finns i V1.

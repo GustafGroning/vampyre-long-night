@@ -7,7 +7,7 @@ export const TABS = [
   { id: 'history', label: 'Ronder', icon: '⌛' },
   { id: 'chat', label: 'Chatt', icon: '💬' },
   { id: 'news', label: 'Nyheter', icon: '📰' },
-  { id: 'artifacts', label: 'Artefakter', icon: '🏺' },
+  { id: 'artifacts', label: 'Artifacts', icon: '🏺' },
   { id: 'vampire', label: 'Vampyr', icon: '🧛' },
   { id: 'minions', label: 'Minions', icon: '👥' },
   { id: 'cities', label: 'Städer', icon: '🏙' },

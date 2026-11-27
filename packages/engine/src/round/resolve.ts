@@ -12,10 +12,12 @@ import {
   compareIds,
   createRng,
   deriveSeed,
+  learnArtifactHolder,
   minionUpkeep,
   actionOrigin,
   observerGroups,
   sortedIds,
+  sortedValues,
   type Content,
   type GameState,
   type Minion,
@@ -461,6 +463,7 @@ function observeAction(res: RoundResolution, entry: EntryRecord, def: ActionDefi
     destination,
   };
   const groups = observerGroups(state, content, observed);
+  revealArtifactUse(res, entry, def, groups);
   const performer: { [key: string]: Json } =
     entry.action.performer.kind === 'vampire'
       ? { kind: 'vampire', playerId: entry.playerId }
@@ -489,6 +492,32 @@ function observeAction(res: RoundResolution, entry: EntryRecord, def: ActionDefi
   }
   if (groups.targetOnly.length > 0) {
     emit(res, phase, 'action_observed', data(false), undefined, undefined, { kind: 'players', ids: groups.targetOnly });
+  }
+}
+
+/**
+ * Den som ser en artefaktaktion vet att utföraren har artefakten ("Or you make
+ * actions that reveal it", 2.0 Possession; V21). Undetectable-aktioner har inga
+ * observatörer och avslöjar därför inget. Har utföraren flera exemplar av samma
+ * artefakt räknas det med lägst id.
+ */
+function revealArtifactUse(
+  res: RoundResolution,
+  entry: EntryRecord,
+  def: ActionDefinition,
+  groups: ReturnType<typeof observerGroups>,
+): void {
+  const key = def.category === 'artifact' ? def.requires?.artifact : undefined;
+  if (!key || entry.action.performer.kind !== 'vampire') return;
+  const state = res.state;
+  const held = sortedValues(state.artifacts as GameState['artifacts']).find(
+    (a) => a.definition === key && a.holder.kind === 'player' && a.holder.id === entry.playerId,
+  );
+  if (!held) return;
+  const observers =
+    groups.kind === 'public' ? sortedIds(state.players as GameState['players']) : [...groups.located, ...groups.targetOnly];
+  for (const pid of observers) {
+    if (pid !== entry.playerId) learnArtifactHolder(state, pid as PlayerId, held.id, def.id);
   }
 }
 

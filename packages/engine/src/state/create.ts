@@ -322,6 +322,7 @@ export function createGameState(input: CreateGameInput, content: Content): GameS
     missions: {},
     debates: {},
     effects: {},
+    knowledge: { artifacts: {} },
     flags: { camarillaViolationGraceUsed: false, masqueradeCollapsed: false },
   };
 

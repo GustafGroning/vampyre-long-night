@@ -66,6 +66,36 @@ export interface MapModel {
 }
 
 // ---------------------------------------------------------------------------
+// Artefakter (Artifacts-fliken)
+
+/** Vem som har en artefakt, så som spelaren garanterat vet det. */
+export interface ArtifactOwner {
+  /** T.ex. "You", "Lady Ashford", "Jenny (Lady Ashford's minion)", "Lying in London". */
+  label: string;
+  /** Spelaren själv eller en egen minion. */
+  own: boolean;
+  /** Hur spelaren vet det, t.ex. "You hold it" eller "Seen using it in round 2". */
+  how: string;
+}
+
+/** En artefakt i kampanjens fasta lista. */
+export interface ArtifactEntry {
+  key: string;
+  name: string;
+  text: string;
+  /** T.ex. "5 Blood", eller "Same as the chosen discipline". */
+  cost: string;
+  /** T.ex. "+1", "Undetectable", "Can't be hidden". */
+  stealth: string;
+  /** Vad en minion som bär den får, eller null om minions inte kan bära den. */
+  minionBonus: string | null;
+  /** Regelnoter: Trifle, bränns, torpor, gratisaktion. */
+  notes: string[];
+  /** Kända bärare. Tom = Unknown. */
+  owners: ArtifactOwner[];
+}
+
+// ---------------------------------------------------------------------------
 // Actions
 
 export type PerformerRef = { kind: 'vampire' } | { kind: 'minion'; minionId: string };
@@ -201,6 +231,8 @@ export interface MainScreenData {
   resources: Resources;
   vampire: VampireSummary;
   map: MapModel;
+  /** Alla artefakter i kampanjen, med bara de bärare spelaren garanterat vet. */
+  artifacts: ArtifactEntry[];
 }
 
 export interface PlayerScreenPort {
