@@ -38,6 +38,8 @@ import type {
 } from './types.js';
 import { normalizeSubmission } from './validate.js';
 import { payBleedIncome, payCityIncome, payOtherIncome } from '../effects/income.js';
+import { archonLoyaltyPhase, minionAllegiancePhase, partnerInCrimeBonus } from '../effects/minions.js';
+import { minionIsResting } from '../state/queries.js';
 
 /** Rondens faser i exakt ordning (SPEC A16, game_design.txt rad 935–960). */
 export const PHASES: readonly PhaseId[] = [
@@ -173,6 +175,12 @@ function run(res: RoundResolution, submissions: Record<PlayerId, Submission> | n
           res.state.phase = 'awaitingCombat';
           return { status: 'suspended', interrupts: clone(res.pendingInterrupts), resolution: res };
         }
+        break;
+      case '4b_player_end_effects':
+        minionAllegiancePhase(phaseContext(res, phase, opts));
+        break;
+      case '4c_missions':
+        archonLoyaltyPhase(phaseContext(res, phase, opts));
         break;
       case '5a_city_income':
         payCityIncome(phaseContext(res, phase, opts));
@@ -390,6 +398,7 @@ function makeActionContext(
     player: res.state.players[entry.playerId]!,
     rng: createRng(deriveSeed(res.seed, 'action', entry.id)),
     emit: (kind, data, audience) => emit(res, phase, kind, data, entry.playerId, entry.id, audience),
+    notify: (kind, data, audience) => emit(res, phase, kind, data, undefined, undefined, audience),
     scratch: res.scratch,
     resolveImmediately: (count) => {
       immediate += count;
@@ -423,6 +432,7 @@ function blockedReason(res: RoundResolution, entry: EntryRecord, registry: Actio
     const minion = res.state.minions[entry.action.performer.minionId];
     if (!minion) return 'Minionen finns inte längre';
     if (minion.owner.kind !== 'player' || minion.owner.id !== entry.playerId) return 'Minionen har bytt ägare';
+    if (minionIsResting(minion, res.state.round)) return 'The minion used Hide and Spy last round and cannot act';
   }
   return null;
 }
@@ -459,6 +469,8 @@ function observeAction(res: RoundResolution, entry: EntryRecord, def: ActionDefi
     stealth: def.stealth,
     targetCities: targets.cities ?? [],
     destination,
+    stealthBonus:
+      entry.action.performer.kind === 'vampire' ? partnerInCrimeBonus(state, content, res.scratch, entry.playerId) : 0,
   };
   const groups = observerGroups(state, content, observed);
   const performer: { [key: string]: Json } =

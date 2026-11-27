@@ -25,11 +25,11 @@ Frågor som bara lead game designern kan svara på. Designern är inte tillgäng
 
 ## Ronden (hittat under rondens skelett, `docs/engine/round-skeleton-plan.md`)
 - [ ] Riktiga aktionseffekter: pågår i `src/effects/` (plan `docs/engine/effects-plan.md`). `stubbedActionIds()` listar det som återstår.
-- [ ] Faserna 2a–2c, 4a–4d och 5a–5c är tomma krokar: contest-straff, storm, masquerade-kaskad, Ventrue +10, klan-curses, missions, Archon-loyalty, start-of-turn-VP. (Income från städer, bleeds och aktioner, 5a–5c, är byggt: E9–E11.)
+- [ ] Faserna 2a–2c, 4a–4d och 5a–5c är tomma krokar: contest-straff, storm, masquerade-kaskad, Ventrue +10, klan-curses, missions, start-of-turn-VP. (Archon-loyalty och minionernas ägarkrav ligger i 4b/4c sedan minions-PR:en.) (Income från städer, bleeds och aktioner, 5a–5c, är byggt: E9–E11.)
 - [ ] Fight for Control-strider som löses i fas 4a nästa rond (spänner över rondgränsen).
 - [ ] Pending choices för målet (M8): fight/flee, acceptera Invite, återvända till contestad stad.
 - [ ] Klanregler som påverkar budget eller Trifle: Lasombra (ingen Trifle om mindre blood än förra ronden), Tremere (enda Thaumaturgy kostar ingen action), Salubri (en Give per rond).
-- [ ] Bränd minion kan lämna dinglande referenser (strider, effekter, Follow Them). Behöver en gemensam `burnMinion` i state när de modellerna används.
+- [ ] Bränd minion kan lämna dinglande referenser (strider, effekter). Follow Them och Partner in Crime kontrollerar att minionen finns kvar. Behöver en gemensam `burnMinion` i state när de modellerna används.
 - [ ] Brujah-rabatt mitt i ronden ska återbetalas i fas 5 (M7).
 - [ ] `ActionDefinition` är data + TypeScript-handler; utvärdera "data + effektprimitiver" (SPEC B11) när några aktioner byggts (R19).
 - [ ] Per-spelare-vyer ska filtrera `RoundResolution.events` (steg 4). Events saknar ännu `audience` (M18).
@@ -50,7 +50,6 @@ Frågor som bara lead game designern kan svara på. Designern är inte tillgäng
 
 ## Actionkatalog (hittat under `docs/decisions/catalog.md`)
 - [ ] **Bundna discipliner:** Ring of Tremere och (M)Thaumaturgy-skapade artefakter har ingen aktion i katalogen; inte heller artefaktaktioner som (M)Thaumaturgy gett permanent (`grantedArtifactActions`) (K15).
-- [ ] **Hide and Spy** ska spärra minionens action nästa rond (gd:296). Kräver att förra rondens aktioner sparas.
 - [ ] **Martinelli's Ring** ska ta bort Dementation så länge man bär den (gd:395).
 - [ ] **(M)Presence-stealth** ska vara den valda aktionens; observationen läser idag `def.stealth` (0) (K9).
 - [ ] **Känd information i målval:** när motorn vet vad en spelare garanterat vet (kartvyn), sortera kända mål "i samma stad" överst (K3).
@@ -74,6 +73,18 @@ Beslut i `docs/decisions/effects.md`, kod i `packages/engine/src/effects/`.
 - [ ] **Unresolved: Picky eater (E8).** Bara aktionen Bleed, och staden tappar hela beloppet medan spelaren får 10 mindre? Provisoriskt ja. — `bleedPenalty` i `src/effects/index.ts`
 - [ ] **Unresolved: controller i torpor (E10).** Får man stadens blood flow i torpor? Provisoriskt ja. — `payCityIncome` i `src/effects/income.ts`
 - [ ] **Unresolved: Hide och Rule of Three (E15).** Hide säger +5 stealth men Rule of Three max +3 per källa. Gustaf 2026-11-19: behåll +5 tills vidare, men fråga designern om det var avsikten. Rule of Three gäller actions enligt gd:532 (Protean-exemplet). — `hide` i `src/effects/index.ts`
+
+- [ ] **Unresolved: Hunt roll vid lika (E24).** Ordlistan säger "If the score is higher than the hunted vampires or minions stealth". Provisoriskt: jägarens D4 + intercept måste vara strikt högre än målets D4 + stealth; lika misslyckas. — `huntRoll` i `src/effects/hunt.ts`
+- [ ] **Unresolved: Archon-loyalty utan missions (E33).** Archons tappar en counter varje rond "unless the Justicar has completed a mission", men missions är borttagna. Provisoriskt tappar de alltid en, så en start-Archon bränns efter rond 3 om Justicaren inte gör The Master's Will. Behöver ny regel. — `archonLoyaltyPhase` i `src/effects/minions.ts`
+- [ ] **Unresolved: när Loyal to the Prince/Camarilla Loyal kontrolleras (E32).** Provisoriskt i fas 4b, och en dold Archbishop förklädd till Prince behåller sin Primogen. — `minionAllegiancePhase` i `src/effects/minions.ts`
+- [ ] **Unresolved: Sabbat Interrogations (E31).** Får Archonens spelare veta om det fanns en bas, och får Sabbat veta att någon slog mot basen? Provisoriskt: spelaren får utfallet, Sabbat ser bara basens nya level i sin vy. — `sabbatInterrogations` i `src/effects/minions.ts`
+
+## Minions (hittat under `docs/engine/minions-plan.md`)
+- [ ] **Hunt roll-modifiers** saknas i `huntRoll`: Apex predators (+1), Animalism (+3 D4, bästa), Gangrel eye (omslag +1), Pumping Heart (−2 i egen domän), Orb of Ulain, (M)Obfuscate (nästa jakt misslyckas). Byggs med strid (steg 3).
+- [ ] **Strid för minions (steg 3):** Bodyguard, Guard the Master, Archons Attack, Hide the Master, och traits Meek (kan inte vinna mot vampyrer) och Trained (+2 strength mot minions). Minion mot minion hoppar över förhandlingen.
+- [ ] **Follow Them och andra förflyttningar:** Dominate, Expansion, Second Tradition, Anarch Highway m.fl. ska anropa `triggerFollowers` (eller `relocatePlayer`) när de byggs.
+- [ ] **Elysium-röster:** specialen ger "+1 vote in the Ivory Tower" men röstningen läser den inte än.
+- [ ] **Följarens förflyttning observeras inte** (E28). Ska den som är i staden se Archonen komma?
 
 ## Effekter (hittat under `docs/engine/effects-plan.md`)
 - [ ] **Blood för förlorad stad:** "If you lose control of a city you will gain the city's full blood flow at the start of the next round" (gd:521–522). Byggs när något kan byta controller (steg 5).

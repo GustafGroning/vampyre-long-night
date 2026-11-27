@@ -23,6 +23,12 @@ export interface ActionContext {
   rng: Rng;
   /** Skapar ett event. Standardpubliken är den agerande spelaren (M18). */
   emit(kind: string, data?: { [key: string]: Json }, audience?: Audience): void;
+  /**
+   * Event till en annan publik utan koppling till entryn (inget `playerId` eller
+   * `entryId`), när mottagaren inte ska få veta vems aktion som utlöste det
+   * (Follow Them).
+   */
+  notify(kind: string, data: { [key: string]: Json }, audience: Audience): void;
   scratch: { [key: string]: Json };
   /** Celerity (M5): lös spelarens `count` nästa pending entries direkt, i samma slot. */
   resolveImmediately(count: number): void;

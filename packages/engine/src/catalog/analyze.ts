@@ -30,6 +30,7 @@ import type {
   ValidationIssue,
   ValidationResult,
 } from '../round/types.js';
+import { minionIsResting } from '../state/queries.js';
 import { optionValues } from './options.js';
 import { ACTION_CATALOG } from './registry.js';
 import type { CatalogContext, NumberRange, ParamKind, ParamOption, ParamSpec, ProjectedPositions } from './types.js';
@@ -177,6 +178,8 @@ export function requirementProblem(
     return fail('wrong_minion_type', `Zombien kan bara göra Move och Hunt for Me (gd:402)`);
   if (def.minionTypes && !def.minionTypes.includes(minion.type) && !(def.zombie && minion.origin.kind === 'vestment_zombie'))
     return fail('wrong_minion_type', `${def.name} kan inte utföras av ${minion.type}`);
+  if (minionIsResting(minion, view.round))
+    return fail('minion_resting', `${minion.name} used Hide and Spy last round and cannot act this round`);
   return null;
 }
 
